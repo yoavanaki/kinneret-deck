@@ -7,8 +7,20 @@ export async function GET() {
 }
 
 export async function PUT(req: NextRequest) {
-  const { slideId, field, value } = await req.json();
+  const body = await req.json();
 
+  // Support batch edits: { edits: [{ slideId, field, value }, ...] }
+  if (Array.isArray(body.edits)) {
+    for (const edit of body.edits) {
+      if (edit.slideId && edit.field && edit.value !== undefined) {
+        await saveSlideEdit(edit.slideId, edit.field, edit.value);
+      }
+    }
+    return NextResponse.json({ ok: true });
+  }
+
+  // Single edit (legacy): { slideId, field, value }
+  const { slideId, field, value } = body;
   if (!slideId || !field || value === undefined) {
     return NextResponse.json({ error: "slideId, field, and value required" }, { status: 400 });
   }

@@ -18,7 +18,7 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
 
   const theme = themes[themeId];
 
-  // Validate the link exists + fetch slide edits
+  // Validate the link exists + fetch slide edits + apply order & graveyard
   useEffect(() => {
     fetch(`/api/share?id=${linkId}`)
       .then((r) => {
@@ -27,12 +27,31 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
       })
       .catch(() => setValid(false));
 
-    fetch("/api/slides")
-      .then((r) => r.json())
-      .then((edits) => {
-        if (edits.length > 0) {
-          setSlideData(applyEdits(initialSlides, edits));
+    Promise.all([
+      fetch("/api/slides").then((r) => r.json()),
+      fetch("/api/slide-order").then((r) => r.json()),
+    ])
+      .then(([edits, order]) => {
+        let merged = edits.length > 0 ? applyEdits(initialSlides, edits) : [...initialSlides];
+
+        if (order && Array.isArray(order.slide_ids) && order.slide_ids.length > 0) {
+          const slideMap = new Map(merged.map((s) => [s.id, s]));
+          const ordered: typeof merged = [];
+          for (const id of order.slide_ids) {
+            const slide = slideMap.get(id);
+            if (slide) { ordered.push(slide); slideMap.delete(id); }
+          }
+          slideMap.forEach((s) => ordered.push(s));
+          merged = ordered;
+
+          // Remove graveyard slides from viewer
+          const gyIdx = typeof order.graveyard_index === "number" ? order.graveyard_index : -1;
+          if (gyIdx >= 0 && gyIdx < merged.length) {
+            merged = merged.slice(0, gyIdx);
+          }
         }
+
+        setSlideData(merged);
       })
       .catch(() => {});
   }, [linkId]);

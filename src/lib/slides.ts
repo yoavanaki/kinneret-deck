@@ -102,11 +102,32 @@ const slide02: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 3: Industrial Revolution Transformation
+// SLIDE 3: Industrial → AI Revolution Parallels
+// ============================================================
+const slideParallels: SlideContent = {
+  id: "slide-parallels",
+  number: 3,
+  title: "History doesn't repeat, but it rhymes",
+  subtitle: "The AI revolution follows the same playbook as the industrial revolution",
+  layout: "table",
+  tableHeaders: ["", "Industrial Revolution", "AI Revolution"],
+  tableRows: [
+    ["Core Resource", "Energy", "Intelligence"],
+    ["Breakthrough", "Steam Engine", "Large Language Models"],
+    ["Infrastructure", "Railroads & Factories", "Data Centers & Cloud"],
+    ["Displacement", "Manual Laborers", "Knowledge Workers"],
+    ["Unit Economics", "Cost per widget → $0", "Cost per decision → $0"],
+    ["New Entity", "The Factory", "The Cognitory"],
+  ],
+  note: "Every revolution replaces the expensive, variable human component with cheap, scalable infrastructure. We're at the start of that curve for services.",
+};
+
+// ============================================================
+// SLIDE 4: Industrial Revolution Transformation
 // ============================================================
 const slide03: SlideContent = {
   id: "slide-03",
-  number: 3,
+  number: 4,
   title: "Industrial Revolution: Transformation of Production",
   layout: "flow",
   flows: {
@@ -119,11 +140,11 @@ const slide03: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 4: AI Revolution Transformation
+// SLIDE 5: AI Revolution Transformation
 // ============================================================
 const slide04: SlideContent = {
   id: "slide-04",
-  number: 4,
+  number: 5,
   title: "AI Revolution: Transformation of Knowledge Work",
   layout: "flow",
   flows: {
@@ -136,11 +157,11 @@ const slide04: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 5: Services Economy
+// SLIDE 6: Services Economy
 // ============================================================
 const slide05: SlideContent = {
   id: "slide-05",
-  number: 5,
+  number: 6,
   title: "White collar services dwarf the technology market",
   subtitle: "U.S. Gross Output by Industry (Q3 2025, Bureau of Economic Analysis)",
   layout: "bar-chart",
@@ -160,11 +181,11 @@ const slide05: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 6: Generalizability of Service Factories
+// SLIDE 7: Generalizability of Service Factories
 // ============================================================
 const slide06: SlideContent = {
   id: "slide-06",
-  number: 6,
+  number: 7,
   title: "Service factories are highly generalizable",
   subtitle: "Common workstreams across white collar services",
   layout: "table",
@@ -180,11 +201,11 @@ const slide06: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 7: Platform Architecture — Stack Diagram
+// SLIDE 8: Platform Architecture — Stack Diagram
 // ============================================================
 const slideStack: SlideContent = {
   id: "slide-stack",
-  number: 7,
+  number: 8,
   title: "The Cognitory platform",
   subtitle: "AI-native software that automates any services business",
   layout: "stack",
@@ -243,11 +264,11 @@ const slideStack: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 8: Mission — Acquire → Automate → Expand
+// SLIDE 9: Mission — Acquire → Automate → Expand
 // ============================================================
 const slide08: SlideContent = {
   id: "slide-08",
-  number: 8,
+  number: 9,
   title: "Building the world's first services factories",
   layout: "flow",
   flows: {
@@ -259,11 +280,11 @@ const slide08: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 9: The Playbook
+// SLIDE 10: The Playbook
 // ============================================================
 const slide09: SlideContent = {
   id: "slide-09",
-  number: 9,
+  number: 10,
   title: "The Playbook",
   layout: "table",
   tableHeaders: ["Phase", "Action", "Outcome"],
@@ -278,11 +299,11 @@ const slide09: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 10: Candidate Industries
+// SLIDE 11: Candidate Industries
 // ============================================================
 const slide10: SlideContent = {
   id: "slide-10",
-  number: 10,
+  number: 11,
   title: "Initial Candidate Industries",
   subtitle: "Fragmented, rule-based, and ripe for automation",
   layout: "table",
@@ -300,11 +321,11 @@ const slide10: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 11: First Bet - Retirement TPA
+// SLIDE 12: First Bet - Retirement TPA
 // ============================================================
 const slide11: SlideContent = {
   id: "slide-11",
-  number: 11,
+  number: 12,
   title: "Our first bet: Retirement TPA",
   subtitle: "Every business with a 401(k) needs a TPA. They can't do it themselves — and they can't stop.",
   layout: "table",
@@ -320,11 +341,11 @@ const slide11: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 12: What does a TPA do?
+// SLIDE 13: What does a TPA do?
 // ============================================================
 const slide12: SlideContent = {
   id: "slide-12",
-  number: 12,
+  number: 13,
   title: "What does a TPA do?",
   layout: "bullets",
   body: "A Retirement TPA handles the complex administrative and compliance work that sits between the plan sponsor (employer) and the government.",
@@ -340,22 +361,22 @@ const slide12: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 13: Chairman
+// SLIDE 14: Chairman
 // ============================================================
 const slide13: SlideContent = {
   id: "slide-13",
-  number: 13,
+  number: 14,
   title: "Jamie Kalamarides — Chairman",
   layout: "text",
   body: "Jamie brings 20+ years of senior leadership at Prudential Financial, where he served as President of Group Insurance and Head of Institutional Retirement Plan Services, overseeing billions in plan assets.\n\nHe was a key expert to the SECURE Act, testifying before the U.S. Senate Finance, HELP, and Aging Committees on retirement policy. He is a nonresident fellow at the Bipartisan Policy Center.\n\nJamie's deep domain expertise in retirement services — combined with his relationships across the industry — gives Cognitory a unique advantage in building trust with acquisition targets and navigating the regulatory landscape.",
 };
 
 // ============================================================
-// SLIDE 14: Why this space
+// SLIDE 15: Why this space
 // ============================================================
 const slide14: SlideContent = {
   id: "slide-14",
-  number: 14,
+  number: 15,
   title: "Why Retirement TPA?",
   layout: "two-column",
   leftText: "STRUCTURAL ADVANTAGES\n\n• Regulatory mandate creates guaranteed demand\n• Extreme fragmentation — no dominant player\n• Owner-operators aging out, looking to sell\n• Acquisition multiples are low (4-6x EBITDA)\n• Recurring, contract-based revenue",
@@ -364,11 +385,11 @@ const slide14: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 15: M&A Pipeline
+// SLIDE 16: M&A Pipeline
 // ============================================================
 const slide15: SlideContent = {
   id: "slide-15",
-  number: 15,
+  number: 16,
   title: "Current M&A Pipeline",
   layout: "table",
   subtitle: "Active conversations with owner-operators",
@@ -384,11 +405,11 @@ const slide15: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 16: Industry Overview
+// SLIDE 17: Industry Overview
 // ============================================================
 const slide16: SlideContent = {
   id: "slide-16",
-  number: 16,
+  number: 17,
   title: "Retirement TPA Industry Overview",
   layout: "two-column",
   leftText: "MARKET STRUCTURE\n\n• $8B+ total addressable market\n• 5,000+ TPA firms in the U.S.\n• Top 10 firms hold <15% market share\n• Average firm: 10-50 employees\n• 700,000+ retirement plans need administration",
@@ -397,11 +418,11 @@ const slide16: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 17: Automation Opportunities
+// SLIDE 18: Automation Opportunities
 // ============================================================
 const slide17: SlideContent = {
   id: "slide-17",
-  number: 17,
+  number: 18,
   title: "Automation Opportunities",
   subtitle: "Implied margin impact per 500-plan TPA ($2M revenue)",
   layout: "table",
@@ -418,11 +439,11 @@ const slide17: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 18: Fundraise
+// SLIDE 19: Fundraise
 // ============================================================
 const slide18: SlideContent = {
   id: "slide-18",
-  number: 18,
+  number: 19,
   title: "Raising $10M",
   layout: "bullets",
   body: "Seed round to acquire initial TPA portfolio and deploy the automation playbook.",
@@ -439,10 +460,10 @@ const slide18: SlideContent = {
 // ALL SLIDES - exported as a single array
 // ============================================================
 export const slides: SlideContent[] = [
-  slide01, slide02, slide03, slide04, slide05,
-  slide06, slideStack, slide08, slide09, slide10,
-  slide11, slide12, slide13, slide14, slide15,
-  slide16, slide17, slide18,
+  slide01, slide02, slideParallels, slide03, slide04,
+  slide05, slide06, slideStack, slide08, slide09,
+  slide10, slide11, slide12, slide13, slide14,
+  slide15, slide16, slide17, slide18,
 ];
 
 // ============================================================

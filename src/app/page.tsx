@@ -18,6 +18,13 @@ export default function Home() {
   const [slideScale, setSlideScale] = useState(1);
   const slideContainerRef = useRef<HTMLDivElement>(null);
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const pendingEditsRef = useRef<Map<string, { slideId: string; field: string; value: string }>>(new Map());
+
+  // Slide ordering & graveyard
+  const [graveyardIndex, setGraveyardIndex] = useState(-1); // -1 = no graveyard
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const orderSaveTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
   const theme = themes[themeId];
 
@@ -49,7 +56,7 @@ export default function Home() {
       if ((e.target as HTMLElement).isContentEditable || tag === "INPUT" || tag === "TEXTAREA") return;
       if (e.key === "ArrowRight" || e.key === "ArrowDown") {
         e.preventDefault();
-        setCurrentSlide((prev) => Math.min(prev + 1, initialSlides.length - 1));
+        setCurrentSlide((prev) => Math.min(prev + 1, slideData.length - 1));
       } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
         e.preventDefault();
         setCurrentSlide((prev) => Math.max(prev - 1, 0));
@@ -58,6 +65,21 @@ export default function Home() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+  // Save slide order to server (debounced)
+  function persistOrder(slides: SlideContent[], gyIndex: number) {
+    clearTimeout(orderSaveTimerRef.current);
+    orderSaveTimerRef.current = setTimeout(() => {
+      fetch("/api/slide-order", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slideIds: slides.map((s) => s.id),
+          graveyardIndex: gyIndex,
+        }),
+      }).catch(() => {});
+    }, 300);
+  }
 
   // Load slide edits from server + local preferences from localStorage
   useEffect(() => {
@@ -70,13 +92,48 @@ export default function Home() {
       setShareLink(`${window.location.origin}/view/${savedLinkId}`);
     }
 
-    // Fetch server-stored edits and merge onto base slides
-    fetch("/api/slides")
-      .then((r) => r.json())
-      .then((edits) => {
-        if (edits.length > 0) {
-          setSlideData(applyEdits(initialSlides, edits));
+    // Fetch server-stored edits and slide order
+    Promise.all([
+      fetch("/api/slides").then((r) => r.json()),
+      fetch("/api/slide-order").then((r) => r.json()),
+    ])
+      .then(([edits, order]) => {
+        let merged = edits.length > 0 ? applyEdits(initialSlides, edits) : initialSlides;
+
+        // Apply saved order if it exists
+        if (order && Array.isArray(order.slide_ids) && order.slide_ids.length > 0) {
+          const slideMap = new Map(merged.map((s) => [s.id, s]));
+          const ordered: SlideContent[] = [];
+          for (const id of order.slide_ids) {
+            const slide = slideMap.get(id);
+            if (slide) {
+              ordered.push(slide);
+              slideMap.delete(id);
+            }
+          }
+          // Insert any new slides (not in saved order) at their original position
+          if (slideMap.size > 0) {
+            const originalIds = merged.map((s) => s.id);
+            slideMap.forEach((s) => {
+              const origIdx = originalIds.indexOf(s.id);
+              let insertAt = ordered.length;
+              for (let j = origIdx - 1; j >= 0; j--) {
+                const prevIdx = ordered.findIndex((o) => o.id === originalIds[j]);
+                if (prevIdx !== -1) {
+                  insertAt = prevIdx + 1;
+                  break;
+                }
+              }
+              ordered.splice(insertAt, 0, s);
+            });
+          }
+          merged = ordered;
+          if (typeof order.graveyard_index === "number") {
+            setGraveyardIndex(order.graveyard_index);
+          }
         }
+
+        setSlideData(merged);
       })
       .catch(() => {});
   }, []);
@@ -130,13 +187,19 @@ export default function Home() {
       })
     );
 
-    // Debounced save to server
+    // Accumulate edit (keyed by slideId+field so latest value wins)
+    pendingEditsRef.current.set(`${slideId}::${field}`, { slideId, field, value });
+
+    // Debounced flush — sends ALL pending edits in one batch
     clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(() => {
+      const edits = Array.from(pendingEditsRef.current.values());
+      pendingEditsRef.current.clear();
+      if (edits.length === 0) return;
       fetch("/api/slides", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slideId, field, value }),
+        body: JSON.stringify({ edits }),
       }).catch(() => {});
     }, 500);
   }
@@ -238,31 +301,153 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="flex-1 flex min-h-0">
-        {/* Slide Thumbnails */}
-        <div className="w-48 bg-white border-r border-gray-200 overflow-y-auto p-2 space-y-2">
-          {slideData.map((s, i) => (
-            <button
-              key={s.id}
-              onClick={() => setCurrentSlide(i)}
-              className={`w-full text-left rounded-lg overflow-hidden border-2 transition-all ${
-                i === currentSlide ? "border-blue-500 shadow-md" : "border-transparent hover:border-gray-300"
-              }`}
-            >
-              <div className="relative" style={{ width: "100%", paddingBottom: "56.25%" }}>
-                <div className="absolute inset-0 overflow-hidden">
-                  <Slide slide={s} theme={theme} scale={0.18} />
-                </div>
-                {commentCounts[s.id] > 0 && (
-                  <div className="absolute top-1 right-1 bg-amber-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center shadow-sm">
-                    {commentCounts[s.id]}
+        {/* Slide Thumbnails — drag to reorder */}
+        <div className="w-48 bg-white border-r border-gray-200 overflow-y-auto p-2 space-y-1 flex flex-col">
+          {slideData.map((s, i) => {
+            const isGraveyard = graveyardIndex >= 0 && i >= graveyardIndex;
+            const showDivider = graveyardIndex >= 0 && i === graveyardIndex;
+
+            return (
+              <div key={s.id}>
+                {showDivider && (
+                  <div
+                    className="flex items-center gap-1 py-2 px-1 select-none"
+                    onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; }}
+                  >
+                    <div className="flex-1 border-t-2 border-dashed border-red-300" />
+                    <span className="text-[10px] font-semibold text-red-400 whitespace-nowrap uppercase tracking-wide">
+                      Slide Graveyard
+                    </span>
+                    <div className="flex-1 border-t-2 border-dashed border-red-300" />
                   </div>
                 )}
+
+                {dragOverIndex === i && dragIndex !== null && dragIndex !== i && dragIndex !== i - 1 && (
+                  <div className="h-0.5 bg-blue-500 rounded-full mx-1 my-0.5" />
+                )}
+
+                <button
+                  draggable
+                  onDragStart={(e) => {
+                    setDragIndex(i);
+                    e.dataTransfer.effectAllowed = "move";
+                    const ghost = document.createElement("div");
+                    ghost.style.cssText = "width:160px;height:20px;background:#3b82f6;border-radius:4px;opacity:0.7;position:absolute;top:-1000px;color:#fff;font-size:11px;padding:2px 8px";
+                    ghost.textContent = s.title.slice(0, 25);
+                    document.body.appendChild(ghost);
+                    e.dataTransfer.setDragImage(ghost, 80, 10);
+                    requestAnimationFrame(() => ghost.remove());
+                  }}
+                  onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setDragOverIndex(i); }}
+                  onDragLeave={() => setDragOverIndex(null)}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    if (dragIndex === null || dragIndex === i) { setDragIndex(null); setDragOverIndex(null); return; }
+                    setSlideData((prev) => {
+                      const next = [...prev];
+                      const [moved] = next.splice(dragIndex, 1);
+                      const targetIdx = dragIndex < i ? i - 1 : i;
+                      next.splice(targetIdx, 0, moved);
+
+                      let newGy = graveyardIndex;
+                      if (graveyardIndex >= 0) {
+                        if (dragIndex >= graveyardIndex && targetIdx < graveyardIndex) newGy++;
+                        else if (dragIndex < graveyardIndex && targetIdx >= graveyardIndex) newGy--;
+                      }
+                      setGraveyardIndex(newGy);
+
+                      if (currentSlide === dragIndex) setCurrentSlide(targetIdx);
+                      else if (dragIndex < currentSlide && targetIdx >= currentSlide) setCurrentSlide(currentSlide - 1);
+                      else if (dragIndex > currentSlide && targetIdx <= currentSlide) setCurrentSlide(currentSlide + 1);
+
+                      persistOrder(next, newGy);
+                      return next;
+                    });
+                    setDragIndex(null);
+                    setDragOverIndex(null);
+                  }}
+                  onDragEnd={() => { setDragIndex(null); setDragOverIndex(null); }}
+                  onClick={() => setCurrentSlide(i)}
+                  className={`w-full text-left rounded-lg overflow-hidden border-2 transition-all cursor-grab active:cursor-grabbing ${
+                    dragIndex === i ? "opacity-40 border-blue-300"
+                      : i === currentSlide ? "border-blue-500 shadow-md"
+                      : "border-transparent hover:border-gray-300"
+                  } ${isGraveyard ? "opacity-50" : ""}`}
+                >
+                  <div className="relative" style={{ width: "100%", paddingBottom: "56.25%" }}>
+                    <div className="absolute inset-0 overflow-hidden">
+                      <Slide slide={s} theme={theme} scale={0.18} />
+                    </div>
+                    {commentCounts[s.id] > 0 && (
+                      <div className="absolute top-1 right-1 bg-amber-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center shadow-sm">
+                        {commentCounts[s.id]}
+                      </div>
+                    )}
+                    {isGraveyard && <div className="absolute inset-0 bg-red-50/40" />}
+                  </div>
+                  <div className={`px-2 py-1 text-xs truncate ${isGraveyard ? "text-red-400 line-through" : "text-gray-500"}`}>
+                    {i + 1}. {s.title.slice(0, 30)}
+                  </div>
+                </button>
               </div>
-              <div className="px-2 py-1 text-xs text-gray-500 truncate">
-                {i + 1}. {s.title.slice(0, 30)}
-              </div>
+            );
+          })}
+
+          {/* Graveyard toggle / drop zone at bottom */}
+          {graveyardIndex < 0 ? (
+            <button
+              onClick={() => { const newGy = slideData.length; setGraveyardIndex(newGy); persistOrder(slideData, newGy); }}
+              onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; }}
+              onDrop={(e) => {
+                e.preventDefault();
+                if (dragIndex === null) return;
+                setSlideData((prev) => {
+                  const next = [...prev];
+                  const [moved] = next.splice(dragIndex, 1);
+                  next.push(moved);
+                  const newGy = next.length - 1;
+                  setGraveyardIndex(newGy);
+                  if (currentSlide === dragIndex) setCurrentSlide(next.length - 1);
+                  else if (dragIndex < currentSlide) setCurrentSlide(currentSlide - 1);
+                  persistOrder(next, newGy);
+                  return next;
+                });
+                setDragIndex(null); setDragOverIndex(null);
+              }}
+              className="flex items-center gap-1 py-2 px-1 mt-2 group cursor-pointer"
+            >
+              <div className="flex-1 border-t-2 border-dashed border-gray-200 group-hover:border-red-300 transition-colors" />
+              <span className="text-[10px] font-semibold text-gray-300 group-hover:text-red-400 whitespace-nowrap uppercase tracking-wide transition-colors">
+                Slide Graveyard
+              </span>
+              <div className="flex-1 border-t-2 border-dashed border-gray-200 group-hover:border-red-300 transition-colors" />
             </button>
-          ))}
+          ) : graveyardIndex >= slideData.length && (
+            <div
+              className="flex items-center gap-1 py-2 px-1"
+              onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; }}
+              onDrop={(e) => {
+                e.preventDefault();
+                if (dragIndex === null) return;
+                setSlideData((prev) => {
+                  const next = [...prev];
+                  const [moved] = next.splice(dragIndex, 1);
+                  next.push(moved);
+                  if (currentSlide === dragIndex) setCurrentSlide(next.length - 1);
+                  else if (dragIndex < currentSlide) setCurrentSlide(currentSlide - 1);
+                  persistOrder(next, graveyardIndex);
+                  return next;
+                });
+                setDragIndex(null); setDragOverIndex(null);
+              }}
+            >
+              <div className="flex-1 border-t-2 border-dashed border-red-300" />
+              <span className="text-[10px] font-semibold text-red-400 whitespace-nowrap uppercase tracking-wide">
+                Slide Graveyard
+              </span>
+              <div className="flex-1 border-t-2 border-dashed border-red-300" />
+            </div>
+          )}
         </div>
 
         {/* Main Slide View */}

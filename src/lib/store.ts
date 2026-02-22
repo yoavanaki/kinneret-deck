@@ -35,6 +35,14 @@ export interface SlideEdit {
   updated_at: string;
 }
 
+export interface SlideOrder {
+  /** Ordered array of slide IDs; slides after graveyardIndex are hidden from viewers */
+  slide_ids: string[];
+  /** Index of the graveyard divider (-1 means no graveyard) */
+  graveyard_index: number;
+  updated_at: string;
+}
+
 // ---- Database initialization ----
 let dbInitialized = false;
 
@@ -79,6 +87,15 @@ export async function initDB() {
       PRIMARY KEY (slide_id, field)
     )
   `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS slide_order (
+      id TEXT PRIMARY KEY DEFAULT 'default',
+      slide_ids TEXT NOT NULL,
+      graveyard_index INTEGER NOT NULL DEFAULT -1,
+      updated_at TIMESTAMP DEFAULT NOW()
+    )
+  `;
 }
 
 // ---- In-memory fallback for local dev ----
@@ -87,12 +104,15 @@ if (!globalAny.__mem_comments) globalAny.__mem_comments = [];
 if (!globalAny.__mem_shareLinks) globalAny.__mem_shareLinks = [];
 if (!globalAny.__mem_viewEvents) globalAny.__mem_viewEvents = [];
 if (!globalAny.__mem_slideEdits) globalAny.__mem_slideEdits = [];
+if (!globalAny.__mem_slideOrder) globalAny.__mem_slideOrder = null;
 
 const mem = {
   get comments(): Comment[] { return globalAny.__mem_comments; },
   get shareLinks(): ShareLink[] { return globalAny.__mem_shareLinks; },
   get viewEvents(): ViewEvent[] { return globalAny.__mem_viewEvents; },
   get slideEdits(): SlideEdit[] { return globalAny.__mem_slideEdits; },
+  get slideOrder(): SlideOrder | null { return globalAny.__mem_slideOrder; },
+  set slideOrder(v: SlideOrder | null) { globalAny.__mem_slideOrder = v; },
 };
 
 function useDB() {
@@ -201,5 +221,35 @@ export async function saveSlideEdit(slideId: string, field: string, value: strin
     INSERT INTO slide_edits (slide_id, field, value, updated_at)
     VALUES (${slideId}, ${field}, ${value}, NOW())
     ON CONFLICT (slide_id, field) DO UPDATE SET value = ${value}, updated_at = NOW()
+  `;
+}
+
+// ---- Slide Order ----
+export async function getSlideOrder(): Promise<SlideOrder | null> {
+  if (!useDB()) {
+    return mem.slideOrder;
+  }
+  await initDB();
+  const { rows } = await sql`SELECT * FROM slide_order WHERE id = 'default'`;
+  if (rows.length === 0) return null;
+  const row = rows[0];
+  return {
+    slide_ids: JSON.parse(row.slide_ids as string),
+    graveyard_index: row.graveyard_index as number,
+    updated_at: row.updated_at as string,
+  };
+}
+
+export async function saveSlideOrder(slideIds: string[], graveyardIndex: number): Promise<void> {
+  const json = JSON.stringify(slideIds);
+  if (!useDB()) {
+    mem.slideOrder = { slide_ids: slideIds, graveyard_index: graveyardIndex, updated_at: new Date().toISOString() };
+    return;
+  }
+  await initDB();
+  await sql`
+    INSERT INTO slide_order (id, slide_ids, graveyard_index, updated_at)
+    VALUES ('default', ${json}, ${graveyardIndex}, NOW())
+    ON CONFLICT (id) DO UPDATE SET slide_ids = ${json}, graveyard_index = ${graveyardIndex}, updated_at = NOW()
   `;
 }
