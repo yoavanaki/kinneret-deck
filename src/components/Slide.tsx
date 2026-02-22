@@ -284,7 +284,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 onUpdate={onUpdate}
                 tag="p"
                 className={`${isLargeTeam ? "text-xs leading-snug" : "text-sm leading-relaxed"}`}
-                style={{ color: t.text }}
+                style={{ color: t.text, whiteSpace: "pre-line" }}
               />
             </div>
           ))}
