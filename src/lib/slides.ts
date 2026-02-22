@@ -233,11 +233,14 @@ const slide12: SlideContent = {
   number: 12,
   title: "Our first bet: Retirement TPA",
   layout: "bullets",
-  body: "Businesses need retirement TPAs to set up, manage and audit their employees' retirement plans",
+  body: "Every business with a 401(k) or pension plan needs a Third Party Administrator to handle compliance, testing, and government filings. They can't do it themselves — and they can't stop.",
   bullets: [
-    "Highly recurring revenue",
-    "Low churn",
-    "..",
+    "Highly recurring revenue — clients pay annually, year after year",
+    "Near-zero churn — switching costs are high and plans are sticky",
+    "Regulatory mandate — ERISA and IRS rules require professional administration",
+    "Fragmented market — 5,000+ independent TPAs, most sub-$5M revenue",
+    "Labor-intensive workflows — ripe for AI-driven automation",
+    "SECURE Act 2.0 tailwind — new legislation expanding retirement plan coverage",
   ],
 };
 
