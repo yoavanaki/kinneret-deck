@@ -58,14 +58,21 @@ export default function Home() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Load saved state from localStorage
+  // Load saved state from localStorage (version-gated to avoid stale data)
   useEffect(() => {
+    const SLIDES_VERSION = "v3";
     const savedTheme = localStorage.getItem("cognitory-theme");
     if (savedTheme && themes[savedTheme]) setThemeId(savedTheme);
 
-    const savedSlides = localStorage.getItem("cognitory-slides");
-    if (savedSlides) {
-      try { setSlideData(JSON.parse(savedSlides)); } catch {}
+    const savedVersion = localStorage.getItem("cognitory-slides-version");
+    if (savedVersion === SLIDES_VERSION) {
+      const savedSlides = localStorage.getItem("cognitory-slides");
+      if (savedSlides) {
+        try { setSlideData(JSON.parse(savedSlides)); } catch {}
+      }
+    } else {
+      localStorage.setItem("cognitory-slides-version", SLIDES_VERSION);
+      localStorage.removeItem("cognitory-slides");
     }
 
     const savedLinkId = localStorage.getItem("cognitory-link-id");
