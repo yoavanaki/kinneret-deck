@@ -271,45 +271,6 @@ const slide19: SlideContent = {
   layout: "big-text",
 };
 
-// ============================================================
-// SLIDE 20: Appendix
-// ============================================================
-const slide20: SlideContent = {
-  id: "slide-20",
-  number: 20,
-  title: "Appendix →",
-  layout: "section",
-};
-
-// ============================================================
-// SLIDE 21: Good Industry Criteria
-// ============================================================
-const slide21: SlideContent = {
-  id: "slide-21",
-  number: 21,
-  title: "What makes a good industry?",
-  layout: "big-text",
-};
-
-// ============================================================
-// SLIDE 22: TPA Tech Stack
-// ============================================================
-const slide22: SlideContent = {
-  id: "slide-22",
-  number: 22,
-  title: "Everything a TPA does and the tech stack",
-  layout: "big-text",
-};
-
-// ============================================================
-// SLIDE 23: Fundraise (alternate)
-// ============================================================
-const slide23: SlideContent = {
-  id: "slide-23",
-  number: 23,
-  title: "Raising $15M",
-  layout: "big-text",
-};
 
 // ============================================================
 // ALL SLIDES - exported as a single array
@@ -318,6 +279,5 @@ export const slides: SlideContent[] = [
   slide01, slide02, slide03, slide04, slide05,
   slide06, slide07, slide08, slide09, slide10,
   slide11, slide12, slide13, slide14, slide15,
-  slide16, slide17, slide18, slide19, slide20,
-  slide21, slide22, slide23,
+  slide16, slide17, slide18, slide19,
 ];

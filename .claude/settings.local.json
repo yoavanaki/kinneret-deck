@@ -2,7 +2,17 @@
   "permissions": {
     "allow": [
       "Bash(npm install:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(git branch:*)",
+      "Bash(git commit:*)",
+      "Bash(gh repo create:*)",
+      "Bash(vercel env ls:*)",
+      "Bash(vercel postgres create:*)",
+      "Bash(vercel store create:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(vercel --prod:*)",
+      "WebFetch(domain:www.crunchbase.com)"
     ]
   }
 }
