@@ -196,7 +196,6 @@ export const themes: Record<string, Theme> = {
       noteText: "#4a3520",
     },
   },
-};
 
   // ----------------------------------------------------------
   // THEME 8: AIPAC — Dark navy with warm accent, serif titles

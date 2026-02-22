@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, use } from "react";
+import { useState, useEffect, useRef, useCallback, use } from "react";
 import { slides as initialSlides, applyEdits } from "@/lib/slides";
 import { themes } from "@/lib/themes";
 import Slide from "@/components/Slide";
@@ -17,6 +17,23 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
   const currentSlideRef = useRef(currentSlide);
 
   const theme = themes[themeId];
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [slideScale, setSlideScale] = useState(1);
+
+  // Calculate scale to fit slide in container
+  const updateScale = useCallback(() => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const scaleX = rect.width / 960;
+    const scaleY = rect.height / 540;
+    setSlideScale(Math.min(scaleX, scaleY));
+  }, []);
+
+  useEffect(() => {
+    updateScale();
+    window.addEventListener("resize", updateScale);
+    return () => window.removeEventListener("resize", updateScale);
+  }, [updateScale]);
 
   useEffect(() => {
     // Fetch link status + slide snapshot (if any) in parallel with slide content
@@ -172,13 +189,42 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
     );
   }
 
+  // Keyboard navigation
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        setCurrentSlide((prev) => {
+          if (prev > 0) {
+            trackCurrentSlide();
+            slideStartTime.current = Date.now();
+            return prev - 1;
+          }
+          return prev;
+        });
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === " ") {
+        e.preventDefault();
+        setCurrentSlide((prev) => {
+          if (prev < slideData.length - 1) {
+            trackCurrentSlide();
+            slideStartTime.current = Date.now();
+            return prev + 1;
+          }
+          return prev;
+        });
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [slideData.length, verified, email]);
+
   const slide = slideData[currentSlide];
 
   // Presentation viewer
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col">
+    <div className="h-screen bg-gray-900 flex flex-col overflow-hidden">
       {/* Top bar */}
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-800 text-white">
+      <div className="flex items-center justify-between px-4 py-2 bg-gray-800 text-white shrink-0">
         <span className="text-sm font-medium">Cognitory Deck</span>
         <span className="text-sm text-gray-400">
           {currentSlide + 1} / {slideData.length}
@@ -186,19 +232,21 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
       </div>
 
       {/* Slide */}
-      <div className="flex-1 flex flex-col items-center justify-center p-4">
-        <div className="shadow-2xl rounded-lg overflow-hidden" style={{ width: 960, height: 540 }}>
-          <Slide slide={slide} theme={theme} />
+      <div className="flex-1 flex flex-col items-center justify-center p-4 min-h-0">
+        <div ref={containerRef} className="flex-1 w-full flex items-center justify-center min-h-0">
+          <div className="shadow-2xl rounded-lg overflow-hidden" style={{ width: 960 * slideScale, height: 540 * slideScale }}>
+            <Slide slide={slide} theme={theme} scale={slideScale} />
+          </div>
         </div>
 
         {/* Navigation */}
-        <div className="flex items-center gap-4 mt-4">
+        <div className="flex items-center gap-4 mt-3 shrink-0">
           <button
             onClick={() => goToSlide(Math.max(0, currentSlide - 1))}
             disabled={currentSlide === 0}
             className="px-4 py-2 bg-gray-700 text-white rounded-lg text-sm disabled:opacity-30 hover:bg-gray-600"
           >
-            Previous
+            ← Previous
           </button>
 
           {/* Slide dots */}
@@ -219,7 +267,7 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
             disabled={currentSlide === slideData.length - 1}
             className="px-4 py-2 bg-gray-700 text-white rounded-lg text-sm disabled:opacity-30 hover:bg-gray-600"
           >
-            Next
+            Next →
           </button>
         </div>
 
