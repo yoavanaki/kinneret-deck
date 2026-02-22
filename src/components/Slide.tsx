@@ -154,9 +154,9 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
               </div>
               <span
                 className="text-xs flex-shrink-0"
-                style={{ width: 40, color: bar.highlight ? t.accent : t.subtitle, fontWeight: bar.highlight ? 700 : 400 }}
+                style={{ width: 48, color: bar.highlight ? t.accent : t.subtitle, fontWeight: bar.highlight ? 700 : 400 }}
               >
-                {bar.value}%
+                {maxVal <= 50 ? "$" : ""}{bar.value % 1 === 0 ? bar.value : bar.value.toFixed(1)}{maxVal > 50 ? "%" : "T"}
               </span>
             </div>
           ))}
@@ -189,12 +189,20 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
               className="flex-1 flex flex-col items-center text-center p-4 rounded-lg"
               style={{ backgroundColor: t.cardBg }}
             >
-              <div
-                className="w-20 h-20 rounded-full mb-4 flex items-center justify-center text-2xl font-bold"
-                style={{ backgroundColor: t.accent, color: t.bg }}
-              >
-                {member.name.split(" ").map(n => n[0]).join("")}
-              </div>
+              {member.imageUrl ? (
+                <img
+                  src={member.imageUrl}
+                  alt={member.name}
+                  className="w-20 h-20 rounded-full mb-4 object-cover"
+                />
+              ) : (
+                <div
+                  className="w-20 h-20 rounded-full mb-4 flex items-center justify-center text-2xl font-bold"
+                  style={{ backgroundColor: t.accent, color: t.bg }}
+                >
+                  {member.name.split(" ").map(n => n[0]).join("")}
+                </div>
+              )}
               <h3 className="text-lg font-bold mb-1" style={{ color: t.heading }}>
                 {member.name}
               </h3>
@@ -207,6 +215,109 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             </div>
           ))}
         </div>
+      </div>
+    );
+  }
+
+  // ---- FLOW LAYOUT ----
+  if (slide.layout === "flow" && slide.flows) {
+    const { before, middle, after, replacement } = slide.flows;
+    return (
+      <div style={baseStyle} className="flex flex-col p-10">
+        <EditableText
+          value={slide.title}
+          slideId={slide.id}
+          field="title"
+          editable={editable}
+          onUpdate={onUpdate}
+          tag="h1"
+          className="text-2xl font-bold mb-6 text-center"
+          style={headingStyle}
+        />
+        <div className="flex-1 flex flex-col items-center justify-center gap-4">
+          {/* Flow row */}
+          <div className="flex items-center gap-3 w-full justify-center">
+            {/* Input box */}
+            <div className="flex flex-col items-center gap-2 w-44">
+              <div
+                className="w-full rounded-xl p-4 flex flex-col items-center text-center"
+                style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
+              >
+                <span className="text-2xl mb-1">{before.icon}</span>
+                <span className="text-sm font-bold" style={{ color: t.heading }}>{before.label}</span>
+                {before.items.map((item, i) => (
+                  <span key={i} className="text-xs mt-0.5" style={{ color: t.subtitle }}>{item}</span>
+                ))}
+              </div>
+            </div>
+
+            {/* Arrow */}
+            <div className="text-xl" style={{ color: t.subtitle }}>→</div>
+
+            {/* Middle box (struck through) */}
+            <div className="flex flex-col items-center gap-2 w-52 relative">
+              <div
+                className="w-full rounded-xl p-4 flex flex-col items-center text-center relative"
+                style={{
+                  backgroundColor: t.cardBg,
+                  border: `1px solid ${t.tableBorder}`,
+                  opacity: middle.strikethrough ? 0.45 : 1,
+                }}
+              >
+                <span className="text-2xl mb-1">{middle.icon}</span>
+                <span
+                  className="text-sm font-bold"
+                  style={{
+                    color: t.heading,
+                    textDecoration: middle.strikethrough ? "line-through" : "none",
+                    textDecorationColor: t.accent,
+                    textDecorationThickness: "2px",
+                  }}
+                >
+                  {middle.label}
+                </span>
+              </div>
+              {/* Replacement arrow + box */}
+              {replacement && (
+                <div className="flex flex-col items-center">
+                  <div className="text-lg" style={{ color: t.accent }}>↓</div>
+                  <div
+                    className="w-full rounded-xl p-4 flex flex-col items-center text-center"
+                    style={{
+                      backgroundColor: t.accent + "18",
+                      border: `2px solid ${t.accent}`,
+                    }}
+                  >
+                    <span className="text-2xl mb-1">{replacement.icon}</span>
+                    <span className="text-sm font-bold" style={{ color: t.accent }}>{replacement.label}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Arrow */}
+            <div className="text-xl" style={{ color: t.subtitle }}>→</div>
+
+            {/* Output box */}
+            <div className="flex flex-col items-center gap-2 w-44">
+              <div
+                className="w-full rounded-xl p-4 flex flex-col items-center text-center"
+                style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
+              >
+                <span className="text-2xl mb-1">{after.icon}</span>
+                <span className="text-sm font-bold" style={{ color: t.heading }}>{after.label}</span>
+                {after.items.map((item, i) => (
+                  <span key={i} className="text-xs mt-0.5" style={{ color: t.subtitle }}>{item}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        {slide.note && (
+          <div className="mt-auto p-3 rounded text-sm text-center" style={{ backgroundColor: t.noteBg, color: t.noteText }}>
+            {slide.note}
+          </div>
+        )}
       </div>
     );
   }

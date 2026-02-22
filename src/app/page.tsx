@@ -84,6 +84,24 @@ export default function Home() {
     localStorage.setItem("cognitory-slides", JSON.stringify(slideData));
   }, [slideData]);
 
+  // Fetch comment counts for all slides
+  function refreshCommentCounts() {
+    fetch("/api/comments")
+      .then((r) => r.json())
+      .then((allComments: { slide_id: string }[]) => {
+        const counts: Record<string, number> = {};
+        allComments.forEach((c) => {
+          counts[c.slide_id] = (counts[c.slide_id] || 0) + 1;
+        });
+        setCommentCounts(counts);
+      })
+      .catch(() => {});
+  }
+
+  useEffect(() => {
+    refreshCommentCounts();
+  }, []);
+
   function handleSlideUpdate(slideId: string, field: string, value: string) {
     setSlideData((prev) =>
       prev.map((s) => {
@@ -158,15 +176,6 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => setShowComments(!showComments)}
-            className={`px-3 py-1.5 rounded text-sm ${
-              showComments ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            Comments
-          </button>
-
           <a
             href="/dashboard"
             className="px-3 py-1.5 rounded text-sm bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -220,6 +229,11 @@ export default function Home() {
                 <div className="absolute inset-0 overflow-hidden">
                   <Slide slide={s} theme={theme} scale={0.18} />
                 </div>
+                {commentCounts[s.id] > 0 && (
+                  <div className="absolute top-1 right-1 bg-amber-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center shadow-sm">
+                    {commentCounts[s.id]}
+                  </div>
+                )}
               </div>
               <div className="px-2 py-1 text-xs text-gray-500 truncate">
                 {i + 1}. {s.title.slice(0, 30)}
@@ -268,16 +282,15 @@ export default function Home() {
               Next
             </button>
           </div>
+        </div>
 
-          {/* Comments Panel */}
-          {showComments && (
-            <div className="mt-3 flex-shrink-0" style={{ width: SLIDE_W * slideScale }}>
-              <Comments
-                slideId={slide.id}
-                theme={themeId === "dark" ? "dark" : "light"}
-              />
-            </div>
-          )}
+        {/* Comments Panel - always visible on the right */}
+        <div className="w-80 bg-white border-l border-gray-200 flex flex-col overflow-hidden">
+          <Comments
+            slideId={slide.id}
+            theme="light"
+            onCommentPosted={refreshCommentCounts}
+          />
         </div>
       </div>
     </div>

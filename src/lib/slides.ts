@@ -17,7 +17,7 @@ export interface SlideContent {
   /** Bullet points as an array of strings */
   bullets?: string[];
   /** Layout type determines how the slide renders */
-  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart";
+  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow";
   /** Custom HTML content for special layouts */
   customHtml?: string;
   /** Team members for team layout */
@@ -33,6 +33,13 @@ export interface SlideContent {
   leftText?: string;
   /** Right column text (for two-column layout) */
   rightText?: string;
+  /** Flow diagrams for flow layout: before/after transformation */
+  flows?: {
+    before: { label: string; icon: string; items: string[] };
+    middle: { label: string; icon: string; strikethrough?: boolean };
+    after: { label: string; icon: string; items: string[] };
+    replacement?: { label: string; icon: string };
+  };
 }
 
 // ============================================================
@@ -60,16 +67,19 @@ const slide02: SlideContent = {
       name: "Yoav Anaki",
       role: "Co-Founder",
       bio: "Junior Partner at fresh.fund, Israel's most active pre-seed VC. Background in CS, previously founded Yodel and the Layoffs Project.",
+      imageUrl: "/team/anaki.jpeg",
     },
     {
       name: "Yoav Segev",
       role: "Co-Founder",
       bio: "MBA from Harvard Business School. Former Associate at Charlesbank Capital Partners, BCG, and Morgan Stanley. BA Economics & Management from Oxford.",
+      imageUrl: "/team/segev.jpeg",
     },
     {
       name: "Jamie Kalamarides",
       role: "Chairman",
       bio: "20+ years at Prudential Financial. Former President of Group Insurance and Head of Institutional Retirement Plan Services. Tuck MBA.",
+      imageUrl: "/team/kalamarides.jpg",
     },
   ],
 };
@@ -81,9 +91,14 @@ const slide03: SlideContent = {
   id: "slide-03",
   number: 3,
   title: "Industrial Revolution: Transformation of Production",
-  layout: "two-column",
-  leftText: "BEFORE INDUSTRIALIZATION\n\nInputs (Raw Materials) → Artisan Tools (Skilled Labor) → Outputs (Finished Goods)",
-  rightText: "AFTER INDUSTRIALIZATION\n\nInputs (Raw Materials) → Factory (Mechanized Production) → Outputs (Finished Goods)",
+  layout: "flow",
+  flows: {
+    before: { label: "Inputs", icon: "🪵", items: ["Raw Materials", "Natural Resources"] },
+    middle: { label: "Artisan Workshop", icon: "🔨", strikethrough: true },
+    after: { label: "Outputs", icon: "📦", items: ["Finished Goods", "Physical Products"] },
+    replacement: { label: "Factory", icon: "🏭" },
+  },
+  note: "Mechanized production replaced skilled artisan labor, enabling mass production at dramatically lower cost.",
 };
 
 // ============================================================
@@ -93,10 +108,14 @@ const slide04: SlideContent = {
   id: "slide-04",
   number: 4,
   title: "AI Revolution: Transformation of Knowledge Work",
-  layout: "two-column",
-  leftText: "BEFORE AI REVOLUTION\n\nInputs (Data & Information) → White Collar Worker (Knowledge Labor) → Outputs (Decisions, Analysis, Content)",
-  rightText: "AFTER AI REVOLUTION\n\nInputs (Data & Information) → AI & Automation (Cognitive Processing) → Outputs (Decisions, Analysis, Content)",
-  note: "The middle component, the white collar worker, is replaced by AI and automation.",
+  layout: "flow",
+  flows: {
+    before: { label: "Inputs", icon: "📊", items: ["Data & Information", "Documents & Records"] },
+    middle: { label: "White Collar Worker", icon: "👔", strikethrough: true },
+    after: { label: "Outputs", icon: "📋", items: ["Decisions & Analysis", "Reports & Content"] },
+    replacement: { label: "AI & Automation", icon: "🤖" },
+  },
+  note: "The middle component — the knowledge worker — is replaced by AI and automation, just as factories replaced artisans.",
 };
 
 // ============================================================
@@ -105,151 +124,127 @@ const slide04: SlideContent = {
 const slide05: SlideContent = {
   id: "slide-05",
   number: 5,
-  title: "Services dominate every major economy",
-  subtitle: "Services sector as % of GDP",
+  title: "White collar services dwarf the technology market",
+  subtitle: "U.S. Gross Output by Industry (Q3 2025, Bureau of Economic Analysis)",
   layout: "bar-chart",
-  note: "Source: World Bank, StatisticsTimes (2024). The U.S. services sector alone is worth ~$18T — and almost none of it runs on automation.",
+  note: "Source: U.S. Bureau of Economic Analysis (Jan 2026). White collar services are ~4x larger than the technology sector — and almost none of it runs on automation.",
   bars: [
-    { label: "United States", value: 77.6, highlight: true },
-    { label: "United Kingdom", value: 72.5 },
-    { label: "France", value: 70.9 },
-    { label: "Japan", value: 69.8 },
-    { label: "Canada", value: 66.4 },
-    { label: "Australia", value: 66.1 },
-    { label: "Germany", value: 64.1 },
-    { label: "Brazil", value: 59.2 },
-    { label: "China", value: 56.8 },
-    { label: "India", value: 49.9 },
+    { label: "White Collar Services", value: 11.3, highlight: true },
+    { label: "Manufacturing", value: 7.3 },
+    { label: "Real Estate", value: 6.1 },
+    { label: "Government", value: 5.7 },
+    { label: "Healthcare", value: 3.9 },
+    { label: "Wholesale Trade", value: 3.2 },
+    { label: "Retail Trade", value: 3.0 },
+    { label: "Technology", value: 2.9 },
+    { label: "Construction", value: 2.5 },
+    { label: "Transportation", value: 1.9 },
   ],
 };
 
 // ============================================================
-// SLIDE 6: Speed of Revolution
+// SLIDE 6: Generalizability of Service Factories
 // ============================================================
 const slide06: SlideContent = {
   id: "slide-06",
   number: 6,
-  title: "The industrial revolution took place over 100+ years.",
-  layout: "two-column",
-  leftText: "The industrial revolution took place over 100+ years.",
-  rightText: "The AI revolution will be much faster due to global information highways",
+  title: "Service factories are highly generalizable",
+  subtitle: "Common workstreams across white collar services",
+  layout: "table",
+  tableHeaders: ["Industry", "Project Mgmt", "Client Comm", "Data Analysis", "Doc Creation", "Invoicing", "Compliance"],
+  tableRows: [
+    ["Accounting / Finance", "✓", "✓", "✓", "", "✓", "✓"],
+    ["Legal Services", "", "✓", "✓", "✓", "✓", ""],
+    ["Mgmt Consulting", "✓", "✓", "✓", "✓", "✓", ""],
+    ["HR Services", "", "✓", "✓", "✓", "✓", "✓"],
+    ["Marketing & Ads", "✓", "✓", "✓", "✓", "✓", "✓"],
+    ["IT Services", "✓", "✓", "✓", "✓", "✓", "✓"],
+  ],
 };
 
 // ============================================================
-// SLIDE 7: Generalizability of Service Factories
+// SLIDE 7: Mission — Acquire → Automate → Expand
 // ============================================================
 const slide07: SlideContent = {
   id: "slide-07",
   number: 7,
-  title: "While industrial factories require highly specialized machines, service factories are highly generalizable",
-  subtitle: "80% Generalizability: Common Workstreams Across White Collar Services",
-  layout: "table",
-  note: "High similarity in core business processes creates opportunities for standardization.",
-  tableHeaders: ["Industry", "Project Mgmt", "Client Comm", "Data Analysis", "Doc Creation", "Invoicing", "Talent Acq", "Compliance"],
-  tableRows: [
-    ["Accounting / Finance", "✓", "✓", "✓", "", "✓", "✓", "✓"],
-    ["Legal Services", "", "✓", "✓", "✓", "✓", "✓", ""],
-    ["Management Consulting", "✓", "✓", "✓", "✓", "✓", "✓", ""],
-    ["HR Services", "", "✓", "✓", "✓", "✓", "✓", "✓"],
-    ["Marketing & Advertising", "✓", "✓", "✓", "✓", "✓", "", "✓"],
-    ["IT Services", "✓", "✓", "✓", "✓", "✓", "✓", "✓"],
-  ],
+  title: "Building the world's first services factories",
+  layout: "flow",
+  flows: {
+    before: { label: "Acquire", icon: "🏢", items: ["Buy services firms", "at 4-6x EBITDA"] },
+    middle: { label: "Automate", icon: "⚡" },
+    after: { label: "Expand", icon: "📈", items: ["End-to-end automation", "Roll up adjacent firms"] },
+  },
+  note: "Following the industrial revolution playbook: acquire manual processes, automate high-friction components, then scale.",
 };
 
 // ============================================================
-// SLIDE 8: Mission
+// SLIDE 8: The Playbook
 // ============================================================
 const slide08: SlideContent = {
   id: "slide-08",
   number: 8,
-  title: "We are on a mission to build the world's first services factories.",
-  layout: "bullets",
-  body: "The best way to do that is similar to how the industrial revolution played out. Rather than automating entire businesses at once, entrepreneurs would:",
-  bullets: [
-    "Take existing manual process (textile production)",
-    "Automate high-friction components (cotton spinning)",
-    "Expand towards end-to-end automation (cotton gin, power loom)",
+  title: "The Playbook",
+  layout: "table",
+  tableHeaders: ["Phase", "Action", "Outcome"],
+  tableRows: [
+    ["1. Scout", "Identify high-fragmentation services sector", "Target market selected"],
+    ["2. Partner", "Recruit industry executive as operating partner", "Domain expertise secured"],
+    ["3. Map", "Map quick-win automation opportunities", "Automation roadmap ready"],
+    ["4. Acquire", "Buy 3-5 firms at 4-6x EBITDA", "Initial portfolio built"],
+    ["5. Automate", "Deploy AI playbook → expand margins 15-25 pp", "Unit economics proven"],
+    ["6. Scale", "Roll up adjacent firms with automation edge", "Platform compounding"],
   ],
 };
 
 // ============================================================
-// SLIDE 9: Strategy
+// SLIDE 9: Candidate Industries
 // ============================================================
 const slide09: SlideContent = {
   id: "slide-09",
   number: 9,
-  title: "We intend to:",
-  layout: "bullets",
-  bullets: [
-    "Acquire services businesses",
-    "Automate discrete processes",
-    "Expand towards end-to-end automation",
+  title: "Initial Candidate Industries",
+  subtitle: "Fragmented, rule-based, and ripe for automation",
+  layout: "table",
+  tableHeaders: ["Sector", "Market Size", "Fragmentation", "Automation Potential", "Regulatory Moat"],
+  tableRows: [
+    ["Retirement TPA", "$8B+", "High — 5,000+ firms", "Very High", "Strong (ERISA/IRS)"],
+    ["Payroll Services", "$25B+", "High — 10,000+ firms", "Very High", "Strong (IRS/DOL)"],
+    ["IRA Administration", "$3B+", "High", "High", "Strong (IRS)"],
+    ["Property Management", "$100B+", "High — mostly local", "High", "Moderate"],
+    ["Insurance Brokerage", "$60B+", "Very High", "High", "Strong"],
+    ["Accounting / Bookkeeping", "$150B+", "Extreme — 90k+ firms", "Medium-High", "Moderate (CPA)"],
+    ["Benefits Administration", "$15B+", "High", "High", "Strong (ERISA/ACA)"],
+    ["Staffing / Recruiting", "$200B+", "High", "Medium", "Low"],
   ],
 };
 
 // ============================================================
-// SLIDE 10: The Playbook
+// SLIDE 10: First Bet - Retirement TPA
 // ============================================================
 const slide10: SlideContent = {
   id: "slide-10",
   number: 10,
-  title: "The Playbook",
-  layout: "bullets",
-  bullets: [
-    "Identify a high-fragmentation services sector",
-    "Recruit an industry executive as operating partner",
-    "Map quick-win automation opportunities across core workflows",
-    "Acquire 3-5 'early believer' firms at 4-6x EBITDA",
-    "Deploy automation playbook → expand margins 15-25 pp",
-    "Roll up adjacent firms using proven automation as due diligence edge",
+  title: "Our first bet: Retirement TPA",
+  subtitle: "Every business with a 401(k) needs a TPA. They can't do it themselves — and they can't stop.",
+  layout: "table",
+  tableHeaders: ["Why Retirement TPA?", "Detail"],
+  tableRows: [
+    ["💰 Recurring Revenue", "Clients pay annually, year after year"],
+    ["🔒 Near-Zero Churn", "High switching costs — plans are sticky"],
+    ["⚖️ Regulatory Mandate", "ERISA & IRS rules require professional administration"],
+    ["🧩 Fragmented Market", "5,000+ independent TPAs, most sub-$5M revenue"],
+    ["🤖 Automation Ready", "80%+ of workflows are rule-based and repetitive"],
+    ["📜 SECURE Act 2.0", "New legislation expanding plan coverage to millions"],
   ],
 };
 
 // ============================================================
-// SLIDE 11: Candidate Industries
+// SLIDE 11: What does a TPA do?
 // ============================================================
 const slide11: SlideContent = {
   id: "slide-11",
   number: 11,
-  title: "Initial Candidate Industries",
-  layout: "table",
-  subtitle: "Sectors scored on fragmentation, process repeatability, and regulatory tailwind",
-  tableHeaders: ["Sector", "Market Size", "Fragmentation", "Automation Potential", "Regulatory Moat"],
-  tableRows: [
-    ["Retirement TPA", "$8B+", "High — 5,000+ firms", "Very High", "Strong (ERISA/IRS)"],
-    ["Property Management", "$100B+", "High — mostly local", "High", "Moderate"],
-    ["Insurance Brokerage", "$60B+", "Very High", "High", "Strong"],
-    ["Accounting / Bookkeeping", "$150B+", "Extreme — 90k+ firms", "Medium-High", "Moderate (CPA)"],
-    ["Staffing / Recruiting", "$200B+", "High", "Medium", "Low"],
-  ],
-  note: "We start where fragmentation is highest, automation potential is clearest, and regulatory complexity creates a natural moat.",
-};
-
-// ============================================================
-// SLIDE 12: First Bet - Retirement TPA
-// ============================================================
-const slide12: SlideContent = {
-  id: "slide-12",
-  number: 12,
-  title: "Our first bet: Retirement TPA",
-  layout: "bullets",
-  body: "Every business with a 401(k) or pension plan needs a Third Party Administrator to handle compliance, testing, and government filings. They can't do it themselves — and they can't stop.",
-  bullets: [
-    "Highly recurring revenue — clients pay annually, year after year",
-    "Near-zero churn — switching costs are high and plans are sticky",
-    "Regulatory mandate — ERISA and IRS rules require professional administration",
-    "Fragmented market — 5,000+ independent TPAs, most sub-$5M revenue",
-    "Labor-intensive workflows — ripe for AI-driven automation",
-    "SECURE Act 2.0 tailwind — new legislation expanding retirement plan coverage",
-  ],
-};
-
-// ============================================================
-// SLIDE 13: What does a TPA do?
-// ============================================================
-const slide13: SlideContent = {
-  id: "slide-13",
-  number: 13,
   title: "What does a TPA do?",
   layout: "bullets",
   body: "A Retirement TPA handles the complex administrative and compliance work that sits between the plan sponsor (employer) and the government.",
@@ -265,22 +260,22 @@ const slide13: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 14: Chairman
+// SLIDE 12: Chairman
 // ============================================================
-const slide14: SlideContent = {
-  id: "slide-14",
-  number: 14,
+const slide12: SlideContent = {
+  id: "slide-12",
+  number: 12,
   title: "Jamie Kalamarides — Chairman",
   layout: "text",
   body: "Jamie brings 20+ years of senior leadership at Prudential Financial, where he served as President of Group Insurance and Head of Institutional Retirement Plan Services, overseeing billions in plan assets.\n\nHe was a key expert to the SECURE Act, testifying before the U.S. Senate Finance, HELP, and Aging Committees on retirement policy. He is a nonresident fellow at the Bipartisan Policy Center.\n\nJamie's deep domain expertise in retirement services — combined with his relationships across the industry — gives Cognitory a unique advantage in building trust with acquisition targets and navigating the regulatory landscape.",
 };
 
 // ============================================================
-// SLIDE 15: Why this space
+// SLIDE 13: Why this space
 // ============================================================
-const slide15: SlideContent = {
-  id: "slide-15",
-  number: 15,
+const slide13: SlideContent = {
+  id: "slide-13",
+  number: 13,
   title: "Why Retirement TPA?",
   layout: "two-column",
   leftText: "STRUCTURAL ADVANTAGES\n\n• Regulatory mandate creates guaranteed demand\n• Extreme fragmentation — no dominant player\n• Owner-operators aging out, looking to sell\n• Acquisition multiples are low (4-6x EBITDA)\n• Recurring, contract-based revenue",
@@ -289,11 +284,11 @@ const slide15: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 16: M&A Pipeline
+// SLIDE 14: M&A Pipeline
 // ============================================================
-const slide16: SlideContent = {
-  id: "slide-16",
-  number: 16,
+const slide14: SlideContent = {
+  id: "slide-14",
+  number: 14,
   title: "Current M&A Pipeline",
   layout: "table",
   subtitle: "Active conversations with owner-operators",
@@ -309,11 +304,11 @@ const slide16: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 17: Industry Overview
+// SLIDE 15: Industry Overview
 // ============================================================
-const slide17: SlideContent = {
-  id: "slide-17",
-  number: 17,
+const slide15: SlideContent = {
+  id: "slide-15",
+  number: 15,
   title: "Retirement TPA Industry Overview",
   layout: "two-column",
   leftText: "MARKET STRUCTURE\n\n• $8B+ total addressable market\n• 5,000+ TPA firms in the U.S.\n• Top 10 firms hold <15% market share\n• Average firm: 10-50 employees\n• 700,000+ retirement plans need administration",
@@ -322,11 +317,11 @@ const slide17: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 18: Automation Opportunities
+// SLIDE 16: Automation Opportunities
 // ============================================================
-const slide18: SlideContent = {
-  id: "slide-18",
-  number: 18,
+const slide16: SlideContent = {
+  id: "slide-16",
+  number: 16,
   title: "Automation Opportunities",
   subtitle: "Implied margin impact per 500-plan TPA ($2M revenue)",
   layout: "table",
@@ -343,11 +338,11 @@ const slide18: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 19: Fundraise
+// SLIDE 17: Fundraise
 // ============================================================
-const slide19: SlideContent = {
-  id: "slide-19",
-  number: 19,
+const slide17: SlideContent = {
+  id: "slide-17",
+  number: 17,
   title: "Raising $10M",
   layout: "bullets",
   body: "Seed round to acquire initial TPA portfolio and deploy the automation playbook.",
@@ -367,5 +362,5 @@ export const slides: SlideContent[] = [
   slide01, slide02, slide03, slide04, slide05,
   slide06, slide07, slide08, slide09, slide10,
   slide11, slide12, slide13, slide14, slide15,
-  slide16, slide17, slide18, slide19,
+  slide16, slide17,
 ];

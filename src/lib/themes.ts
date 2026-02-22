@@ -100,6 +100,102 @@ export const themes: Record<string, Theme> = {
       noteText: "#78350f",
     },
   },
+
+  // ----------------------------------------------------------
+  // THEME 4: Neon — Vibrant dark with electric accents
+  // ----------------------------------------------------------
+  neon: {
+    id: "neon",
+    name: "Neon",
+    description: "Electric colors on dark canvas",
+    slideClass: "theme-neon",
+    headingFont: "'Space Grotesk', sans-serif",
+    bodyFont: "'Inter', sans-serif",
+    colors: {
+      bg: "#0a0a0a",
+      text: "#d4d4d8",
+      heading: "#f0abfc",
+      subtitle: "#a78bfa",
+      accent: "#22d3ee",
+      cardBg: "#18181b",
+      tableBorder: "#3f3f46",
+      tableHeaderBg: "#27272a",
+      noteBg: "#1e1b4b",
+      noteText: "#c4b5fd",
+    },
+  },
+
+  // ----------------------------------------------------------
+  // THEME 5: Glass — Soft translucent modern feel
+  // ----------------------------------------------------------
+  glass: {
+    id: "glass",
+    name: "Glass",
+    description: "Soft pastels, airy and light",
+    slideClass: "theme-glass",
+    headingFont: "'DM Sans', sans-serif",
+    bodyFont: "'DM Sans', sans-serif",
+    colors: {
+      bg: "#f0f4ff",
+      text: "#475569",
+      heading: "#1e293b",
+      subtitle: "#64748b",
+      accent: "#6366f1",
+      cardBg: "#e8eeff",
+      tableBorder: "#c7d2fe",
+      tableHeaderBg: "#e0e7ff",
+      noteBg: "#fef9c3",
+      noteText: "#854d0e",
+    },
+  },
+
+  // ----------------------------------------------------------
+  // THEME 6: Arcane — Medieval warmth meets AI aesthetics
+  // ----------------------------------------------------------
+  arcane: {
+    id: "arcane",
+    name: "Arcane",
+    description: "Medieval gold meets modern AI — refined and bold",
+    slideClass: "theme-arcane",
+    headingFont: "'Cinzel', serif",
+    bodyFont: "'IBM Plex Sans', sans-serif",
+    colors: {
+      bg: "#0c0e17",
+      text: "#a8a49b",
+      heading: "#c9a84c",
+      subtitle: "#7a7265",
+      accent: "#2fbfbf",
+      cardBg: "#121521",
+      tableBorder: "#252838",
+      tableHeaderBg: "#181b2a",
+      noteBg: "#18160d",
+      noteText: "#c9a84c",
+    },
+  },
+
+  // ----------------------------------------------------------
+  // THEME 7: Medieval — Parchment & blackletter
+  // ----------------------------------------------------------
+  medieval: {
+    id: "medieval",
+    name: "Medieval",
+    description: "Parchment, ink, and old-world script",
+    slideClass: "theme-medieval",
+    headingFont: "'UnifrakturMaguntia', cursive",
+    bodyFont: "'Crimson Text', serif",
+    colors: {
+      bg: "#f5eed6",
+      text: "#3e2f1c",
+      heading: "#2c1a0e",
+      subtitle: "#6b4f36",
+      accent: "#8b1a1a",
+      cardBg: "#ebe3c8",
+      tableBorder: "#c4b494",
+      tableHeaderBg: "#ddd4b6",
+      noteBg: "#d4c9a8",
+      noteText: "#4a3520",
+    },
+  },
 };
 
 export const themeIds = Object.keys(themes) as Array<keyof typeof themes>;
