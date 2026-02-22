@@ -21,7 +21,7 @@ export interface SlideContent {
   /** Custom HTML content for special layouts */
   customHtml?: string;
   /** Team members for team layout */
-  team?: { name: string; role: string; bio: string; imageUrl?: string }[];
+  team?: { name: string; role: string; bio: string; imageUrl?: string; logos?: string[] }[];
   /** Bar chart data for bar-chart layout */
   bars?: { label: string; value: number; highlight?: boolean }[];
   /** Optional note/annotation shown in a different style */
@@ -79,24 +79,28 @@ const slide02: SlideContent = {
       role: "Business",
       bio: "Economics @ Oxford University\nConsultant at BCG\nBusiness Services Investor at Charlesbank\nIncubated Compliance Consulting firm\nMBA @ HBS",
       imageUrl: "/team/segev.jpeg",
+      logos: ["HBS", "BCG", "Charlesbank"],
     },
     {
       name: "Yoav Anaki",
       role: "Business",
       bio: "Computer Science age 13\nCOO at Mad Mimi, acquired by GoDaddy\nIDF Counterterrorism Investigations\nPartner, AI at Fresh Fund\nMBA @ HBS",
       imageUrl: "/team/anaki.jpeg",
+      logos: ["HBS", "IDF", "Fresh Fund"],
     },
     {
       name: "Eran Pinhas",
       role: "Tech",
       bio: "CTO & Co-Founder of Ginzi (AI Support Automation)\nPrincipal Software Engineer at Axonius\nFull-stack & AI/ML systems\nOpen-source contributor\nCS @ Ben-Gurion University",
       imageUrl: "/team/pinhas.jpg",
+      logos: ["IDF 8200", "Ben Gurion Uni", "Axonius"],
     },
     {
       name: "Jamie Kalamarides",
       role: "Retirement",
       bio: "President, Group Insurance at Prudential Financial\nHead of Institutional Retirement Plan Services\nExpert witness, U.S. Senate (SECURE Act)\nFellow, Bipartisan Policy Center\nMBA @ Tuck",
       imageUrl: "/team/kalamarides.jpg",
+      logos: ["Dartmouth", "US Government", "Prudential"],
     },
   ],
 };

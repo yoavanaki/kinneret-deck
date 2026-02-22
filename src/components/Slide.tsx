@@ -283,9 +283,27 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 editable={editable}
                 onUpdate={onUpdate}
                 tag="p"
-                className={`${isLargeTeam ? "text-xs leading-snug" : "text-sm leading-relaxed"}`}
+                className={`${isLargeTeam ? "text-[10px] leading-snug" : "text-xs leading-relaxed"}`}
                 style={{ color: t.text, whiteSpace: "pre-line" }}
               />
+              {member.logos && member.logos.length > 0 && (
+                <div className="flex flex-wrap justify-center gap-1 mt-2">
+                  {member.logos.map((logo, li) => (
+                    <span
+                      key={li}
+                      className="text-[9px] font-semibold px-1.5 py-0.5 rounded"
+                      style={{
+                        backgroundColor: t.accent + "18",
+                        color: t.accent,
+                        border: `1px solid ${t.accent}40`,
+                        letterSpacing: "0.02em",
+                      }}
+                    >
+                      {logo}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
