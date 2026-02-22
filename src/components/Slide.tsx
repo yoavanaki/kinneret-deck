@@ -892,8 +892,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
   if (slide.layout === "stack" && slide.stack) {
     const W = 960, H = 540;
     const MARGIN = 28;
-    const TITLE_H = 52;
-    const NOTE_H = 32;
+    const TITLE_H = 62;
     const ARROW_GAP = 14;
 
     const hasHoldco = slide.holdcoAgents && slide.holdcoAgents.length > 0;
@@ -906,7 +905,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
     const layers = slide.stack;
     const numLayers = layers.length;
     const numArrowGaps = numLayers - 1;
-    const totalDiagramH = H - TITLE_H - NOTE_H - MARGIN;
+    const totalDiagramH = H - TITLE_H - MARGIN;
     const layerH = (totalDiagramH - numArrowGaps * ARROW_GAP) / numLayers;
     const renderLayers = [...layers].reverse();
 
@@ -1089,9 +1088,11 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             const agentCount = agents.length;
             const colTopY = TITLE_H;
             const colH = totalDiagramH;
-            const cardGap = 10;
-            const arrowH = 18;
-            const cardH = (colH - (agentCount - 1) * (cardGap + arrowH)) / agentCount;
+            const innerPad = 12;
+            const cardGap = 8;
+            const arrowH = 16;
+            const usableH = colH - innerPad * 2;
+            const cardH = (usableH - (agentCount - 1) * (cardGap + arrowH)) / agentCount;
 
             return (
               <g>
@@ -1107,9 +1108,9 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                   strokeDasharray="6,3" />
 
                 {agents.map((agent, ai) => {
-                  const cy = colTopY + 8 + ai * (cardH + cardGap + arrowH);
-                  const innerW = rightW - 16;
-                  const cx = rightX + 8;
+                  const cy = colTopY + innerPad + ai * (cardH + cardGap + arrowH);
+                  const innerW = rightW - innerPad * 2;
+                  const cx = rightX + innerPad;
 
                   return (
                     <g key={ai}>
@@ -1149,16 +1150,6 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             );
           })()}
 
-          {/* Note at bottom */}
-          {slide.note && (
-            <g>
-              <rect x={MARGIN} y={H - NOTE_H - 4} width={W - MARGIN * 2} height={NOTE_H} rx={4}
-                fill={t.noteBg} />
-              <text x={MARGIN + 10} y={H - NOTE_H + 14} fill={t.noteText} fontSize={8}>
-                {slide.note}
-              </text>
-            </g>
-          )}
         </svg>
       </div>
     );
