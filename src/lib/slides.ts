@@ -422,11 +422,32 @@ const slide16: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 18: Automation Opportunities
+// SLIDE 18: Competitive Landscape
+// ============================================================
+const slideCompetitive: SlideContent = {
+  id: "slide-competitive",
+  number: 18,
+  title: "Competitive Landscape",
+  subtitle: "No one is combining acquisitions with AI-native automation",
+  layout: "table",
+  tableHeaders: ["Player", "Model", "AI Automation", "M&A Strategy", "Threat Level"],
+  tableRows: [
+    ["Large Recordkeepers\n(Fidelity, Vanguard, Empower)", "Bundled plan services", "Internal tools only", "Acquire large RKs", "Low — don't serve small plans"],
+    ["National TPAs\n(ASC, Pinnacle)", "Traditional TPA", "Minimal", "Organic growth", "Low — no tech DNA"],
+    ["Regional / Local TPAs\n(5,000+ firms)", "Owner-operated", "None", "None — aging owners", "None — these are targets"],
+    ["Tech Platforms\n(Vestwell, Human Interest)", "Software for advisors", "Workflow tooling", "Not acquiring TPAs", "Medium — different segment"],
+    ["PE Rollups\n(Hub, NFP, CBIZ)", "Buy & integrate", "Limited", "Acquire for revenue", "Medium — no automation edge"],
+    ["Cognitory", "Acquire + Automate", "AI-native platform", "Buy at 4-6x, automate", "We play to win"],
+  ],
+  note: "Most competitors are either technology companies that don't acquire, or acquirers that don't automate. Cognitory is uniquely positioned to do both.",
+};
+
+// ============================================================
+// SLIDE 19: Automation Opportunities
 // ============================================================
 const slide17: SlideContent = {
   id: "slide-17",
-  number: 18,
+  number: 19,
   title: "Automation Opportunities",
   subtitle: "Implied margin impact per 500-plan TPA ($2M revenue)",
   layout: "table",
@@ -443,11 +464,11 @@ const slide17: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 19: Fundraise
+// SLIDE 20: Fundraise
 // ============================================================
 const slide18: SlideContent = {
   id: "slide-18",
-  number: 19,
+  number: 20,
   title: "Raising $10M",
   layout: "bullets",
   body: "Seed round to acquire initial TPA portfolio and deploy the automation playbook.",
@@ -467,7 +488,7 @@ export const slides: SlideContent[] = [
   slide01, slide02, slideParallels, slide03, slide04,
   slide05, slide06, slideStack, slide08, slide09,
   slide10, slide11, slide12, slide13, slide14,
-  slide15, slide16, slide17, slide18,
+  slide15, slide16, slideCompetitive, slide17, slide18,
 ];
 
 // ============================================================
