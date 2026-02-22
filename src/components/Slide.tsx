@@ -298,20 +298,26 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 </div>
               )}
               {member.logos && member.logos.length > 0 && (
-                <div className="flex flex-wrap justify-center gap-1 mt-2">
+                <div className="flex justify-center gap-2 mt-2">
                   {member.logos.map((logo, li) => (
-                    <span
+                    <div
                       key={li}
-                      className="text-[9px] font-semibold px-1.5 py-0.5 rounded"
+                      className="flex items-center justify-center rounded"
                       style={{
-                        backgroundColor: t.accent + "18",
-                        color: t.accent,
-                        border: `1px solid ${t.accent}40`,
-                        letterSpacing: "0.02em",
+                        width: 48,
+                        height: 28,
+                        backgroundColor: "#ffffff",
+                        padding: "2px 4px",
+                        flexShrink: 0,
                       }}
+                      title={logo.name}
                     >
-                      {logo}
-                    </span>
+                      <img
+                        src={logo.imageUrl}
+                        alt={logo.name}
+                        style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
+                      />
+                    </div>
                   ))}
                 </div>
               )}
