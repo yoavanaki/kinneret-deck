@@ -281,8 +281,11 @@ const slide14: SlideContent = {
 const slide15: SlideContent = {
   id: "slide-15",
   number: 15,
-  title: "Why do we like this space?",
-  layout: "big-text",
+  title: "Why Retirement TPA?",
+  layout: "two-column",
+  leftText: "STRUCTURAL ADVANTAGES\n\n• Regulatory mandate creates guaranteed demand\n• Extreme fragmentation — no dominant player\n• Owner-operators aging out, looking to sell\n• Acquisition multiples are low (4-6x EBITDA)\n• Recurring, contract-based revenue",
+  rightText: "AUTOMATION OPPORTUNITY\n\n• 80%+ of workflows are rule-based\n• Document generation is templated\n• Compliance testing follows fixed algorithms\n• Government filings are standardized\n• AI can reduce cost-to-serve by 50%+",
+  note: "The combination of cheap acquisitions and dramatic margin expansion through automation creates a powerful economic engine.",
 };
 
 // ============================================================
