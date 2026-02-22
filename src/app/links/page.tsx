@@ -16,9 +16,8 @@ export default function LinksPage() {
   const [links, setLinks] = useState<ShareLink[]>([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState<string | null>(null);
-  const [busy, setBusy] = useState<string | null>(null); // link id being acted on
-
-  // Current active slide IDs (for refresh snapshot)
+  const [busy, setBusy] = useState<string | null>(null);
+  const [creating, setCreating] = useState(false);
   const [activeSlideIds, setActiveSlideIds] = useState<string[]>([]);
 
   useEffect(() => {
@@ -30,7 +29,7 @@ export default function LinksPage() {
       })
       .catch(() => setLoading(false));
 
-    // Load current slide order to know what to snapshot on refresh
+    // Load current slide order for creating new links / refreshing snapshots
     Promise.all([
       fetch("/api/slides").then((r) => r.json()).catch(() => []),
       fetch("/api/slide-order").then((r) => r.json()).catch(() => null),
@@ -62,17 +61,38 @@ export default function LinksPage() {
     setTimeout(() => setCopied(null), 2000);
   }
 
+  async function createNewLink() {
+    if (activeSlideIds.length === 0) return;
+    setCreating(true);
+    const id = crypto.randomUUID().slice(0, 8);
+    const now = new Date().toISOString();
+    const newLink: ShareLink = {
+      id,
+      created_at: now,
+      updated_at: now,
+      disabled: false,
+      slide_ids: activeSlideIds,
+    };
+    try {
+      await fetch("/api/share", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, slide_ids: activeSlideIds }),
+      });
+      setLinks((prev) => [newLink, ...prev]);
+    } catch {}
+    setCreating(false);
+  }
+
   async function toggleDisable(link: ShareLink) {
     const action = link.disabled ? "enable" : "disable";
     setBusy(link.id);
-    // Optimistic update
     setLinks((prev) => prev.map((l) => l.id === link.id ? { ...l, disabled: !l.disabled } : l));
     await fetch("/api/share", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: link.id, action }),
     }).catch(() => {
-      // Revert on failure
       setLinks((prev) => prev.map((l) => l.id === link.id ? { ...l, disabled: link.disabled } : l));
     });
     setBusy(null);
@@ -82,7 +102,6 @@ export default function LinksPage() {
     if (activeSlideIds.length === 0) return;
     setBusy(link.id);
     const now = new Date().toISOString();
-    // Optimistic update
     setLinks((prev) =>
       prev.map((l) => l.id === link.id ? { ...l, slide_ids: activeSlideIds, updated_at: now } : l)
     );
@@ -118,10 +137,17 @@ export default function LinksPage() {
           <div>
             <h1 className="text-xl font-bold text-gray-900">Share Links</h1>
             <p className="text-sm text-gray-500">
-              {links.length} link{links.length !== 1 ? "s" : ""}
+              {links.length} link{links.length !== 1 ? "s" : ""} &middot; {links.filter((l) => !l.disabled).length} active
             </p>
           </div>
           <div className="flex items-center gap-3">
+            <button
+              onClick={createNewLink}
+              disabled={creating || activeSlideIds.length === 0}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 disabled:opacity-40"
+            >
+              {creating ? "Creating..." : "New Link"}
+            </button>
             <a
               href="/dashboard"
               className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200"
@@ -142,13 +168,14 @@ export default function LinksPage() {
         {links.length === 0 ? (
           <div className="text-center py-16">
             <h2 className="text-lg font-medium text-gray-900 mb-2">No links yet</h2>
-            <p className="text-gray-500 mb-4">Generate a share link from the deck editor to get started.</p>
-            <a
-              href="/"
-              className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"
+            <p className="text-gray-500 mb-4">Create a share link to let others view your deck.</p>
+            <button
+              onClick={createNewLink}
+              disabled={creating || activeSlideIds.length === 0}
+              className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 disabled:opacity-40"
             >
-              Go to Deck Editor
-            </a>
+              {creating ? "Creating..." : "Create First Link"}
+            </button>
           </div>
         ) : (
           <div className="space-y-3">
@@ -196,7 +223,7 @@ export default function LinksPage() {
                           rel="noopener noreferrer"
                           className="flex-shrink-0 text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded hover:bg-gray-200"
                         >
-                          Open ↗
+                          Open
                         </a>
                       </div>
 
@@ -206,7 +233,7 @@ export default function LinksPage() {
                           <span>Refreshed {formatDate(link.updated_at)}</span>
                         )}
                         {link.slide_ids && (
-                          <span>{link.slide_ids.length} slides snapshotted</span>
+                          <span>{link.slide_ids.length} slides</span>
                         )}
                       </div>
                     </div>
@@ -219,7 +246,7 @@ export default function LinksPage() {
                         title="Update this link to show the current deck"
                         className="px-3 py-1.5 text-sm bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 disabled:opacity-40"
                       >
-                        {isBusy ? "..." : "Refresh Snapshot"}
+                        {isBusy ? "..." : "Refresh"}
                       </button>
                       <button
                         onClick={() => toggleDisable(link)}

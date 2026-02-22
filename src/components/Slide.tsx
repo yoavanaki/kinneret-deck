@@ -276,16 +276,27 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 className={`${isLargeTeam ? "text-xs" : "text-sm"} font-semibold mb-2`}
                 style={{ color: t.accent }}
               />
-              <EditableText
-                value={member.bio}
-                slideId={slide.id}
-                field={`team.${i}.bio`}
-                editable={editable}
-                onUpdate={onUpdate}
-                tag="p"
-                className={`${isLargeTeam ? "text-[10px] leading-snug" : "text-xs leading-relaxed"}`}
-                style={{ color: t.text, whiteSpace: "pre-line" }}
-              />
+              {editable ? (
+                <EditableText
+                  value={member.bio}
+                  slideId={slide.id}
+                  field={`team.${i}.bio`}
+                  editable={editable}
+                  onUpdate={onUpdate}
+                  tag="p"
+                  className={`${isLargeTeam ? "text-[10px] leading-snug" : "text-xs leading-relaxed"}`}
+                  style={{ color: t.text, whiteSpace: "pre-line" }}
+                />
+              ) : (
+                <div className="flex flex-col gap-0.5 w-full">
+                  {member.bio.split("\n").map((line, li) => (
+                    <p key={li} className={`${isLargeTeam ? "text-[10px]" : "text-xs"} leading-tight`}
+                      style={{ color: t.text }}>
+                      {line}
+                    </p>
+                  ))}
+                </div>
+              )}
               {member.logos && member.logos.length > 0 && (
                 <div className="flex flex-wrap justify-center gap-1 mt-2">
                   {member.logos.map((logo, li) => (
