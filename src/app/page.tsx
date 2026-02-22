@@ -16,6 +16,7 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
   const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
   const [slideScale, setSlideScale] = useState(1);
+  const [hydrated, setHydrated] = useState(false);
   const slideContainerRef = useRef<HTMLDivElement>(null);
 
   const theme = themes[themeId];
@@ -60,7 +61,7 @@ export default function Home() {
 
   // Load saved state from localStorage (version-gated to avoid stale data)
   useEffect(() => {
-    const SLIDES_VERSION = "v6";
+    const SLIDES_VERSION = "v11";
     const savedTheme = localStorage.getItem("cognitory-theme");
     if (savedTheme && themes[savedTheme]) setThemeId(savedTheme);
 
@@ -80,16 +81,20 @@ export default function Home() {
       setShareLinkId(savedLinkId);
       setShareLink(`${window.location.origin}/view/${savedLinkId}`);
     }
+
+    setHydrated(true);
   }, []);
 
-  // Save to localStorage on changes
+  // Save to localStorage on changes (only after initial hydration)
   useEffect(() => {
+    if (!hydrated) return;
     localStorage.setItem("cognitory-theme", themeId);
-  }, [themeId]);
+  }, [themeId, hydrated]);
 
   useEffect(() => {
+    if (!hydrated) return;
     localStorage.setItem("cognitory-slides", JSON.stringify(slideData));
-  }, [slideData]);
+  }, [slideData, hydrated]);
 
   // Fetch comment counts for all slides
   function refreshCommentCounts() {

@@ -75,28 +75,28 @@ const slide02: SlideContent = {
   layout: "team",
   team: [
     {
-      name: "Yoav Anaki",
-      role: "Co-Founder",
-      bio: "Computer Science age 13 · COO at Mad Mimi, acquired by GoDaddy · IDF Counterterrorism Investigations · Partner, AI at Fresh Fund · MBA @ HBS",
-      imageUrl: "/team/anaki.jpeg",
-    },
-    {
       name: "Yoav Segev",
-      role: "Co-Founder",
+      role: "Co-CEO",
       bio: "Economics @ Oxford University · Consultant at BCG · Business Services Investor at Charlesbank · Incubated Compliance Consulting firm · MBA @ HBS",
       imageUrl: "/team/segev.jpeg",
     },
     {
-      name: "Jamie Kalamarides",
-      role: "Chairman",
-      bio: "President, Group Insurance at Prudential Financial · Head of Institutional Retirement Plan Services · Expert witness, U.S. Senate (SECURE Act) · Fellow, Bipartisan Policy Center · MBA @ Tuck",
-      imageUrl: "/team/kalamarides.jpg",
+      name: "Yoav Anaki",
+      role: "Co-CEO",
+      bio: "Computer Science age 13 · COO at Mad Mimi, acquired by GoDaddy · IDF Counterterrorism Investigations · Partner, AI at Fresh Fund · MBA @ HBS",
+      imageUrl: "/team/anaki.jpeg",
     },
     {
       name: "Eran Pinhas",
       role: "Technologist",
       bio: "CTO & Co-Founder of Ginzi (AI Support Automation) · Senior Software Engineer at Axonius · Full-stack & AI/ML systems · Open-source contributor · CS @ Ben-Gurion University",
       imageUrl: "/team/pinhas.jpg",
+    },
+    {
+      name: "Jamie Kalamarides",
+      role: "Chairman",
+      bio: "President, Group Insurance at Prudential Financial · Head of Institutional Retirement Plan Services · Expert witness, U.S. Senate (SECURE Act) · Fellow, Bipartisan Policy Center · MBA @ Tuck",
+      imageUrl: "/team/kalamarides.jpg",
     },
   ],
 };
@@ -180,11 +180,74 @@ const slide06: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 7: Mission — Acquire → Automate → Expand
+// SLIDE 7: Platform Architecture — Stack Diagram
 // ============================================================
-const slide07: SlideContent = {
-  id: "slide-07",
+const slideStack: SlideContent = {
+  id: "slide-stack",
   number: 7,
+  title: "The Cognitory platform",
+  subtitle: "AI-native software that automates any services business",
+  layout: "stack",
+  stack: [
+    // Layer 1 (bottom): AI Model
+    {
+      label: "AI Model Layer",
+      icon: "🧠",
+      description: "Foundation models powering all automation",
+      items: [
+        { label: "LLM Reasoning", icon: "💬" },
+        { label: "Document Understanding", icon: "📄" },
+        { label: "Data Extraction", icon: "🔍" },
+        { label: "Classification", icon: "🏷️" },
+      ],
+    },
+    // Layer 2 (middle): Agentic Layer
+    {
+      label: "Agentic Layer",
+      icon: "⚡",
+      description: "Autonomous agents with general and domain-specific skills",
+      items: [
+        { label: "Scheduling" },
+        { label: "Cron Jobs" },
+        { label: "Notifications" },
+        { label: "Data Pipelines" },
+        { label: "Client Intake" },
+        { label: "Doc Generation" },
+        { label: "Compliance Testing", accent: true },
+        { label: "Form 5500 Filing", accent: true },
+        { label: "Plan Doc Drafting", accent: true },
+        { label: "Contribution Calcs", accent: true },
+        { label: "Error Corrections", accent: true },
+      ],
+    },
+    // Layer 3 (top): Monitoring & Control
+    {
+      label: "Monitoring & Control Center",
+      icon: "📡",
+      description: "Observe, manage, and intervene across all running agents",
+      grid: true,
+      items: [
+        { label: "TPA-A Agent 1", accent: true },
+        { label: "TPA-A Agent 2", accent: true },
+        { label: "TPA-A Agent 3", accent: true },
+        { label: "TPA-B Agent 1", accent: true },
+        { label: "TPA-B Agent 2", accent: true },
+        { label: "Payroll Agent", icon: "🔵" },
+        { label: "Benefits Agent", icon: "🔵" },
+        { label: "Insurance Agent", icon: "🔵" },
+        { label: "Agent N ...", icon: "🔵" },
+      ],
+    },
+  ],
+  note: "General skills (white) transfer across verticals. Domain skills (highlighted) are vertical-specific. The monitoring layer provides real-time visibility across all agents in the portfolio.",
+};
+
+// ============================================================
+// SLIDE 8: Mission — Acquire → Automate → Expand
+// ============================================================
+const slide08: SlideContent = {
+  id: "slide-08",
+  number: 8,
   title: "Building the world's first services factories",
   layout: "flow",
   flows: {
@@ -196,11 +259,11 @@ const slide07: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 8: The Playbook
+// SLIDE 9: The Playbook
 // ============================================================
-const slide08: SlideContent = {
-  id: "slide-08",
-  number: 8,
+const slide09: SlideContent = {
+  id: "slide-09",
+  number: 9,
   title: "The Playbook",
   layout: "table",
   tableHeaders: ["Phase", "Action", "Outcome"],
@@ -215,11 +278,11 @@ const slide08: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 9: Candidate Industries
+// SLIDE 10: Candidate Industries
 // ============================================================
-const slide09: SlideContent = {
-  id: "slide-09",
-  number: 9,
+const slide10: SlideContent = {
+  id: "slide-10",
+  number: 10,
   title: "Initial Candidate Industries",
   subtitle: "Fragmented, rule-based, and ripe for automation",
   layout: "table",
@@ -237,11 +300,11 @@ const slide09: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 10: First Bet - Retirement TPA
+// SLIDE 11: First Bet - Retirement TPA
 // ============================================================
-const slide10: SlideContent = {
-  id: "slide-10",
-  number: 10,
+const slide11: SlideContent = {
+  id: "slide-11",
+  number: 11,
   title: "Our first bet: Retirement TPA",
   subtitle: "Every business with a 401(k) needs a TPA. They can't do it themselves — and they can't stop.",
   layout: "table",
@@ -257,11 +320,11 @@ const slide10: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 11: What does a TPA do?
+// SLIDE 12: What does a TPA do?
 // ============================================================
-const slide11: SlideContent = {
-  id: "slide-11",
-  number: 11,
+const slide12: SlideContent = {
+  id: "slide-12",
+  number: 12,
   title: "What does a TPA do?",
   layout: "bullets",
   body: "A Retirement TPA handles the complex administrative and compliance work that sits between the plan sponsor (employer) and the government.",
@@ -277,22 +340,22 @@ const slide11: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 12: Chairman
+// SLIDE 13: Chairman
 // ============================================================
-const slide12: SlideContent = {
-  id: "slide-12",
-  number: 12,
+const slide13: SlideContent = {
+  id: "slide-13",
+  number: 13,
   title: "Jamie Kalamarides — Chairman",
   layout: "text",
   body: "Jamie brings 20+ years of senior leadership at Prudential Financial, where he served as President of Group Insurance and Head of Institutional Retirement Plan Services, overseeing billions in plan assets.\n\nHe was a key expert to the SECURE Act, testifying before the U.S. Senate Finance, HELP, and Aging Committees on retirement policy. He is a nonresident fellow at the Bipartisan Policy Center.\n\nJamie's deep domain expertise in retirement services — combined with his relationships across the industry — gives Cognitory a unique advantage in building trust with acquisition targets and navigating the regulatory landscape.",
 };
 
 // ============================================================
-// SLIDE 13: Why this space
+// SLIDE 14: Why this space
 // ============================================================
-const slide13: SlideContent = {
-  id: "slide-13",
-  number: 13,
+const slide14: SlideContent = {
+  id: "slide-14",
+  number: 14,
   title: "Why Retirement TPA?",
   layout: "two-column",
   leftText: "STRUCTURAL ADVANTAGES\n\n• Regulatory mandate creates guaranteed demand\n• Extreme fragmentation — no dominant player\n• Owner-operators aging out, looking to sell\n• Acquisition multiples are low (4-6x EBITDA)\n• Recurring, contract-based revenue",
@@ -301,11 +364,11 @@ const slide13: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 14: M&A Pipeline
+// SLIDE 15: M&A Pipeline
 // ============================================================
-const slide14: SlideContent = {
-  id: "slide-14",
-  number: 14,
+const slide15: SlideContent = {
+  id: "slide-15",
+  number: 15,
   title: "Current M&A Pipeline",
   layout: "table",
   subtitle: "Active conversations with owner-operators",
@@ -321,11 +384,11 @@ const slide14: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 15: Industry Overview
+// SLIDE 16: Industry Overview
 // ============================================================
-const slide15: SlideContent = {
-  id: "slide-15",
-  number: 15,
+const slide16: SlideContent = {
+  id: "slide-16",
+  number: 16,
   title: "Retirement TPA Industry Overview",
   layout: "two-column",
   leftText: "MARKET STRUCTURE\n\n• $8B+ total addressable market\n• 5,000+ TPA firms in the U.S.\n• Top 10 firms hold <15% market share\n• Average firm: 10-50 employees\n• 700,000+ retirement plans need administration",
@@ -334,11 +397,11 @@ const slide15: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 16: Automation Opportunities
+// SLIDE 17: Automation Opportunities
 // ============================================================
-const slide16: SlideContent = {
-  id: "slide-16",
-  number: 16,
+const slide17: SlideContent = {
+  id: "slide-17",
+  number: 17,
   title: "Automation Opportunities",
   subtitle: "Implied margin impact per 500-plan TPA ($2M revenue)",
   layout: "table",
@@ -355,11 +418,11 @@ const slide16: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 17: Fundraise
+// SLIDE 18: Fundraise
 // ============================================================
-const slide17: SlideContent = {
-  id: "slide-17",
-  number: 17,
+const slide18: SlideContent = {
+  id: "slide-18",
+  number: 18,
   title: "Raising $10M",
   layout: "bullets",
   body: "Seed round to acquire initial TPA portfolio and deploy the automation playbook.",
@@ -377,7 +440,7 @@ const slide17: SlideContent = {
 // ============================================================
 export const slides: SlideContent[] = [
   slide01, slide02, slide03, slide04, slide05,
-  slide06, slide07, slide08, slide09, slide10,
+  slide06, slideStack, slide08, slide09, slide10,
   slide11, slide12, slide13, slide14, slide15,
-  slide16, slide17,
+  slide16, slide17, slide18,
 ];

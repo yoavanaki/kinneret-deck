@@ -224,7 +224,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
   if (slide.layout === "team" && slide.team) {
     const isLargeTeam = slide.team.length > 3;
     return (
-      <div style={baseStyle} className={`flex flex-col ${isLargeTeam ? "p-8" : "p-12"}`}>
+      <div style={baseStyle} className={`flex flex-col items-center justify-center ${isLargeTeam ? "px-10 py-10" : "p-12"}`}>
         <EditableText
           value={slide.title}
           slideId={slide.id}
@@ -232,14 +232,14 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           editable={editable}
           onUpdate={onUpdate}
           tag="h1"
-          className={`font-bold ${isLargeTeam ? "text-2xl mb-5" : "text-3xl mb-8"} text-center`}
+          className={`font-bold ${isLargeTeam ? "text-2xl mb-6" : "text-3xl mb-8"} text-center w-full`}
           style={headingStyle}
         />
-        <div className={`flex ${isLargeTeam ? "gap-3" : "gap-6"} flex-1 items-start`}>
+        <div className={`flex ${isLargeTeam ? "gap-4" : "gap-6"} items-stretch w-full`}>
           {slide.team.map((member, i) => (
             <div
               key={i}
-              className={`flex-1 flex flex-col items-center text-center ${isLargeTeam ? "p-3" : "p-4"} rounded-lg`}
+              className={`flex-1 flex flex-col items-center text-center ${isLargeTeam ? "px-4 py-5" : "p-4"} rounded-lg`}
               style={{ backgroundColor: t.cardBg }}
             >
               {member.imageUrl ? (
@@ -744,6 +744,229 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             </table>
           </div>
         )}
+      </div>
+    );
+  }
+
+  // ---- STACK LAYOUT (SVG Architecture Diagram) ----
+  if (slide.layout === "stack" && slide.stack) {
+    // Layout constants
+    const W = 960, H = 540;
+    const MARGIN = 40;
+    const TITLE_H = 58;
+    const NOTE_H = 36;
+    const LAYER_GAP = 12;
+    const ARROW_GAP = 20;
+    const diagramW = W - MARGIN * 2;
+
+    // We have 3 layers + 2 arrow gaps between them
+    const layers = slide.stack; // bottom-to-top in data, we render top-to-bottom reversed
+    const numLayers = layers.length;
+    const numArrowGaps = numLayers - 1;
+    const totalDiagramH = H - TITLE_H - NOTE_H - MARGIN;
+    const layerH = (totalDiagramH - numArrowGaps * ARROW_GAP) / numLayers;
+
+    // Render layers top-to-bottom (reverse of data order: data[0]=bottom, data[last]=top)
+    const renderLayers = [...layers].reverse();
+
+    return (
+      <div style={baseStyle}>
+        <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} style={{ fontFamily: theme.bodyFont }}>
+          {/* Title */}
+          <text x={MARGIN} y={32} fill={t.heading} fontSize={22} fontWeight="bold" fontFamily={theme.headingFont}>
+            {slide.title}
+          </text>
+          {slide.subtitle && (
+            <text x={MARGIN} y={52} fill={t.subtitle} fontSize={13}>
+              {slide.subtitle}
+            </text>
+          )}
+
+          {/* Layers */}
+          {renderLayers.map((layer, li) => {
+            const layerY = TITLE_H + li * (layerH + ARROW_GAP);
+            const layerX = MARGIN;
+            const items = layer.items || [];
+            const innerPadTop = 28;
+            const innerPadSide = 14;
+            const innerH = layerH - innerPadTop - 10;
+
+            // For grid layers (monitoring): small boxes in a row
+            // For non-grid layers: two groups side by side (general vs domain)
+            if (layer.grid) {
+              // Grid of agent cards
+              const cols = Math.min(items.length, 9);
+              const boxGap = 8;
+              const boxW = (diagramW - innerPadSide * 2 - (cols - 1) * boxGap) / cols;
+              const boxH = innerH - 4;
+
+              return (
+                <g key={li}>
+                  {/* Layer container */}
+                  <rect x={layerX} y={layerY} width={diagramW} height={layerH} rx={8}
+                    fill={t.cardBg} stroke={t.tableBorder} strokeWidth={1.5} />
+                  {/* Layer label */}
+                  <text x={layerX + innerPadSide} y={layerY + 19} fill={t.accent}
+                    fontSize={11} fontWeight="bold" letterSpacing="0.08em">
+                    {layer.icon} {layer.label.toUpperCase()}
+                  </text>
+                  {layer.description && (
+                    <text x={layerX + innerPadSide + layer.label.length * 7.5 + 30} y={layerY + 19}
+                      fill={t.subtitle} fontSize={10}>
+                      {layer.description}
+                    </text>
+                  )}
+                  {/* Agent boxes */}
+                  {items.map((item, ii) => {
+                    const bx = layerX + innerPadSide + ii * (boxW + boxGap);
+                    const by = layerY + innerPadTop;
+                    const isAccent = item.accent;
+                    return (
+                      <g key={ii}>
+                        <rect x={bx} y={by} width={boxW} height={boxH} rx={5}
+                          fill={isAccent ? t.accent + "20" : t.bg}
+                          stroke={isAccent ? t.accent + "80" : t.tableBorder}
+                          strokeWidth={1}
+                          strokeDasharray={!isAccent && item.icon === "🔵" ? "3,2" : undefined} />
+                        <text x={bx + boxW / 2} y={by + boxH / 2 + 4} textAnchor="middle"
+                          fill={isAccent ? t.accent : t.subtitle} fontSize={9}>
+                          {item.label}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </g>
+              );
+            }
+
+            // Non-grid layer: split items into general (no accent) and domain (accent)
+            const generalItems = items.filter(i => !i.accent);
+            const domainItems = items.filter(i => i.accent);
+            const hasTwo = domainItems.length > 0 && generalItems.length > 0;
+            const groupGap = 14;
+            const groupW = hasTwo ? (diagramW - innerPadSide * 2 - groupGap) / 2 : diagramW - innerPadSide * 2;
+
+            return (
+              <g key={li}>
+                {/* Layer container */}
+                <rect x={layerX} y={layerY} width={diagramW} height={layerH} rx={8}
+                  fill={t.cardBg} stroke={t.tableBorder} strokeWidth={1.5} />
+                {/* Layer label */}
+                <text x={layerX + innerPadSide} y={layerY + 19} fill={t.accent}
+                  fontSize={11} fontWeight="bold" letterSpacing="0.08em">
+                  {layer.icon} {layer.label.toUpperCase()}
+                </text>
+                {layer.description && (
+                  <text x={layerX + innerPadSide + layer.label.length * 7.5 + 30} y={layerY + 19}
+                    fill={t.subtitle} fontSize={10}>
+                    {layer.description}
+                  </text>
+                )}
+
+                {/* General skills group */}
+                {generalItems.length > 0 && (
+                  <g>
+                    <rect x={layerX + innerPadSide} y={layerY + innerPadTop}
+                      width={groupW} height={innerH} rx={6}
+                      fill={t.bg} stroke={t.tableBorder} strokeWidth={1} />
+                    <text x={layerX + innerPadSide + 10} y={layerY + innerPadTop + 16}
+                      fill={t.subtitle} fontSize={9} fontWeight="bold" letterSpacing="0.05em">
+                      {hasTwo ? "GENERAL SKILLS" : "CAPABILITIES"}
+                    </text>
+                    {generalItems.map((item, ii) => {
+                      const cols = Math.min(generalItems.length, 3);
+                      const row = Math.floor(ii / cols);
+                      const col = ii % cols;
+                      const bw = (groupW - 24) / cols - 4;
+                      const bh = 24;
+                      const bx = layerX + innerPadSide + 10 + col * (bw + 6);
+                      const by = layerY + innerPadTop + 24 + row * (bh + 5);
+                      return (
+                        <g key={ii}>
+                          <rect x={bx} y={by} width={bw} height={bh} rx={4}
+                            fill={t.cardBg} stroke={t.tableBorder} strokeWidth={0.75} />
+                          <text x={bx + bw / 2} y={by + bh / 2 + 4} textAnchor="middle"
+                            fill={t.text} fontSize={10}>
+                            {item.label}
+                          </text>
+                        </g>
+                      );
+                    })}
+                  </g>
+                )}
+
+                {/* Domain skills group */}
+                {domainItems.length > 0 && (
+                  <g>
+                    <rect x={layerX + innerPadSide + (hasTwo ? groupW + groupGap : 0)}
+                      y={layerY + innerPadTop}
+                      width={hasTwo ? groupW : diagramW - innerPadSide * 2}
+                      height={innerH} rx={6}
+                      fill={t.accent + "10"} stroke={t.accent + "50"} strokeWidth={1} />
+                    <text x={layerX + innerPadSide + (hasTwo ? groupW + groupGap : 0) + 10}
+                      y={layerY + innerPadTop + 16}
+                      fill={t.accent} fontSize={9} fontWeight="bold" letterSpacing="0.05em">
+                      DOMAIN SKILLS (TPA)
+                    </text>
+                    {domainItems.map((item, ii) => {
+                      const gx = layerX + innerPadSide + (hasTwo ? groupW + groupGap : 0);
+                      const gw = hasTwo ? groupW : diagramW - innerPadSide * 2;
+                      const cols = Math.min(domainItems.length, 3);
+                      const row = Math.floor(ii / cols);
+                      const col = ii % cols;
+                      const bw = (gw - 24) / cols - 4;
+                      const bh = 24;
+                      const bx = gx + 10 + col * (bw + 6);
+                      const by = layerY + innerPadTop + 24 + row * (bh + 5);
+                      return (
+                        <g key={ii}>
+                          <rect x={bx} y={by} width={bw} height={bh} rx={4}
+                            fill={t.accent + "20"} stroke={t.accent + "60"} strokeWidth={0.75} />
+                          <text x={bx + bw / 2} y={by + bh / 2 + 4} textAnchor="middle"
+                            fill={t.accent} fontSize={10}>
+                            {item.label}
+                          </text>
+                        </g>
+                      );
+                    })}
+                  </g>
+                )}
+              </g>
+            );
+          })}
+
+          {/* Arrows between layers */}
+          {renderLayers.slice(0, -1).map((_, li) => {
+            const gapTop = TITLE_H + (li + 1) * layerH + li * ARROW_GAP;
+            const gapMid = gapTop + ARROW_GAP / 2;
+            const cx = W / 2;
+            // Three small chevrons (▼) spread across the width
+            const chevronXs = [cx - 100, cx, cx + 100];
+            return (
+              <g key={`arrow-${li}`}>
+                {chevronXs.map((ax, ai) => (
+                  <g key={ai} opacity={0.5}>
+                    <line x1={ax - 6} y1={gapMid - 3} x2={ax} y2={gapMid + 3}
+                      stroke={t.accent} strokeWidth={1.5} strokeLinecap="round" />
+                    <line x1={ax + 6} y1={gapMid - 3} x2={ax} y2={gapMid + 3}
+                      stroke={t.accent} strokeWidth={1.5} strokeLinecap="round" />
+                  </g>
+                ))}
+              </g>
+            );
+          })}
+
+          {/* Note at bottom */}
+          {slide.note && (
+            <g>
+              <rect x={MARGIN} y={H - NOTE_H - 6} width={diagramW} height={NOTE_H} rx={4}
+                fill={t.noteBg} />
+              <text x={MARGIN + 10} y={H - NOTE_H + 16} fill={t.noteText} fontSize={9}>
+                {slide.note}
+              </text>
+            </g>
+          )}
+        </svg>
       </div>
     );
   }

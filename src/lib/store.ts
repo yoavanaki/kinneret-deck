@@ -28,6 +28,13 @@ export interface ViewEvent {
   timestamp: string;
 }
 
+export interface SlideEdit {
+  slide_id: string;
+  field: string;
+  value: string;
+  updated_at: string;
+}
+
 // ---- Database initialization ----
 let dbInitialized = false;
 
@@ -62,6 +69,16 @@ export async function initDB() {
       timestamp TIMESTAMP DEFAULT NOW()
     )
   `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS slide_edits (
+      slide_id TEXT NOT NULL,
+      field TEXT NOT NULL,
+      value TEXT NOT NULL,
+      updated_at TIMESTAMP DEFAULT NOW(),
+      PRIMARY KEY (slide_id, field)
+    )
+  `;
 }
 
 // ---- In-memory fallback for local dev ----
@@ -69,11 +86,13 @@ const globalAny = globalThis as any;
 if (!globalAny.__mem_comments) globalAny.__mem_comments = [];
 if (!globalAny.__mem_shareLinks) globalAny.__mem_shareLinks = [];
 if (!globalAny.__mem_viewEvents) globalAny.__mem_viewEvents = [];
+if (!globalAny.__mem_slideEdits) globalAny.__mem_slideEdits = [];
 
 const mem = {
   get comments(): Comment[] { return globalAny.__mem_comments; },
   get shareLinks(): ShareLink[] { return globalAny.__mem_shareLinks; },
   get viewEvents(): ViewEvent[] { return globalAny.__mem_viewEvents; },
+  get slideEdits(): SlideEdit[] { return globalAny.__mem_slideEdits; },
 };
 
 function useDB() {
