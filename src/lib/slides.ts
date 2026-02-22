@@ -211,8 +211,18 @@ const slide10: SlideContent = {
 const slide11: SlideContent = {
   id: "slide-11",
   number: 11,
-  title: "What are our initial candidate industries?",
-  layout: "big-text",
+  title: "Initial Candidate Industries",
+  layout: "table",
+  subtitle: "Sectors scored on fragmentation, process repeatability, and regulatory tailwind",
+  tableHeaders: ["Sector", "Market Size", "Fragmentation", "Automation Potential", "Regulatory Moat"],
+  tableRows: [
+    ["Retirement TPA", "$8B+", "High — 5,000+ firms", "Very High", "Strong (ERISA/IRS)"],
+    ["Property Management", "$100B+", "High — mostly local", "High", "Moderate"],
+    ["Insurance Brokerage", "$60B+", "Very High", "High", "Strong"],
+    ["Accounting / Bookkeeping", "$150B+", "Extreme — 90k+ firms", "Medium-High", "Moderate (CPA)"],
+    ["Staffing / Recruiting", "$200B+", "High", "Medium", "Low"],
+  ],
+  note: "We start where fragmentation is highest, automation potential is clearest, and regulatory complexity creates a natural moat.",
 };
 
 // ============================================================
