@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { slides as initialSlides, SlideContent } from "@/lib/slides";
+import { slides as initialSlides, SlideContent, applyEdits } from "@/lib/slides";
 import { themes } from "@/lib/themes";
 import Slide from "@/components/Slide";
 import Comments from "@/components/Comments";
@@ -16,8 +16,8 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
   const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
   const [slideScale, setSlideScale] = useState(1);
-  const [hydrated, setHydrated] = useState(false);
   const slideContainerRef = useRef<HTMLDivElement>(null);
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
   const theme = themes[themeId];
 
@@ -59,22 +59,10 @@ export default function Home() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Load saved state from localStorage (version-gated to avoid stale data)
+  // Load slide edits from server + local preferences from localStorage
   useEffect(() => {
-    const SLIDES_VERSION = "v11";
     const savedTheme = localStorage.getItem("cognitory-theme");
     if (savedTheme && themes[savedTheme]) setThemeId(savedTheme);
-
-    const savedVersion = localStorage.getItem("cognitory-slides-version");
-    if (savedVersion === SLIDES_VERSION) {
-      const savedSlides = localStorage.getItem("cognitory-slides");
-      if (savedSlides) {
-        try { setSlideData(JSON.parse(savedSlides)); } catch {}
-      }
-    } else {
-      localStorage.setItem("cognitory-slides-version", SLIDES_VERSION);
-      localStorage.removeItem("cognitory-slides");
-    }
 
     const savedLinkId = localStorage.getItem("cognitory-link-id");
     if (savedLinkId) {
@@ -82,19 +70,21 @@ export default function Home() {
       setShareLink(`${window.location.origin}/view/${savedLinkId}`);
     }
 
-    setHydrated(true);
+    // Fetch server-stored edits and merge onto base slides
+    fetch("/api/slides")
+      .then((r) => r.json())
+      .then((edits) => {
+        if (edits.length > 0) {
+          setSlideData(applyEdits(initialSlides, edits));
+        }
+      })
+      .catch(() => {});
   }, []);
 
-  // Save to localStorage on changes (only after initial hydration)
+  // Save theme preference to localStorage
   useEffect(() => {
-    if (!hydrated) return;
     localStorage.setItem("cognitory-theme", themeId);
-  }, [themeId, hydrated]);
-
-  useEffect(() => {
-    if (!hydrated) return;
-    localStorage.setItem("cognitory-slides", JSON.stringify(slideData));
-  }, [slideData, hydrated]);
+  }, [themeId]);
 
   // Fetch comment counts for all slides
   function refreshCommentCounts() {
@@ -139,6 +129,16 @@ export default function Home() {
         return updated;
       })
     );
+
+    // Debounced save to server
+    clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(() => {
+      fetch("/api/slides", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slideId, field, value }),
+      }).catch(() => {});
+    }, 500);
   }
 
   async function generateLink() {

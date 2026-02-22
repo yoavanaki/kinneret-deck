@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, use } from "react";
-import { slides as initialSlides } from "@/lib/slides";
+import { slides as initialSlides, applyEdits } from "@/lib/slides";
 import { themes } from "@/lib/themes";
 import Slide from "@/components/Slide";
 
@@ -12,12 +12,13 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
   const [valid, setValid] = useState<boolean | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [themeId, setThemeId] = useState("minimal");
+  const [slideData, setSlideData] = useState(initialSlides);
   const slideStartTime = useRef<number>(Date.now());
   const currentSlideRef = useRef(currentSlide);
 
   const theme = themes[themeId];
 
-  // Validate the link exists
+  // Validate the link exists + fetch slide edits
   useEffect(() => {
     fetch(`/api/share?id=${linkId}`)
       .then((r) => {
@@ -25,6 +26,15 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
         else setValid(false);
       })
       .catch(() => setValid(false));
+
+    fetch("/api/slides")
+      .then((r) => r.json())
+      .then((edits) => {
+        if (edits.length > 0) {
+          setSlideData(applyEdits(initialSlides, edits));
+        }
+      })
+      .catch(() => {});
   }, [linkId]);
 
   // Track time on slide changes
@@ -35,7 +45,7 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
   function trackCurrentSlide() {
     if (!verified) return;
     const duration = (Date.now() - slideStartTime.current) / 1000;
-    const slideId = initialSlides[currentSlideRef.current]?.id;
+    const slideId = slideData[currentSlideRef.current]?.id;
     if (duration > 0.5 && slideId) {
       fetch("/api/analytics/track", {
         method: "POST",
@@ -124,7 +134,7 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
     );
   }
 
-  const slide = initialSlides[currentSlide];
+  const slide = slideData[currentSlide];
 
   // Presentation viewer
   return (
@@ -133,7 +143,7 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
       <div className="flex items-center justify-between px-4 py-2 bg-gray-800 text-white">
         <span className="text-sm font-medium">Cognitory Deck</span>
         <span className="text-sm text-gray-400">
-          {currentSlide + 1} / {initialSlides.length}
+          {currentSlide + 1} / {slideData.length}
         </span>
       </div>
 
@@ -155,7 +165,7 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
 
           {/* Slide dots */}
           <div className="flex gap-1">
-            {initialSlides.map((_, i) => (
+            {slideData.map((_, i) => (
               <button
                 key={i}
                 onClick={() => goToSlide(i)}
@@ -167,8 +177,8 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
           </div>
 
           <button
-            onClick={() => goToSlide(Math.min(initialSlides.length - 1, currentSlide + 1))}
-            disabled={currentSlide === initialSlides.length - 1}
+            onClick={() => goToSlide(Math.min(slideData.length - 1, currentSlide + 1))}
+            disabled={currentSlide === slideData.length - 1}
             className="px-4 py-2 bg-gray-700 text-white rounded-lg text-sm disabled:opacity-30 hover:bg-gray-600"
           >
             Next

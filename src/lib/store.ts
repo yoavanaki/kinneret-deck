@@ -177,3 +177,29 @@ export async function getViewEvents(linkId?: string): Promise<ViewEvent[]> {
   const { rows } = await sql`SELECT * FROM view_events ORDER BY timestamp ASC`;
   return rows as ViewEvent[];
 }
+
+// ---- Slide Edits ----
+export async function getSlideEdits(): Promise<SlideEdit[]> {
+  if (!useDB()) {
+    return mem.slideEdits;
+  }
+  await initDB();
+  const { rows } = await sql`SELECT * FROM slide_edits ORDER BY updated_at ASC`;
+  return rows as SlideEdit[];
+}
+
+export async function saveSlideEdit(slideId: string, field: string, value: string): Promise<void> {
+  if (!useDB()) {
+    const idx = mem.slideEdits.findIndex((e) => e.slide_id === slideId && e.field === field);
+    const edit: SlideEdit = { slide_id: slideId, field, value, updated_at: new Date().toISOString() };
+    if (idx >= 0) mem.slideEdits[idx] = edit;
+    else mem.slideEdits.push(edit);
+    return;
+  }
+  await initDB();
+  await sql`
+    INSERT INTO slide_edits (slide_id, field, value, updated_at)
+    VALUES (${slideId}, ${field}, ${value}, NOW())
+    ON CONFLICT (slide_id, field) DO UPDATE SET value = ${value}, updated_at = NOW()
+  `;
+}

@@ -444,3 +444,44 @@ export const slides: SlideContent[] = [
   slide11, slide12, slide13, slide14, slide15,
   slide16, slide17, slide18,
 ];
+
+// ============================================================
+// APPLY EDITS — merges server-stored field overrides onto slides
+// ============================================================
+export function applyEdits(
+  baseSlides: SlideContent[],
+  edits: { slide_id: string; field: string; value: string }[]
+): SlideContent[] {
+  if (edits.length === 0) return baseSlides;
+
+  // Group edits by slide_id
+  const editMap: Record<string, { field: string; value: string }[]> = {};
+  for (const e of edits) {
+    if (!editMap[e.slide_id]) editMap[e.slide_id] = [];
+    editMap[e.slide_id].push(e);
+  }
+
+  return baseSlides.map((slide) => {
+    const slideEdits = editMap[slide.id];
+    if (!slideEdits) return slide;
+
+    const updated = JSON.parse(JSON.stringify(slide));
+    for (const { field, value } of slideEdits) {
+      const parts = field.split(".");
+      if (parts.length === 1) {
+        updated[field] = value;
+      } else {
+        let target: any = updated;
+        for (let i = 0; i < parts.length - 1; i++) {
+          const key = /^\d+$/.test(parts[i]) ? parseInt(parts[i]) : parts[i];
+          target = target[key];
+        }
+        const lastKey = /^\d+$/.test(parts[parts.length - 1])
+          ? parseInt(parts[parts.length - 1])
+          : parts[parts.length - 1];
+        target[lastKey] = value;
+      }
+    }
+    return updated;
+  });
+}
