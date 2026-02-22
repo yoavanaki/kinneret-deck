@@ -17,11 +17,13 @@ export interface SlideContent {
   /** Bullet points as an array of strings */
   bullets?: string[];
   /** Layout type determines how the slide renders */
-  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team";
+  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart";
   /** Custom HTML content for special layouts */
   customHtml?: string;
   /** Team members for team layout */
   team?: { name: string; role: string; bio: string; imageUrl?: string }[];
+  /** Bar chart data for bar-chart layout */
+  bars?: { label: string; value: number; highlight?: boolean }[];
   /** Optional note/annotation shown in a different style */
   note?: string;
   /** Table data: headers and rows */
@@ -103,10 +105,22 @@ const slide04: SlideContent = {
 const slide05: SlideContent = {
   id: "slide-05",
   number: 5,
-  title: "Services is the biggest sector of the U.S. economy, accounting for XX% of GDP",
-  layout: "two-column",
-  leftText: "Services is the biggest sector of the U.S. economy, accounting for XX% of GDP",
-  rightText: "We're on the threshold of a massive transformation, with AI resetting the services economy",
+  title: "Services dominate every major economy",
+  subtitle: "Services sector as % of GDP",
+  layout: "bar-chart",
+  note: "Source: World Bank, StatisticsTimes (2024). The U.S. services sector alone is worth ~$18T — and almost none of it runs on automation.",
+  bars: [
+    { label: "United States", value: 77.6, highlight: true },
+    { label: "United Kingdom", value: 72.5 },
+    { label: "France", value: 70.9 },
+    { label: "Japan", value: 69.8 },
+    { label: "Canada", value: 66.4 },
+    { label: "Australia", value: 66.1 },
+    { label: "Germany", value: 64.1 },
+    { label: "Brazil", value: 59.2 },
+    { label: "China", value: 56.8 },
+    { label: "India", value: 49.9 },
+  ],
 };
 
 // ============================================================

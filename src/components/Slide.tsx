@@ -115,6 +115,59 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
     );
   }
 
+  // ---- BAR CHART LAYOUT ----
+  if (slide.layout === "bar-chart" && slide.bars) {
+    const maxVal = Math.max(...slide.bars.map(b => b.value));
+    return (
+      <div style={baseStyle} className="flex flex-col p-10">
+        <EditableText
+          value={slide.title}
+          slideId={slide.id}
+          field="title"
+          editable={editable}
+          onUpdate={onUpdate}
+          tag="h1"
+          className="text-2xl font-bold mb-1"
+          style={headingStyle}
+        />
+        {slide.subtitle && (
+          <p className="text-sm mb-4" style={{ color: t.subtitle }}>{slide.subtitle}</p>
+        )}
+        <div className="flex-1 flex flex-col justify-center gap-1.5">
+          {slide.bars.map((bar, i) => (
+            <div key={i} className="flex items-center gap-3">
+              <span
+                className="text-xs text-right flex-shrink-0"
+                style={{ width: 90, color: bar.highlight ? t.heading : t.text, fontWeight: bar.highlight ? 700 : 400 }}
+              >
+                {bar.label}
+              </span>
+              <div className="flex-1 h-5 rounded-sm overflow-hidden" style={{ backgroundColor: t.cardBg }}>
+                <div
+                  className="h-full rounded-sm transition-all"
+                  style={{
+                    width: `${(bar.value / maxVal) * 100}%`,
+                    backgroundColor: bar.highlight ? t.accent : t.subtitle,
+                    opacity: bar.highlight ? 1 : 0.5,
+                  }}
+                />
+              </div>
+              <span
+                className="text-xs flex-shrink-0"
+                style={{ width: 40, color: bar.highlight ? t.accent : t.subtitle, fontWeight: bar.highlight ? 700 : 400 }}
+              >
+                {bar.value}%
+              </span>
+            </div>
+          ))}
+        </div>
+        {slide.note && (
+          <p className="text-xs mt-3" style={{ color: t.subtitle }}>{slide.note}</p>
+        )}
+      </div>
+    );
+  }
+
   // ---- TEAM LAYOUT ----
   if (slide.layout === "team" && slide.team) {
     return (
