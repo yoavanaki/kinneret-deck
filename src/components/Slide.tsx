@@ -115,6 +115,49 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
     );
   }
 
+  // ---- TEAM LAYOUT ----
+  if (slide.layout === "team" && slide.team) {
+    return (
+      <div style={baseStyle} className="flex flex-col p-12">
+        <EditableText
+          value={slide.title}
+          slideId={slide.id}
+          field="title"
+          editable={editable}
+          onUpdate={onUpdate}
+          tag="h1"
+          className="text-3xl font-bold mb-8 text-center"
+          style={headingStyle}
+        />
+        <div className="flex gap-6 flex-1 items-start">
+          {slide.team.map((member, i) => (
+            <div
+              key={i}
+              className="flex-1 flex flex-col items-center text-center p-4 rounded-lg"
+              style={{ backgroundColor: t.cardBg }}
+            >
+              <div
+                className="w-20 h-20 rounded-full mb-4 flex items-center justify-center text-2xl font-bold"
+                style={{ backgroundColor: t.accent, color: t.bg }}
+              >
+                {member.name.split(" ").map(n => n[0]).join("")}
+              </div>
+              <h3 className="text-lg font-bold mb-1" style={{ color: t.heading }}>
+                {member.name}
+              </h3>
+              <p className="text-sm font-semibold mb-2" style={{ color: t.accent }}>
+                {member.role}
+              </p>
+              <p className="text-sm leading-relaxed" style={{ color: t.text }}>
+                {member.bio}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   // ---- TITLE LAYOUT ----
   if (slide.layout === "title") {
     return (

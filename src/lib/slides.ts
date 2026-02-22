@@ -46,14 +46,30 @@ const slide01: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 2: Team Bios (placeholder - original has images)
+// SLIDE 2: Team
 // ============================================================
 const slide02: SlideContent = {
   id: "slide-02",
   number: 2,
-  title: "The Devil's Team Bios",
-  layout: "text",
-  body: "The Devil — Leader. Master of deception and soul collection. Loves gambling and jazz.\n\nKing Dice — Right-Hand Man. Casino manager and sly trickster. Loyal to a fault.\n\nThe Imps — Minions. Agents of mischief and mayhem. Always plotting pranks.",
+  title: "The Team",
+  layout: "team",
+  team: [
+    {
+      name: "Yoav Anaki",
+      role: "Co-Founder",
+      bio: "Junior Partner at fresh.fund, Israel's most active pre-seed VC. Background in CS, previously founded Yodel and the Layoffs Project.",
+    },
+    {
+      name: "Yoav Segev",
+      role: "Co-Founder",
+      bio: "MBA from Harvard Business School. Former Associate at Charlesbank Capital Partners, BCG, and Morgan Stanley. BA Economics & Management from Oxford.",
+    },
+    {
+      name: "Jamie Kalamarides",
+      role: "Chairman",
+      bio: "20+ years at Prudential Financial. Former President of Group Insurance and Head of Institutional Retirement Plan Services. Tuck MBA.",
+    },
+  ],
 };
 
 // ============================================================
