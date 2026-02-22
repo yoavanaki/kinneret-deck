@@ -49,6 +49,8 @@ export interface SlideContent {
     /** If true, items render as a grid of small cards (for "many agents" feel) */
     grid?: boolean;
   }[];
+  /** Holdco-level AI agents (shown as a separate diagram alongside stack) */
+  holdcoAgents?: { label: string; icon: string; description?: string }[];
 }
 
 // ============================================================
@@ -280,7 +282,13 @@ const slideStack: SlideContent = {
       ],
     },
   ],
-  note: "General skills (white) transfer across verticals. Domain skills (highlighted) are vertical-specific. The monitoring layer provides real-time visibility across all agents in the portfolio.",
+  holdcoAgents: [
+    { label: "Sourcing Agent", icon: "🔎", description: "Scans broker listings, databases & networks to identify acquisition targets" },
+    { label: "Outreach Agent", icon: "📧", description: "Personalized multi-channel outreach to owner-operators" },
+    { label: "Diligence Agent", icon: "📊", description: "Analyzes financials, client lists, compliance history & automation fit" },
+    { label: "Integration Agent", icon: "🔗", description: "Onboards acquired firms onto the Cognitory platform" },
+  ],
+  note: "Left: the platform deployed inside each acquired firm. Right: AI agents that power the holdco's acquisition engine.",
 };
 
 // ============================================================

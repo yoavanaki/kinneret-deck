@@ -890,86 +890,85 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
   // ---- STACK LAYOUT (SVG Architecture Diagram) ----
   if (slide.layout === "stack" && slide.stack) {
-    // Layout constants
     const W = 960, H = 540;
-    const MARGIN = 40;
-    const TITLE_H = 58;
-    const NOTE_H = 36;
-    const LAYER_GAP = 12;
-    const ARROW_GAP = 20;
-    const diagramW = W - MARGIN * 2;
+    const MARGIN = 28;
+    const TITLE_H = 52;
+    const NOTE_H = 32;
+    const ARROW_GAP = 14;
 
-    // We have 3 layers + 2 arrow gaps between them
-    const layers = slide.stack; // bottom-to-top in data, we render top-to-bottom reversed
+    const hasHoldco = slide.holdcoAgents && slide.holdcoAgents.length > 0;
+    const COL_GAP = 20;
+    // Left column: platform stack. Right column: holdco agents.
+    const leftW = hasHoldco ? 540 : W - MARGIN * 2;
+    const rightW = hasHoldco ? W - MARGIN * 2 - leftW - COL_GAP : 0;
+    const rightX = MARGIN + leftW + COL_GAP;
+
+    const layers = slide.stack;
     const numLayers = layers.length;
     const numArrowGaps = numLayers - 1;
     const totalDiagramH = H - TITLE_H - NOTE_H - MARGIN;
     const layerH = (totalDiagramH - numArrowGaps * ARROW_GAP) / numLayers;
-
-    // Render layers top-to-bottom (reverse of data order: data[0]=bottom, data[last]=top)
     const renderLayers = [...layers].reverse();
 
     return (
       <div style={baseStyle}>
         <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} style={{ fontFamily: theme.bodyFont }}>
           {/* Title */}
-          <text x={MARGIN} y={32} fill={t.heading} fontSize={22} fontWeight="bold" fontFamily={theme.headingFont}>
+          <text x={MARGIN} y={28} fill={t.heading} fontSize={20} fontWeight="bold" fontFamily={theme.headingFont}>
             {slide.title}
           </text>
           {slide.subtitle && (
-            <text x={MARGIN} y={52} fill={t.subtitle} fontSize={13}>
+            <text x={MARGIN} y={45} fill={t.subtitle} fontSize={11}>
               {slide.subtitle}
             </text>
           )}
 
-          {/* Layers */}
+          {/* === LEFT: Platform Stack === */}
+          {/* Column header */}
+          <text x={MARGIN + leftW / 2} y={TITLE_H - 2} textAnchor="middle"
+            fill={t.subtitle} fontSize={9} fontWeight="bold" letterSpacing="0.1em">
+            PORTFOLIO PLATFORM
+          </text>
+
           {renderLayers.map((layer, li) => {
             const layerY = TITLE_H + li * (layerH + ARROW_GAP);
             const layerX = MARGIN;
             const items = layer.items || [];
-            const innerPadTop = 28;
-            const innerPadSide = 14;
-            const innerH = layerH - innerPadTop - 10;
+            const innerPadTop = 22;
+            const innerPadSide = 10;
+            const innerH = layerH - innerPadTop - 6;
 
-            // For grid layers (monitoring): small boxes in a row
-            // For non-grid layers: two groups side by side (general vs domain)
             if (layer.grid) {
-              // Grid of agent cards
-              const cols = Math.min(items.length, 9);
-              const boxGap = 8;
-              const boxW = (diagramW - innerPadSide * 2 - (cols - 1) * boxGap) / cols;
-              const boxH = innerH - 4;
+              const cols = Math.min(items.length, hasHoldco ? 5 : 9);
+              const boxGap = 5;
+              const boxW = (leftW - innerPadSide * 2 - (cols - 1) * boxGap) / cols;
+              const boxH = innerH - 2;
+              const rows = Math.ceil(items.length / cols);
 
               return (
                 <g key={li}>
-                  {/* Layer container */}
-                  <rect x={layerX} y={layerY} width={diagramW} height={layerH} rx={8}
+                  <rect x={layerX} y={layerY} width={leftW} height={layerH} rx={6}
                     fill={t.cardBg} stroke={t.tableBorder} strokeWidth={1.5} />
-                  {/* Layer label */}
-                  <text x={layerX + innerPadSide} y={layerY + 19} fill={t.accent}
-                    fontSize={11} fontWeight="bold" letterSpacing="0.08em">
+                  <text x={layerX + innerPadSide} y={layerY + 15} fill={t.accent}
+                    fontSize={9} fontWeight="bold" letterSpacing="0.08em">
                     {layer.icon} {layer.label.toUpperCase()}
                   </text>
-                  {layer.description && (
-                    <text x={layerX + innerPadSide + layer.label.length * 7.5 + 30} y={layerY + 19}
-                      fill={t.subtitle} fontSize={10}>
-                      {layer.description}
-                    </text>
-                  )}
-                  {/* Agent boxes */}
                   {items.map((item, ii) => {
-                    const bx = layerX + innerPadSide + ii * (boxW + boxGap);
-                    const by = layerY + innerPadTop;
+                    const col = ii % cols;
+                    const row = Math.floor(ii / cols);
+                    const bx = layerX + innerPadSide + col * (boxW + boxGap);
+                    const rowH = rows > 1 ? (innerH - 2) / rows - 3 : boxH;
+                    const by = layerY + innerPadTop + row * (rowH + 3);
                     const isAccent = item.accent;
                     return (
                       <g key={ii}>
-                        <rect x={bx} y={by} width={boxW} height={boxH} rx={5}
+                        <rect x={bx} y={by} width={boxW} height={rowH} rx={4}
                           fill={isAccent ? t.accent + "20" : t.bg}
                           stroke={isAccent ? t.accent + "80" : t.tableBorder}
                           strokeWidth={1}
                           strokeDasharray={!isAccent && item.icon === "🔵" ? "3,2" : undefined} />
-                        <text x={bx + boxW / 2} y={by + boxH / 2 + 4} textAnchor="middle"
-                          fill={isAccent ? t.accent : t.subtitle} fontSize={9}>
+                        <text x={bx + boxW / 2} y={by + rowH / 2 + 3} textAnchor="middle"
+                          fill={isAccent ? t.accent : t.subtitle} fontSize={8}>
                           {item.label}
                         </text>
                       </g>
@@ -979,54 +978,44 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
               );
             }
 
-            // Non-grid layer: split items into general (no accent) and domain (accent)
             const generalItems = items.filter(i => !i.accent);
             const domainItems = items.filter(i => i.accent);
             const hasTwo = domainItems.length > 0 && generalItems.length > 0;
-            const groupGap = 14;
-            const groupW = hasTwo ? (diagramW - innerPadSide * 2 - groupGap) / 2 : diagramW - innerPadSide * 2;
+            const groupGap = 10;
+            const groupW = hasTwo ? (leftW - innerPadSide * 2 - groupGap) / 2 : leftW - innerPadSide * 2;
 
             return (
               <g key={li}>
-                {/* Layer container */}
-                <rect x={layerX} y={layerY} width={diagramW} height={layerH} rx={8}
+                <rect x={layerX} y={layerY} width={leftW} height={layerH} rx={6}
                   fill={t.cardBg} stroke={t.tableBorder} strokeWidth={1.5} />
-                {/* Layer label */}
-                <text x={layerX + innerPadSide} y={layerY + 19} fill={t.accent}
-                  fontSize={11} fontWeight="bold" letterSpacing="0.08em">
+                <text x={layerX + innerPadSide} y={layerY + 15} fill={t.accent}
+                  fontSize={9} fontWeight="bold" letterSpacing="0.08em">
                   {layer.icon} {layer.label.toUpperCase()}
                 </text>
-                {layer.description && (
-                  <text x={layerX + innerPadSide + layer.label.length * 7.5 + 30} y={layerY + 19}
-                    fill={t.subtitle} fontSize={10}>
-                    {layer.description}
-                  </text>
-                )}
 
-                {/* General skills group */}
                 {generalItems.length > 0 && (
                   <g>
                     <rect x={layerX + innerPadSide} y={layerY + innerPadTop}
-                      width={groupW} height={innerH} rx={6}
+                      width={groupW} height={innerH} rx={5}
                       fill={t.bg} stroke={t.tableBorder} strokeWidth={1} />
-                    <text x={layerX + innerPadSide + 10} y={layerY + innerPadTop + 16}
-                      fill={t.subtitle} fontSize={9} fontWeight="bold" letterSpacing="0.05em">
+                    <text x={layerX + innerPadSide + 8} y={layerY + innerPadTop + 13}
+                      fill={t.subtitle} fontSize={8} fontWeight="bold" letterSpacing="0.05em">
                       {hasTwo ? "GENERAL SKILLS" : "CAPABILITIES"}
                     </text>
                     {generalItems.map((item, ii) => {
-                      const cols = Math.min(generalItems.length, 3);
+                      const cols = hasTwo ? Math.min(generalItems.length, 2) : Math.min(generalItems.length, 4);
                       const row = Math.floor(ii / cols);
                       const col = ii % cols;
-                      const bw = (groupW - 24) / cols - 4;
-                      const bh = 24;
-                      const bx = layerX + innerPadSide + 10 + col * (bw + 6);
-                      const by = layerY + innerPadTop + 24 + row * (bh + 5);
+                      const bw = (groupW - 20) / cols - 3;
+                      const bh = 20;
+                      const bx = layerX + innerPadSide + 8 + col * (bw + 4);
+                      const by = layerY + innerPadTop + 20 + row * (bh + 4);
                       return (
                         <g key={ii}>
-                          <rect x={bx} y={by} width={bw} height={bh} rx={4}
+                          <rect x={bx} y={by} width={bw} height={bh} rx={3}
                             fill={t.cardBg} stroke={t.tableBorder} strokeWidth={0.75} />
-                          <text x={bx + bw / 2} y={by + bh / 2 + 4} textAnchor="middle"
-                            fill={t.text} fontSize={10}>
+                          <text x={bx + bw / 2} y={by + bh / 2 + 3} textAnchor="middle"
+                            fill={t.text} fontSize={8}>
                             {item.label}
                           </text>
                         </g>
@@ -1035,35 +1024,34 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                   </g>
                 )}
 
-                {/* Domain skills group */}
                 {domainItems.length > 0 && (
                   <g>
                     <rect x={layerX + innerPadSide + (hasTwo ? groupW + groupGap : 0)}
                       y={layerY + innerPadTop}
-                      width={hasTwo ? groupW : diagramW - innerPadSide * 2}
-                      height={innerH} rx={6}
+                      width={hasTwo ? groupW : leftW - innerPadSide * 2}
+                      height={innerH} rx={5}
                       fill={t.accent + "10"} stroke={t.accent + "50"} strokeWidth={1} />
-                    <text x={layerX + innerPadSide + (hasTwo ? groupW + groupGap : 0) + 10}
-                      y={layerY + innerPadTop + 16}
-                      fill={t.accent} fontSize={9} fontWeight="bold" letterSpacing="0.05em">
+                    <text x={layerX + innerPadSide + (hasTwo ? groupW + groupGap : 0) + 8}
+                      y={layerY + innerPadTop + 13}
+                      fill={t.accent} fontSize={8} fontWeight="bold" letterSpacing="0.05em">
                       DOMAIN SKILLS (TPA)
                     </text>
                     {domainItems.map((item, ii) => {
                       const gx = layerX + innerPadSide + (hasTwo ? groupW + groupGap : 0);
-                      const gw = hasTwo ? groupW : diagramW - innerPadSide * 2;
-                      const cols = Math.min(domainItems.length, 3);
+                      const gw = hasTwo ? groupW : leftW - innerPadSide * 2;
+                      const cols = hasTwo ? Math.min(domainItems.length, 2) : Math.min(domainItems.length, 3);
                       const row = Math.floor(ii / cols);
                       const col = ii % cols;
-                      const bw = (gw - 24) / cols - 4;
-                      const bh = 24;
-                      const bx = gx + 10 + col * (bw + 6);
-                      const by = layerY + innerPadTop + 24 + row * (bh + 5);
+                      const bw = (gw - 20) / cols - 3;
+                      const bh = 20;
+                      const bx = gx + 8 + col * (bw + 4);
+                      const by = layerY + innerPadTop + 20 + row * (bh + 4);
                       return (
                         <g key={ii}>
-                          <rect x={bx} y={by} width={bw} height={bh} rx={4}
+                          <rect x={bx} y={by} width={bw} height={bh} rx={3}
                             fill={t.accent + "20"} stroke={t.accent + "60"} strokeWidth={0.75} />
-                          <text x={bx + bw / 2} y={by + bh / 2 + 4} textAnchor="middle"
-                            fill={t.accent} fontSize={10}>
+                          <text x={bx + bw / 2} y={by + bh / 2 + 3} textAnchor="middle"
+                            fill={t.accent} fontSize={8}>
                             {item.label}
                           </text>
                         </g>
@@ -1075,20 +1063,19 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             );
           })}
 
-          {/* Arrows between layers */}
+          {/* Arrows between platform layers */}
           {renderLayers.slice(0, -1).map((_, li) => {
             const gapTop = TITLE_H + (li + 1) * layerH + li * ARROW_GAP;
             const gapMid = gapTop + ARROW_GAP / 2;
-            const cx = W / 2;
-            // Three small chevrons (▼) spread across the width
-            const chevronXs = [cx - 100, cx, cx + 100];
+            const cx = MARGIN + leftW / 2;
+            const chevronXs = [cx - 80, cx, cx + 80];
             return (
               <g key={`arrow-${li}`}>
                 {chevronXs.map((ax, ai) => (
                   <g key={ai} opacity={0.5}>
-                    <line x1={ax - 6} y1={gapMid - 3} x2={ax} y2={gapMid + 3}
+                    <line x1={ax - 5} y1={gapMid - 3} x2={ax} y2={gapMid + 2}
                       stroke={t.accent} strokeWidth={1.5} strokeLinecap="round" />
-                    <line x1={ax + 6} y1={gapMid - 3} x2={ax} y2={gapMid + 3}
+                    <line x1={ax + 5} y1={gapMid - 3} x2={ax} y2={gapMid + 2}
                       stroke={t.accent} strokeWidth={1.5} strokeLinecap="round" />
                   </g>
                 ))}
@@ -1096,12 +1083,78 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             );
           })}
 
+          {/* === RIGHT: Holdco AI Agents === */}
+          {hasHoldco && slide.holdcoAgents && (() => {
+            const agents = slide.holdcoAgents;
+            const agentCount = agents.length;
+            const colTopY = TITLE_H;
+            const colH = totalDiagramH;
+            const cardGap = 10;
+            const arrowH = 18;
+            const cardH = (colH - (agentCount - 1) * (cardGap + arrowH)) / agentCount;
+
+            return (
+              <g>
+                {/* Column header */}
+                <text x={rightX + rightW / 2} y={TITLE_H - 2} textAnchor="middle"
+                  fill={t.subtitle} fontSize={9} fontWeight="bold" letterSpacing="0.1em">
+                  HOLDCO AI AGENTS
+                </text>
+
+                {/* Outer container */}
+                <rect x={rightX} y={colTopY} width={rightW} height={colH} rx={8}
+                  fill={t.accent + "06"} stroke={t.accent + "30"} strokeWidth={1.5}
+                  strokeDasharray="6,3" />
+
+                {agents.map((agent, ai) => {
+                  const cy = colTopY + 8 + ai * (cardH + cardGap + arrowH);
+                  const innerW = rightW - 16;
+                  const cx = rightX + 8;
+
+                  return (
+                    <g key={ai}>
+                      {/* Card */}
+                      <rect x={cx} y={cy} width={innerW} height={cardH} rx={6}
+                        fill={t.cardBg} stroke={t.accent + "60"} strokeWidth={1.5} />
+                      {/* Icon */}
+                      <text x={cx + 14} y={cy + cardH / 2 + 1} fontSize={18} dominantBaseline="middle">
+                        {agent.icon}
+                      </text>
+                      {/* Label */}
+                      <text x={cx + 38} y={cy + cardH * 0.38} fill={t.heading}
+                        fontSize={11} fontWeight="bold">
+                        {agent.label}
+                      </text>
+                      {/* Description */}
+                      {agent.description && (
+                        <text x={cx + 38} y={cy + cardH * 0.68} fill={t.subtitle} fontSize={8}>
+                          {agent.description.length > 55 ? agent.description.slice(0, 55) + "…" : agent.description}
+                        </text>
+                      )}
+                      {/* Arrow to next */}
+                      {ai < agentCount - 1 && (
+                        <g>
+                          <line x1={rightX + rightW / 2} y1={cy + cardH + 2}
+                            x2={rightX + rightW / 2} y2={cy + cardH + cardGap + arrowH - 2}
+                            stroke={t.accent} strokeWidth={1.5} opacity={0.5} />
+                          <polygon
+                            points={`${rightX + rightW / 2 - 4},${cy + cardH + cardGap + arrowH - 7} ${rightX + rightW / 2 + 4},${cy + cardH + cardGap + arrowH - 7} ${rightX + rightW / 2},${cy + cardH + cardGap + arrowH - 2}`}
+                            fill={t.accent} opacity={0.5} />
+                        </g>
+                      )}
+                    </g>
+                  );
+                })}
+              </g>
+            );
+          })()}
+
           {/* Note at bottom */}
           {slide.note && (
             <g>
-              <rect x={MARGIN} y={H - NOTE_H - 6} width={diagramW} height={NOTE_H} rx={4}
+              <rect x={MARGIN} y={H - NOTE_H - 4} width={W - MARGIN * 2} height={NOTE_H} rx={4}
                 fill={t.noteBg} />
-              <text x={MARGIN + 10} y={H - NOTE_H + 16} fill={t.noteText} fontSize={9}>
+              <text x={MARGIN + 10} y={H - NOTE_H + 14} fill={t.noteText} fontSize={8}>
                 {slide.note}
               </text>
             </g>
