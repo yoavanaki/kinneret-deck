@@ -270,8 +270,9 @@ const slide13: SlideContent = {
 const slide14: SlideContent = {
   id: "slide-14",
   number: 14,
-  title: "Who is our chairman?",
-  layout: "big-text",
+  title: "Jamie Kalamarides — Chairman",
+  layout: "text",
+  body: "Jamie brings 20+ years of senior leadership at Prudential Financial, where he served as President of Group Insurance and Head of Institutional Retirement Plan Services, overseeing billions in plan assets.\n\nHe was a key expert to the SECURE Act, testifying before the U.S. Senate Finance, HELP, and Aging Committees on retirement policy. He is a nonresident fellow at the Bipartisan Policy Center.\n\nJamie's deep domain expertise in retirement services — combined with his relationships across the industry — gives Cognitory a unique advantage in building trust with acquisition targets and navigating the regulatory landscape.",
 };
 
 // ============================================================
