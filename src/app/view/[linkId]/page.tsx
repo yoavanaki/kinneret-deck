@@ -4,7 +4,6 @@ import { useState, useEffect, useRef, use } from "react";
 import { slides as initialSlides } from "@/lib/slides";
 import { themes } from "@/lib/themes";
 import Slide from "@/components/Slide";
-import Comments from "@/components/Comments";
 
 export default function ViewPage({ params }: { params: Promise<{ linkId: string }> }) {
   const { linkId } = use(params);
@@ -13,7 +12,6 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
   const [valid, setValid] = useState<boolean | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [themeId, setThemeId] = useState("minimal");
-  const [showComments, setShowComments] = useState(false);
   const slideStartTime = useRef<number>(Date.now());
   const currentSlideRef = useRef(currentSlide);
 
@@ -102,7 +100,7 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Kinneret Deck</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Cognitory Deck</h1>
           <p className="text-gray-500 mb-6">Enter your email to view this presentation.</p>
           <form onSubmit={handleSubmitEmail}>
             <input
@@ -133,20 +131,10 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
     <div className="min-h-screen bg-gray-900 flex flex-col">
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-2 bg-gray-800 text-white">
-        <span className="text-sm font-medium">Kinneret Deck</span>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setShowComments(!showComments)}
-            className={`px-3 py-1 rounded text-sm ${
-              showComments ? "bg-blue-600" : "bg-gray-700 hover:bg-gray-600"
-            }`}
-          >
-            Comments
-          </button>
-          <span className="text-sm text-gray-400">
-            {currentSlide + 1} / {initialSlides.length}
-          </span>
-        </div>
+        <span className="text-sm font-medium">Cognitory Deck</span>
+        <span className="text-sm text-gray-400">
+          {currentSlide + 1} / {initialSlides.length}
+        </span>
       </div>
 
       {/* Slide */}
@@ -187,12 +175,6 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
           </button>
         </div>
 
-        {/* Comments */}
-        {showComments && (
-          <div className="w-full max-w-[960px] mt-4">
-            <Comments slideId={slide.id} theme="dark" />
-          </div>
-        )}
       </div>
     </div>
   );

@@ -13,8 +13,8 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [shareLink, setShareLink] = useState<string | null>(null);
   const [shareLinkId, setShareLinkId] = useState<string | null>(null);
-  const [showComments, setShowComments] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
   const [slideScale, setSlideScale] = useState(1);
   const slideContainerRef = useRef<HTMLDivElement>(null);
 
@@ -60,15 +60,15 @@ export default function Home() {
 
   // Load saved state from localStorage
   useEffect(() => {
-    const savedTheme = localStorage.getItem("kinneret-theme");
+    const savedTheme = localStorage.getItem("cognitory-theme");
     if (savedTheme && themes[savedTheme]) setThemeId(savedTheme);
 
-    const savedSlides = localStorage.getItem("kinneret-slides");
+    const savedSlides = localStorage.getItem("cognitory-slides");
     if (savedSlides) {
       try { setSlideData(JSON.parse(savedSlides)); } catch {}
     }
 
-    const savedLinkId = localStorage.getItem("kinneret-link-id");
+    const savedLinkId = localStorage.getItem("cognitory-link-id");
     if (savedLinkId) {
       setShareLinkId(savedLinkId);
       setShareLink(`${window.location.origin}/view/${savedLinkId}`);
@@ -77,11 +77,11 @@ export default function Home() {
 
   // Save to localStorage on changes
   useEffect(() => {
-    localStorage.setItem("kinneret-theme", themeId);
+    localStorage.setItem("cognitory-theme", themeId);
   }, [themeId]);
 
   useEffect(() => {
-    localStorage.setItem("kinneret-slides", JSON.stringify(slideData));
+    localStorage.setItem("cognitory-slides", JSON.stringify(slideData));
   }, [slideData]);
 
   function handleSlideUpdate(slideId: string, field: string, value: string) {
@@ -115,7 +115,7 @@ export default function Home() {
     });
 
     setShareLinkId(id);
-    localStorage.setItem("kinneret-link-id", id);
+    localStorage.setItem("cognitory-link-id", id);
     setShareLink(`${window.location.origin}/view/${id}`);
   }
 
@@ -128,7 +128,7 @@ export default function Home() {
     });
 
     setShareLinkId(id);
-    localStorage.setItem("kinneret-link-id", id);
+    localStorage.setItem("cognitory-link-id", id);
     setShareLink(`${window.location.origin}/view/${id}`);
     setCopied(false);
   }
@@ -151,7 +151,7 @@ export default function Home() {
       {/* Toolbar */}
       <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-200">
         <div className="flex items-center gap-3">
-          <h1 className="text-lg font-bold text-gray-900">Kinneret Deck</h1>
+          <h1 className="text-lg font-bold text-gray-900">Cognitory Deck</h1>
           <span className="text-sm text-gray-500">
             Slide {currentSlide + 1} of {slideData.length}
           </span>
