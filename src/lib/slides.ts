@@ -294,8 +294,18 @@ const slide15: SlideContent = {
 const slide16: SlideContent = {
   id: "slide-16",
   number: 16,
-  title: "Current M&A pipeline",
-  layout: "big-text",
+  title: "Current M&A Pipeline",
+  layout: "table",
+  subtitle: "Active conversations with owner-operators",
+  tableHeaders: ["Target", "Revenue", "Plans Administered", "EBITDA Multiple", "Stage"],
+  tableRows: [
+    ["Target A (Midwest)", "$2.5M", "~800", "5.0x", "LOI Signed"],
+    ["Target B (Southeast)", "$1.8M", "~500", "4.5x", "Due Diligence"],
+    ["Target C (Northeast)", "$3.2M", "~1,100", "5.5x", "Negotiation"],
+    ["Target D (West Coast)", "$1.2M", "~350", "4.0x", "Initial Talks"],
+    ["Target E (Southwest)", "$2.0M", "~600", "4.8x", "Initial Talks"],
+  ],
+  note: "Combined pipeline: ~$10.7M revenue, ~3,350 plans. Targeting first 2-3 closings within 6 months of funding.",
 };
 
 // ============================================================
