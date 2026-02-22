@@ -420,16 +420,18 @@ const slide15: SlideContent = {
   number: 16,
   title: "Current M&A Pipeline",
   layout: "table",
-  subtitle: "Active conversations with owner-operators",
-  tableHeaders: ["Target", "Revenue", "Plans Administered", "EBITDA Multiple", "Stage"],
+  subtitle: "24 active targets  |  ~$74M pipeline revenue  |  6 in Pre-LOI diligence  |  13 states",
+  tableHeaders: ["Target", "Revenue", "EBITDA", "Region", "Stage"],
   tableRows: [
-    ["Target A (Midwest)", "$2.5M", "~800", "5.0x", "LOI Signed"],
-    ["Target B (Southeast)", "$1.8M", "~500", "4.5x", "Due Diligence"],
-    ["Target C (Northeast)", "$3.2M", "~1,100", "5.5x", "Negotiation"],
-    ["Target D (West Coast)", "$1.2M", "~350", "4.0x", "Initial Talks"],
-    ["Target E (Southwest)", "$2.0M", "~600", "4.8x", "Initial Talks"],
+    ["Liberty Benefits Admin", "$1.8M", "$810K", "Mid-Atlantic", "Pre-LOI Diligence"],
+    ["Atlantic Retirement Group", "$2.0M", "$800K", "Northeast", "Pre-LOI Diligence"],
+    ["Pacific Pension Services", "$2.0M", "$600K", "West Coast", "Pre-LOI Diligence"],
+    ["Evergreen Plan Services", "$1.7M", "$425K", "Pacific NW", "Pre-LOI Diligence"],
+    ["Summit Trust Services", "$5.0M", "—", "Pacific NW", "First Meeting"],
+    ["Lone Star Admin", "$10.0M", "—", "Southwest", "First Meeting"],
+    ["+ 18 additional targets", "$750K–$10M", "", "Nationwide", "Various"],
   ],
-  note: "Combined pipeline: ~$10.7M revenue, ~3,350 plans. Targeting first 2-3 closings within 6 months of funding.",
+  note: "Sourcing: 46% warm intros, 33% cold outreach, 21% banker-sourced. Pre-LOI targets have combined ~$5M EBITDA. Revenue ranges from $750K to $10M across the full pipeline.",
 };
 
 // ============================================================
