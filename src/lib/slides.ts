@@ -251,7 +251,17 @@ const slide13: SlideContent = {
   id: "slide-13",
   number: 13,
   title: "What does a TPA do?",
-  layout: "big-text",
+  layout: "bullets",
+  body: "A Retirement TPA handles the complex administrative and compliance work that sits between the plan sponsor (employer) and the government.",
+  bullets: [
+    "Plan design & documentation — draft plan documents, amendments, SPDs",
+    "Compliance testing — ADP/ACP, top-heavy, 415 limits, coverage tests",
+    "Government filings — Form 5500, SAR, PBGC premiums",
+    "Contribution calculations — allocation formulas, true-ups, forfeitures",
+    "Participant communications — enrollment, disclosures, benefit statements",
+    "Plan corrections — EPCRS/VCP filings for operational errors",
+  ],
+  note: "Most of this work is document-heavy, rule-based, and repetitive — exactly the profile AI excels at automating.",
 };
 
 // ============================================================
