@@ -40,10 +40,7 @@ export default function ThemePicker({ currentTheme, onSelect }: ThemePickerProps
                   style={{ backgroundColor: t.colors.accent }}
                 />
               </div>
-              <div>
-                <div className="font-medium">{t.name}</div>
-                <div className="text-xs text-gray-500">{t.description}</div>
-              </div>
+              <div className="font-medium text-sm">{t.name}</div>
             </button>
           );
         })}
