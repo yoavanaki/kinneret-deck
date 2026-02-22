@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { slides as initialSlides, SlideContent } from "@/lib/slides";
 import { themes } from "@/lib/themes";
 import Slide from "@/components/Slide";
@@ -15,8 +15,30 @@ export default function Home() {
   const [shareLinkId, setShareLinkId] = useState<string | null>(null);
   const [showComments, setShowComments] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [slideScale, setSlideScale] = useState(1);
+  const slideContainerRef = useRef<HTMLDivElement>(null);
 
   const theme = themes[themeId];
+
+  // Dynamically scale slide to fill available space
+  const SLIDE_W = 960;
+  const SLIDE_H = 540;
+  const PAD = 48; // padding around the slide
+
+  const updateScale = useCallback(() => {
+    const el = slideContainerRef.current;
+    if (!el) return;
+    const availW = el.clientWidth - PAD * 2;
+    const availH = el.clientHeight - PAD * 2;
+    const scale = Math.min(availW / SLIDE_W, availH / SLIDE_H, 1.6);
+    setSlideScale(Math.max(scale, 0.4));
+  }, []);
+
+  useEffect(() => {
+    updateScale();
+    window.addEventListener("resize", updateScale);
+    return () => window.removeEventListener("resize", updateScale);
+  }, [updateScale]);
 
   // Load saved state from localStorage
   useEffect(() => {
@@ -189,18 +211,27 @@ export default function Home() {
         </div>
 
         {/* Main Slide View */}
-        <div className="flex-1 flex flex-col items-center justify-center p-8 overflow-auto">
-          <div className="shadow-2xl rounded-lg overflow-hidden" style={{ width: 960, height: 540 }}>
+        <div ref={slideContainerRef} className="flex-1 flex flex-col items-center justify-center overflow-hidden relative">
+          {/* Scaled slide wrapper */}
+          <div
+            className="shadow-2xl rounded-lg overflow-hidden"
+            style={{
+              width: SLIDE_W * slideScale,
+              height: SLIDE_H * slideScale,
+              flexShrink: 0,
+            }}
+          >
             <Slide
               slide={slide}
               theme={theme}
               editable={true}
               onUpdate={handleSlideUpdate}
+              scale={slideScale}
             />
           </div>
 
           {/* Navigation */}
-          <div className="flex items-center gap-4 mt-6">
+          <div className="flex items-center gap-4 mt-4 flex-shrink-0">
             <button
               onClick={() => setCurrentSlide(Math.max(0, currentSlide - 1))}
               disabled={currentSlide === 0}
@@ -222,7 +253,7 @@ export default function Home() {
 
           {/* Comments Panel */}
           {showComments && (
-            <div className="w-full max-w-[960px] mt-4">
+            <div className="mt-3 flex-shrink-0" style={{ width: SLIDE_W * slideScale }}>
               <Comments
                 slideId={slide.id}
                 theme={themeId === "dark" ? "dark" : "light"}
