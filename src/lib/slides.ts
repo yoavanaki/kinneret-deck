@@ -196,12 +196,13 @@ const slide10: SlideContent = {
   title: "The Playbook",
   layout: "bullets",
   bullets: [
-    "Identify Sector",
-    "Recruit Industry Executive(s)",
-    "Identify quick-win automation opportunities",
-    "Find 3-5 'early believer' firms to acquire",
+    "Identify a high-fragmentation services sector",
+    "Recruit an industry executive as operating partner",
+    "Map quick-win automation opportunities across core workflows",
+    "Acquire 3-5 'early believer' firms at 4-6x EBITDA",
+    "Deploy automation playbook → expand margins 15-25 pp",
+    "Roll up adjacent firms using proven automation as due diligence edge",
   ],
-  note: "... cashflow? This is missing what happens after the initial few steps",
 };
 
 // ============================================================
