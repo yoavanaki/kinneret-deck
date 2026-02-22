@@ -349,7 +349,14 @@ const slide19: SlideContent = {
   id: "slide-19",
   number: 19,
   title: "Raising $10M",
-  layout: "big-text",
+  layout: "bullets",
+  body: "Seed round to acquire initial TPA portfolio and deploy the automation playbook.",
+  bullets: [
+    "Acquisitions (60%) — acquire 2-3 TPAs at 4-6x EBITDA",
+    "Automation build (25%) — AI/ML pipeline for compliance, filings, and document generation",
+    "Operations & team (15%) — integration playbook, operating partners, G&A",
+  ],
+  note: "Target returns: 3-5x over 5 years through margin expansion + revenue growth + multiple re-rating at exit. First acquisitions expected within 6 months of close.",
 };
 
 
