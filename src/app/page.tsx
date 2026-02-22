@@ -40,6 +40,24 @@ export default function Home() {
     return () => window.removeEventListener("resize", updateScale);
   }, [updateScale]);
 
+  // Arrow key navigation
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      // Don't navigate if user is editing text
+      const tag = (e.target as HTMLElement).tagName;
+      if ((e.target as HTMLElement).isContentEditable || tag === "INPUT" || tag === "TEXTAREA") return;
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        setCurrentSlide((prev) => Math.min(prev + 1, initialSlides.length - 1));
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        setCurrentSlide((prev) => Math.max(prev - 1, 0));
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   // Load saved state from localStorage
   useEffect(() => {
     const savedTheme = localStorage.getItem("kinneret-theme");
@@ -126,7 +144,7 @@ export default function Home() {
   const slide = slideData[currentSlide];
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div className="h-screen bg-gray-100 flex flex-col overflow-hidden">
       {/* Theme Picker */}
       <ThemePicker currentTheme={themeId} onSelect={setThemeId} />
 
@@ -187,7 +205,7 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex">
+      <div className="flex-1 flex min-h-0">
         {/* Slide Thumbnails */}
         <div className="w-48 bg-white border-r border-gray-200 overflow-y-auto p-2 space-y-2">
           {slideData.map((s, i) => (
