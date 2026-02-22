@@ -82,7 +82,7 @@ const slide02: SlideContent = {
       bio: "Economics @ Oxford University\nConsultant at BCG\nBusiness Services Investor at Charlesbank\nIncubated Compliance Consulting firm\nMBA @ HBS",
       imageUrl: "/team/segev.jpeg",
       logos: [
-        { name: "HBS", imageUrl: "/logos/hbs.png" },
+        { name: "HBS", imageUrl: "/logos/hbs.svg" },
         { name: "BCG", imageUrl: "/logos/bcg.svg" },
         { name: "Charlesbank", imageUrl: "/logos/charlesbank.svg" },
       ],
@@ -93,7 +93,7 @@ const slide02: SlideContent = {
       bio: "Computer Science age 13\nCOO at Mad Mimi, acquired by GoDaddy\nIDF Counterterrorism Investigations\nPartner, AI at Fresh Fund\nMBA @ HBS",
       imageUrl: "/team/anaki.jpeg",
       logos: [
-        { name: "HBS", imageUrl: "/logos/hbs.png" },
+        { name: "HBS", imageUrl: "/logos/hbs.svg" },
         { name: "IDF", imageUrl: "/logos/idf.svg" },
         { name: "Fresh Fund", imageUrl: "/logos/freshfund.svg" },
       ],

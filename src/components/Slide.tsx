@@ -298,16 +298,16 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 </div>
               )}
               {member.logos && member.logos.length > 0 && (
-                <div className="flex justify-center gap-2 mt-2">
+                <div className="flex justify-center gap-1.5 mt-2">
                   {member.logos.map((logo, li) => (
                     <div
                       key={li}
                       className="flex items-center justify-center rounded"
                       style={{
-                        width: 48,
-                        height: 28,
-                        backgroundColor: "#ffffff",
-                        padding: "2px 4px",
+                        width: 52,
+                        height: 36,
+                        backgroundColor: "#e8e8e8",
+                        padding: "4px 5px",
                         flexShrink: 0,
                       }}
                       title={logo.name}
@@ -315,7 +315,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                       <img
                         src={logo.imageUrl}
                         alt={logo.name}
-                        style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
+                        style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", display: "block" }}
                       />
                     </div>
                   ))}

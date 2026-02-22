@@ -198,4 +198,29 @@ export const themes: Record<string, Theme> = {
   },
 };
 
+  // ----------------------------------------------------------
+  // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+  // ----------------------------------------------------------
+  aipac: {
+    id: "aipac",
+    name: "AIPAC",
+    description: "Dark navy, warm brown accent, elegant serif headings",
+    slideClass: "theme-aipac",
+    headingFont: "'Instrument Serif', serif",
+    bodyFont: "'DM Sans', sans-serif",
+    colors: {
+      bg: "#0e1117",
+      text: "#e6edf3",
+      heading: "#e6edf3",
+      subtitle: "#8b949e",
+      accent: "#c9856b",
+      cardBg: "#151921",
+      tableBorder: "#30363d",
+      tableHeaderBg: "#161b22",
+      noteBg: "#1c1510",
+      noteText: "#c9856b",
+    },
+  },
+};
+
 export const themeIds = Object.keys(themes) as Array<keyof typeof themes>;
