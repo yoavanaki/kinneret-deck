@@ -651,6 +651,158 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
     );
   }
 
+  // ---- PARALLELS LAYOUT (side-by-side revolution comparison) ----
+  if (slide.layout === "parallels" && slide.tableRows && slide.tableHeaders) {
+    const W = 960, H = 540;
+    const PAD = 30;
+    const TITLE_H = 72;
+    const NOTE_H = 44;
+    const HEADER_H = 32;
+    const CENTER_X = 480;
+    const HALF = 55; // half-width of center category zone
+
+    const leftLabel = slide.tableHeaders[1] || "";
+    const rightLabel = slide.tableHeaders[2] || "";
+    const rows = slide.tableRows;
+    const numRows = rows.length;
+
+    const vizStart = TITLE_H;
+    const vizEnd = H - NOTE_H - 6;
+    const rowsStart = vizStart + HEADER_H + 6;
+    const lastRowH = 82;
+    const normalRowH = (vizEnd - rowsStart - lastRowH) / (numRows - 1);
+
+    const leftHeaderMid = PAD + (CENTER_X - HALF - PAD) / 2;
+    const rightHeaderMid = CENTER_X + HALF + (W - PAD - CENTER_X - HALF) / 2;
+
+    // Split long note at a word boundary around char 90
+    const noteLines: string[] = [];
+    if (slide.note) {
+      const splitAt = slide.note.lastIndexOf(" ", 90);
+      noteLines.push(splitAt > 0 ? slide.note.slice(0, splitAt) : slide.note);
+      if (splitAt > 0) noteLines.push(slide.note.slice(splitAt + 1));
+    }
+
+    return (
+      <div style={baseStyle}>
+        <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} style={{ fontFamily: theme.bodyFont }}>
+
+          {/* Title */}
+          <text x={PAD} y={34} fill={t.heading} fontSize={23} fontWeight="bold" fontFamily={theme.headingFont}>
+            {slide.title}
+          </text>
+          {slide.subtitle && (
+            <text x={PAD} y={56} fill={t.subtitle} fontSize={12}>
+              {slide.subtitle}
+            </text>
+          )}
+
+          {/* Left column header — Industrial Revolution */}
+          <rect x={PAD} y={vizStart} width={CENTER_X - HALF - PAD} height={HEADER_H} rx={5}
+            fill={t.tableHeaderBg} stroke={t.tableBorder} strokeWidth={1} />
+          <text x={leftHeaderMid} y={vizStart + HEADER_H / 2 + 5}
+            textAnchor="middle" fill={t.subtitle}
+            fontSize={11} fontWeight="bold" letterSpacing="0.07em">
+            {leftLabel.toUpperCase()}
+          </text>
+
+          {/* Right column header — AI Revolution */}
+          <rect x={CENTER_X + HALF} y={vizStart} width={W - PAD - CENTER_X - HALF} height={HEADER_H} rx={5}
+            fill={t.accent + "28"} stroke={t.accent + "70"} strokeWidth={1} />
+          <text x={rightHeaderMid} y={vizStart + HEADER_H / 2 + 5}
+            textAnchor="middle" fill={t.accent}
+            fontSize={11} fontWeight="bold" letterSpacing="0.07em">
+            {rightLabel.toUpperCase()}
+          </text>
+
+          {/* Rows */}
+          {rows.map((row, ri) => {
+            const isLast = ri === numRows - 1;
+            const rowH = isLast ? lastRowH : normalRowH;
+            const rowY = rowsStart + ri * normalRowH;
+            const cat = row[0] || "";
+            const leftVal = row[1] || "";
+            const rightVal = row[2] || "";
+            const valY = rowY + (isLast ? rowH / 2 + 10 : rowH / 2 + 7);
+
+            if (isLast) {
+              return (
+                <g key={ri}>
+                  {/* Highlight background */}
+                  <rect x={PAD} y={rowY + 3} width={W - PAD * 2} height={rowH - 6} rx={7}
+                    fill={t.accent + "15"} stroke={t.accent + "50"} strokeWidth={1.5} />
+                  {/* Category label */}
+                  <text x={CENTER_X} y={rowY + 18}
+                    textAnchor="middle" fill={t.accent}
+                    fontSize={9} fontWeight="bold" letterSpacing="0.1em">
+                    {cat.toUpperCase()}
+                  </text>
+                  {/* Left value */}
+                  <text x={CENTER_X - HALF - 10} y={valY}
+                    textAnchor="end" fill={t.text}
+                    fontSize={22} fontWeight="bold">
+                    {leftVal}
+                  </text>
+                  {/* Center arrow */}
+                  <text x={CENTER_X} y={valY}
+                    textAnchor="middle" fill={t.accent} fontSize={18}>
+                    →
+                  </text>
+                  {/* Right value */}
+                  <text x={CENTER_X + HALF + 10} y={valY}
+                    textAnchor="start" fill={t.accent}
+                    fontSize={22} fontWeight="bold">
+                    {rightVal}
+                  </text>
+                </g>
+              );
+            }
+
+            return (
+              <g key={ri}>
+                {/* Category label at top of row */}
+                <text x={CENTER_X} y={rowY + 14}
+                  textAnchor="middle" fill={t.subtitle}
+                  fontSize={8} fontWeight="bold" letterSpacing="0.09em" opacity={0.7}>
+                  {cat.toUpperCase()}
+                </text>
+                {/* Left value */}
+                <text x={CENTER_X - HALF - 10} y={valY}
+                  textAnchor="end" fill={t.text}
+                  fontSize={15}>
+                  {leftVal}
+                </text>
+                {/* Right value */}
+                <text x={CENTER_X + HALF + 10} y={valY}
+                  textAnchor="start" fill={t.text}
+                  fontSize={15}>
+                  {rightVal}
+                </text>
+                {/* Bottom separator */}
+                <line x1={PAD + 8} y1={rowY + rowH} x2={W - PAD - 8} y2={rowY + rowH}
+                  stroke={t.tableBorder} strokeWidth={0.75} />
+              </g>
+            );
+          })}
+
+          {/* Note */}
+          {noteLines.length > 0 && (
+            <g>
+              <rect x={PAD} y={vizEnd + 2} width={W - PAD * 2} height={NOTE_H} rx={4}
+                fill={t.noteBg} />
+              {noteLines.map((line, li) => (
+                <text key={li} x={PAD + 10} y={vizEnd + 16 + li * 14}
+                  fill={t.noteText} fontSize={9}>
+                  {line}
+                </text>
+              ))}
+            </g>
+          )}
+        </svg>
+      </div>
+    );
+  }
+
   // ---- TABLE LAYOUT ----
   if (slide.layout === "table") {
     return (

@@ -9,7 +9,7 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
   const { linkId } = use(params);
   const [email, setEmail] = useState("");
   const [verified, setVerified] = useState(false);
-  const [valid, setValid] = useState<boolean | null>(null);
+  const [linkStatus, setLinkStatus] = useState<"loading" | "ok" | "disabled">("loading");
   const [currentSlide, setCurrentSlide] = useState(0);
   const [themeId, setThemeId] = useState("minimal");
   const [slideData, setSlideData] = useState(initialSlides);
@@ -18,42 +18,60 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
 
   const theme = themes[themeId];
 
-  // Validate the link exists + fetch slide edits + apply order & graveyard
   useEffect(() => {
-    fetch(`/api/share?id=${linkId}`)
-      .then((r) => {
-        if (r.ok) setValid(true);
-        else setValid(false);
-      })
-      .catch(() => setValid(false));
-
+    // Fetch link status + slide snapshot (if any) in parallel with slide content
     Promise.all([
+      fetch(`/api/share?id=${linkId}`).then((r) => (r.ok ? r.json() : null)),
       fetch("/api/slides").then((r) => r.json()),
-      fetch("/api/slide-order").then((r) => r.json()),
     ])
-      .then(([edits, order]) => {
+      .then(([link, edits]) => {
+        if (link?.disabled) {
+          setLinkStatus("disabled");
+          return;
+        }
+        setLinkStatus("ok");
+
+        // Build slide content from edits
         let merged = edits.length > 0 ? applyEdits(initialSlides, edits) : [...initialSlides];
 
-        if (order && Array.isArray(order.slide_ids) && order.slide_ids.length > 0) {
+        // Use link's snapshot slide_ids if available; otherwise fetch global order
+        if (link?.slide_ids && Array.isArray(link.slide_ids) && link.slide_ids.length > 0) {
           const slideMap = new Map(merged.map((s) => [s.id, s]));
           const ordered: typeof merged = [];
-          for (const id of order.slide_ids) {
+          for (const id of link.slide_ids) {
             const slide = slideMap.get(id);
-            if (slide) { ordered.push(slide); slideMap.delete(id); }
+            if (slide) ordered.push(slide);
           }
-          slideMap.forEach((s) => ordered.push(s));
-          merged = ordered;
+          setSlideData(ordered);
+        } else {
+          // Fallback: use global slide order
+          fetch("/api/slide-order")
+            .then((r) => r.json())
+            .then((order) => {
+              if (order && Array.isArray(order.slide_ids) && order.slide_ids.length > 0) {
+                const slideMap = new Map(merged.map((s) => [s.id, s]));
+                const ordered: typeof merged = [];
+                for (const id of order.slide_ids) {
+                  const slide = slideMap.get(id);
+                  if (slide) { ordered.push(slide); slideMap.delete(id); }
+                }
+                slideMap.forEach((s) => ordered.push(s));
+                merged = ordered;
 
-          // Remove graveyard slides from viewer
-          const gyIdx = typeof order.graveyard_index === "number" ? order.graveyard_index : -1;
-          if (gyIdx >= 0 && gyIdx < merged.length) {
-            merged = merged.slice(0, gyIdx);
-          }
+                const gyIdx = typeof order.graveyard_index === "number" ? order.graveyard_index : -1;
+                if (gyIdx >= 0 && gyIdx < merged.length) {
+                  merged = merged.slice(0, gyIdx);
+                }
+              }
+              setSlideData(merged);
+            })
+            .catch(() => setSlideData(merged));
         }
-
-        setSlideData(merged);
       })
-      .catch(() => {});
+      .catch(() => {
+        // If the API is unreachable, just show the deck
+        setLinkStatus("ok");
+      });
   }, [linkId]);
 
   // Track time on slide changes
@@ -104,7 +122,7 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
   }
 
   // Loading state
-  if (valid === null) {
+  if (linkStatus === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <p className="text-gray-500">Loading...</p>
@@ -112,13 +130,14 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
     );
   }
 
-  // Invalid link
-  if (valid === false) {
+  // Disabled link
+  if (linkStatus === "disabled") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Link not found</h1>
-          <p className="text-gray-500">This share link is invalid or has been refreshed.</p>
+        <div className="text-center max-w-sm">
+          <div className="text-4xl mb-4">🔒</div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">No longer available</h1>
+          <p className="text-gray-500">This presentation has been disabled by its owner.</p>
         </div>
       </div>
     );

@@ -204,6 +204,12 @@ export default function Home() {
     }, 500);
   }
 
+  function activeSlideIds() {
+    return graveyardIndex >= 0
+      ? slideData.slice(0, graveyardIndex).map((s) => s.id)
+      : slideData.map((s) => s.id);
+  }
+
   async function generateLink() {
     // If we already have a link, just show it (stable URL)
     if (shareLinkId) {
@@ -215,26 +221,12 @@ export default function Home() {
     await fetch("/api/share", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ id, slide_ids: activeSlideIds() }),
     });
 
     setShareLinkId(id);
     localStorage.setItem("cognitory-link-id", id);
     setShareLink(`${window.location.origin}/view/${id}`);
-  }
-
-  async function refreshLink() {
-    const id = crypto.randomUUID().slice(0, 8);
-    await fetch("/api/share", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
-
-    setShareLinkId(id);
-    localStorage.setItem("cognitory-link-id", id);
-    setShareLink(`${window.location.origin}/view/${id}`);
-    setCopied(false);
   }
 
   function copyLink() {
@@ -268,13 +260,19 @@ export default function Home() {
           >
             Dashboard
           </a>
+          <a
+            href="/links"
+            className="px-3 py-1.5 rounded text-sm bg-gray-100 text-gray-700 hover:bg-gray-200"
+          >
+            Links
+          </a>
 
           {!shareLink ? (
             <button
               onClick={generateLink}
               className="px-4 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
             >
-              Generate Share Link
+              Generate Link
             </button>
           ) : (
             <div className="flex items-center gap-2">
@@ -287,13 +285,12 @@ export default function Home() {
               >
                 {copied ? "Copied!" : "Copy"}
               </button>
-              <button
-                onClick={refreshLink}
-                className="px-3 py-1.5 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200"
-                title="Generate a new URL (old link stops working)"
+              <a
+                href="/links"
+                className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200"
               >
-                Refresh Link
-              </button>
+                Manage
+              </a>
             </div>
           )}
         </div>
@@ -313,6 +310,23 @@ export default function Home() {
                   <div
                     className="flex items-center gap-1 py-2 px-1 select-none"
                     onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      if (dragIndex === null || dragIndex === graveyardIndex) { setDragIndex(null); setDragOverIndex(null); return; }
+                      setSlideData((prev) => {
+                        const next = [...prev];
+                        const [moved] = next.splice(dragIndex, 1);
+                        let newGy = graveyardIndex;
+                        if (dragIndex < graveyardIndex) newGy--;
+                        next.splice(newGy, 0, moved);
+                        setGraveyardIndex(newGy);
+                        if (currentSlide === dragIndex) setCurrentSlide(newGy);
+                        else if (dragIndex < currentSlide) setCurrentSlide(currentSlide - 1);
+                        persistOrder(next, newGy);
+                        return next;
+                      });
+                      setDragIndex(null); setDragOverIndex(null);
+                    }}
                   >
                     <div className="flex-1 border-t-2 border-dashed border-red-300" />
                     <span className="text-[10px] font-semibold text-red-400 whitespace-nowrap uppercase tracking-wide">
@@ -422,9 +436,9 @@ export default function Home() {
               </span>
               <div className="flex-1 border-t-2 border-dashed border-gray-200 group-hover:border-red-300 transition-colors" />
             </button>
-          ) : graveyardIndex >= slideData.length && (
+          ) : graveyardIndex >= 0 && (
             <div
-              className="flex items-center gap-1 py-2 px-1"
+              className={`flex items-center gap-1 py-2 px-1 ${graveyardIndex < slideData.length ? "min-h-[32px]" : ""}`}
               onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; }}
               onDrop={(e) => {
                 e.preventDefault();
@@ -433,19 +447,24 @@ export default function Home() {
                   const next = [...prev];
                   const [moved] = next.splice(dragIndex, 1);
                   next.push(moved);
+                  let newGy = graveyardIndex;
+                  if (dragIndex < graveyardIndex) newGy--;
+                  setGraveyardIndex(newGy);
                   if (currentSlide === dragIndex) setCurrentSlide(next.length - 1);
                   else if (dragIndex < currentSlide) setCurrentSlide(currentSlide - 1);
-                  persistOrder(next, graveyardIndex);
+                  persistOrder(next, newGy);
                   return next;
                 });
                 setDragIndex(null); setDragOverIndex(null);
               }}
             >
-              <div className="flex-1 border-t-2 border-dashed border-red-300" />
-              <span className="text-[10px] font-semibold text-red-400 whitespace-nowrap uppercase tracking-wide">
-                Slide Graveyard
-              </span>
-              <div className="flex-1 border-t-2 border-dashed border-red-300" />
+              {graveyardIndex >= slideData.length && <>
+                <div className="flex-1 border-t-2 border-dashed border-red-300" />
+                <span className="text-[10px] font-semibold text-red-400 whitespace-nowrap uppercase tracking-wide">
+                  Slide Graveyard
+                </span>
+                <div className="flex-1 border-t-2 border-dashed border-red-300" />
+              </>}
             </div>
           )}
         </div>

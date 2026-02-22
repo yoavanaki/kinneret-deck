@@ -1,10 +1,11 @@
 // ============================================================
 // DATABASE STORE — Uses Vercel Postgres (Neon) for persistence.
-// Falls back to in-memory store when POSTGRES_URL is not set
-// (for local development).
+// Falls back to a file-based JSON store when POSTGRES_URL is not set
+// (for local development), so data survives server restarts.
 // ============================================================
 
 import { sql } from "@vercel/postgres";
+import { readFileStore, writeFileStore } from "./fileStore";
 
 export interface Comment {
   id: string;
@@ -17,6 +18,10 @@ export interface Comment {
 export interface ShareLink {
   id: string;
   created_at: string;
+  updated_at?: string;
+  disabled?: boolean;
+  slide_ids?: string[]; // snapshot of active slide IDs at create/refresh time
+  label?: string;
 }
 
 export interface ViewEvent {
@@ -67,6 +72,12 @@ export async function initDB() {
     )
   `;
 
+  // Migrate: add new columns to share_links if they don't exist
+  await sql`ALTER TABLE share_links ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP`;
+  await sql`ALTER TABLE share_links ADD COLUMN IF NOT EXISTS disabled BOOLEAN DEFAULT false`;
+  await sql`ALTER TABLE share_links ADD COLUMN IF NOT EXISTS slide_ids TEXT`;
+  await sql`ALTER TABLE share_links ADD COLUMN IF NOT EXISTS label TEXT`;
+
   await sql`
     CREATE TABLE IF NOT EXISTS view_events (
       id SERIAL PRIMARY KEY,
@@ -98,32 +109,31 @@ export async function initDB() {
   `;
 }
 
-// ---- In-memory fallback for local dev ----
-const globalAny = globalThis as any;
-if (!globalAny.__mem_comments) globalAny.__mem_comments = [];
-if (!globalAny.__mem_shareLinks) globalAny.__mem_shareLinks = [];
-if (!globalAny.__mem_viewEvents) globalAny.__mem_viewEvents = [];
-if (!globalAny.__mem_slideEdits) globalAny.__mem_slideEdits = [];
-if (!globalAny.__mem_slideOrder) globalAny.__mem_slideOrder = null;
-
-const mem = {
-  get comments(): Comment[] { return globalAny.__mem_comments; },
-  get shareLinks(): ShareLink[] { return globalAny.__mem_shareLinks; },
-  get viewEvents(): ViewEvent[] { return globalAny.__mem_viewEvents; },
-  get slideEdits(): SlideEdit[] { return globalAny.__mem_slideEdits; },
-  get slideOrder(): SlideOrder | null { return globalAny.__mem_slideOrder; },
-  set slideOrder(v: SlideOrder | null) { globalAny.__mem_slideOrder = v; },
-};
+// ---- File-based fallback for local dev ----
+// (data is persisted to .data/store.json so it survives server restarts)
 
 function useDB() {
   return !!process.env.POSTGRES_URL;
 }
 
+function deserializeShareLink(row: any): ShareLink {
+  return {
+    ...row,
+    disabled: row.disabled ?? false,
+    slide_ids: row.slide_ids
+      ? typeof row.slide_ids === "string"
+        ? JSON.parse(row.slide_ids)
+        : row.slide_ids
+      : undefined,
+  };
+}
+
 // ---- Comments ----
 export async function getComments(slideId?: string): Promise<Comment[]> {
   if (!useDB()) {
-    if (slideId) return mem.comments.filter((c) => c.slide_id === slideId);
-    return mem.comments;
+    const { comments } = readFileStore();
+    if (slideId) return comments.filter((c) => c.slide_id === slideId);
+    return comments;
   }
   await initDB();
   if (slideId) {
@@ -136,7 +146,7 @@ export async function getComments(slideId?: string): Promise<Comment[]> {
 
 export async function addComment(comment: Comment): Promise<Comment> {
   if (!useDB()) {
-    mem.comments.push(comment);
+    writeFileStore((d) => ({ ...d, comments: [...d.comments, comment] }));
     return comment;
   }
   await initDB();
@@ -147,37 +157,88 @@ export async function addComment(comment: Comment): Promise<Comment> {
 // ---- Share Links ----
 export async function getShareLink(id: string): Promise<ShareLink | null> {
   if (!useDB()) {
-    return mem.shareLinks.find((l) => l.id === id) || null;
+    const { shareLinks } = readFileStore();
+    const link = shareLinks.find((l) => l.id === id);
+    return link ? deserializeShareLink(link) : null;
   }
   await initDB();
   const { rows } = await sql`SELECT * FROM share_links WHERE id = ${id}`;
-  return (rows[0] as ShareLink) || null;
+  return rows[0] ? deserializeShareLink(rows[0]) : null;
 }
 
 export async function getAllShareLinks(): Promise<ShareLink[]> {
   if (!useDB()) {
-    return mem.shareLinks;
+    return readFileStore().shareLinks.map(deserializeShareLink);
   }
   await initDB();
   const { rows } = await sql`SELECT * FROM share_links ORDER BY created_at DESC`;
-  return rows as ShareLink[];
+  return rows.map(deserializeShareLink);
 }
 
 export async function createShareLink(link: ShareLink): Promise<ShareLink> {
+  const slideIdsJson = link.slide_ids ? JSON.stringify(link.slide_ids) : null;
   if (!useDB()) {
-    const existing = mem.shareLinks.find((l) => l.id === link.id);
-    if (!existing) mem.shareLinks.push(link);
+    writeFileStore((d) => {
+      if (d.shareLinks.find((l) => l.id === link.id)) return d;
+      return { ...d, shareLinks: [...d.shareLinks, link] };
+    });
     return link;
   }
   await initDB();
-  await sql`INSERT INTO share_links (id, created_at) VALUES (${link.id}, ${link.created_at}) ON CONFLICT (id) DO NOTHING`;
+  await sql`
+    INSERT INTO share_links (id, created_at, updated_at, disabled, slide_ids, label)
+    VALUES (${link.id}, ${link.created_at}, ${link.updated_at ?? null}, ${link.disabled ?? false}, ${slideIdsJson}, ${link.label ?? null})
+    ON CONFLICT (id) DO NOTHING
+  `;
   return link;
+}
+
+export async function updateShareLink(
+  id: string,
+  updates: { disabled?: boolean; slide_ids?: string[]; label?: string }
+): Promise<ShareLink | null> {
+  const now = new Date().toISOString();
+  if (!useDB()) {
+    let updated: ShareLink | null = null;
+    writeFileStore((d) => {
+      const idx = d.shareLinks.findIndex((l) => l.id === id);
+      if (idx < 0) return d;
+      const next = [...d.shareLinks];
+      next[idx] = { ...next[idx], ...updates, updated_at: now };
+      updated = deserializeShareLink(next[idx]);
+      return { ...d, shareLinks: next };
+    });
+    return updated;
+  }
+  await initDB();
+  const slideIdsJson = updates.slide_ids !== undefined ? JSON.stringify(updates.slide_ids) : undefined;
+
+  if (updates.disabled !== undefined && slideIdsJson !== undefined) {
+    const { rows } = await sql`
+      UPDATE share_links SET disabled = ${updates.disabled}, slide_ids = ${slideIdsJson}, updated_at = NOW()
+      WHERE id = ${id} RETURNING *
+    `;
+    return rows[0] ? deserializeShareLink(rows[0]) : null;
+  } else if (updates.disabled !== undefined) {
+    const { rows } = await sql`
+      UPDATE share_links SET disabled = ${updates.disabled}, updated_at = NOW()
+      WHERE id = ${id} RETURNING *
+    `;
+    return rows[0] ? deserializeShareLink(rows[0]) : null;
+  } else if (slideIdsJson !== undefined) {
+    const { rows } = await sql`
+      UPDATE share_links SET slide_ids = ${slideIdsJson}, updated_at = NOW()
+      WHERE id = ${id} RETURNING *
+    `;
+    return rows[0] ? deserializeShareLink(rows[0]) : null;
+  }
+  return getShareLink(id);
 }
 
 // ---- View Events ----
 export async function trackView(event: ViewEvent): Promise<void> {
   if (!useDB()) {
-    mem.viewEvents.push(event);
+    writeFileStore((d) => ({ ...d, viewEvents: [...d.viewEvents, event] }));
     return;
   }
   await initDB();
@@ -186,8 +247,9 @@ export async function trackView(event: ViewEvent): Promise<void> {
 
 export async function getViewEvents(linkId?: string): Promise<ViewEvent[]> {
   if (!useDB()) {
-    if (linkId) return mem.viewEvents.filter((e) => e.link_id === linkId);
-    return mem.viewEvents;
+    const { viewEvents } = readFileStore();
+    if (linkId) return viewEvents.filter((e) => e.link_id === linkId);
+    return viewEvents;
   }
   await initDB();
   if (linkId) {
@@ -201,7 +263,7 @@ export async function getViewEvents(linkId?: string): Promise<ViewEvent[]> {
 // ---- Slide Edits ----
 export async function getSlideEdits(): Promise<SlideEdit[]> {
   if (!useDB()) {
-    return mem.slideEdits;
+    return readFileStore().slideEdits;
   }
   await initDB();
   const { rows } = await sql`SELECT * FROM slide_edits ORDER BY updated_at ASC`;
@@ -210,10 +272,14 @@ export async function getSlideEdits(): Promise<SlideEdit[]> {
 
 export async function saveSlideEdit(slideId: string, field: string, value: string): Promise<void> {
   if (!useDB()) {
-    const idx = mem.slideEdits.findIndex((e) => e.slide_id === slideId && e.field === field);
-    const edit: SlideEdit = { slide_id: slideId, field, value, updated_at: new Date().toISOString() };
-    if (idx >= 0) mem.slideEdits[idx] = edit;
-    else mem.slideEdits.push(edit);
+    writeFileStore((d) => {
+      const idx = d.slideEdits.findIndex((e) => e.slide_id === slideId && e.field === field);
+      const edit: SlideEdit = { slide_id: slideId, field, value, updated_at: new Date().toISOString() };
+      const next = [...d.slideEdits];
+      if (idx >= 0) next[idx] = edit;
+      else next.push(edit);
+      return { ...d, slideEdits: next };
+    });
     return;
   }
   await initDB();
@@ -227,7 +293,7 @@ export async function saveSlideEdit(slideId: string, field: string, value: strin
 // ---- Slide Order ----
 export async function getSlideOrder(): Promise<SlideOrder | null> {
   if (!useDB()) {
-    return mem.slideOrder;
+    return readFileStore().slideOrder;
   }
   await initDB();
   const { rows } = await sql`SELECT * FROM slide_order WHERE id = 'default'`;
@@ -243,7 +309,10 @@ export async function getSlideOrder(): Promise<SlideOrder | null> {
 export async function saveSlideOrder(slideIds: string[], graveyardIndex: number): Promise<void> {
   const json = JSON.stringify(slideIds);
   if (!useDB()) {
-    mem.slideOrder = { slide_ids: slideIds, graveyard_index: graveyardIndex, updated_at: new Date().toISOString() };
+    writeFileStore((d) => ({
+      ...d,
+      slideOrder: { slide_ids: slideIds, graveyard_index: graveyardIndex, updated_at: new Date().toISOString() },
+    }));
     return;
   }
   await initDB();

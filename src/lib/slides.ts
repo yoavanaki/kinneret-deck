@@ -17,7 +17,7 @@ export interface SlideContent {
   /** Bullet points as an array of strings */
   bullets?: string[];
   /** Layout type determines how the slide renders */
-  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack";
+  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels";
   /** Custom HTML content for special layouts */
   customHtml?: string;
   /** Team members for team layout */
@@ -62,7 +62,7 @@ const slide01: SlideContent = {
   subtitle: "/ˈkɒɡ.nɪ.tər.i/",
   body: "noun",
   customHtml: "A facility or system that produces services at scale through standardized, automated processes — as a factory does for physical goods.",
-  note: `"The retirement TPA was transformed into a cognitory — processing thousands of plans with a fraction of the headcount."`,
+  note: "",
 };
 
 // ============================================================
@@ -76,25 +76,25 @@ const slide02: SlideContent = {
   team: [
     {
       name: "Yoav Segev",
-      role: "Co-CEO",
+      role: "Business",
       bio: "Economics @ Oxford University · Consultant at BCG · Business Services Investor at Charlesbank · Incubated Compliance Consulting firm · MBA @ HBS",
       imageUrl: "/team/segev.jpeg",
     },
     {
       name: "Yoav Anaki",
-      role: "Co-CEO",
+      role: "Business",
       bio: "Computer Science age 13 · COO at Mad Mimi, acquired by GoDaddy · IDF Counterterrorism Investigations · Partner, AI at Fresh Fund · MBA @ HBS",
       imageUrl: "/team/anaki.jpeg",
     },
     {
       name: "Eran Pinhas",
-      role: "Technologist",
+      role: "Tech",
       bio: "CTO & Co-Founder of Ginzi (AI Support Automation) · Senior Software Engineer at Axonius · Full-stack & AI/ML systems · Open-source contributor · CS @ Ben-Gurion University",
       imageUrl: "/team/pinhas.jpg",
     },
     {
       name: "Jamie Kalamarides",
-      role: "Chairman",
+      role: "Retirement",
       bio: "President, Group Insurance at Prudential Financial · Head of Institutional Retirement Plan Services · Expert witness, U.S. Senate (SECURE Act) · Fellow, Bipartisan Policy Center · MBA @ Tuck",
       imageUrl: "/team/kalamarides.jpg",
     },
@@ -109,7 +109,7 @@ const slideParallels: SlideContent = {
   number: 3,
   title: "History doesn't repeat, but it rhymes",
   subtitle: "The AI revolution follows the same playbook as the industrial revolution",
-  layout: "table",
+  layout: "parallels",
   tableHeaders: ["", "Industrial Revolution", "AI Revolution"],
   tableRows: [
     ["Core Resource", "Energy", "Intelligence"],
@@ -117,7 +117,7 @@ const slideParallels: SlideContent = {
     ["Infrastructure", "Railroads & Factories", "Data Centers & Cloud"],
     ["Displacement", "Manual Laborers", "Knowledge Workers"],
     ["Unit Economics", "Cost per widget → $0", "Cost per decision → $0"],
-    ["New Entity", "The Factory", "The Cognitory"],
+    ["New Entity", "🏭  The Factory", "The Cognitory  🤖"],
   ],
   note: "Every revolution replaces the expensive, variable human component with cheap, scalable infrastructure. We're at the start of that curve for services.",
 };
