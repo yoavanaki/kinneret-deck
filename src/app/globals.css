@@ -5,3 +5,11 @@
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
+
+@layer utilities {
+  .footnote {
+    font-size: 9px;
+    line-height: 1.4;
+    opacity: 0.8;
+  }
+}

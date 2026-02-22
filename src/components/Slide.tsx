@@ -182,8 +182,8 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 editable={editable}
                 onUpdate={onUpdate}
                 tag="span"
-                className="text-xs text-right flex-shrink-0"
-                style={{ width: 90, color: bar.highlight ? t.heading : t.text, fontWeight: bar.highlight ? 700 : 400 }}
+                className="text-[10px] text-right flex-shrink-0"
+                style={{ width: 110, color: bar.highlight ? t.heading : t.text, fontWeight: bar.highlight ? 700 : 400 }}
               />
               <div className="flex-1 h-5 rounded-sm overflow-hidden" style={{ backgroundColor: t.cardBg }}>
                 <div
@@ -212,7 +212,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             editable={editable}
             onUpdate={onUpdate}
             tag="p"
-            className="text-xs mt-3"
+            className="footnote mt-3"
             style={{ color: t.subtitle }}
           />
         )}

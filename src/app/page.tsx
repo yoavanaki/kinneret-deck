@@ -254,19 +254,6 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-2">
-          <a
-            href="/dashboard"
-            className="px-3 py-1.5 rounded text-sm bg-gray-100 text-gray-700 hover:bg-gray-200"
-          >
-            Dashboard
-          </a>
-          <a
-            href="/links"
-            className="px-3 py-1.5 rounded text-sm bg-gray-100 text-gray-700 hover:bg-gray-200"
-          >
-            Links
-          </a>
-
           {!shareLink ? (
             <button
               onClick={generateLink}
@@ -285,12 +272,6 @@ export default function Home() {
               >
                 {copied ? "Copied!" : "Copy"}
               </button>
-              <a
-                href="/links"
-                className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200"
-              >
-                Manage
-              </a>
             </div>
           )}
         </div>
