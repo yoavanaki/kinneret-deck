@@ -112,14 +112,14 @@ const slideParallels: SlideContent = {
   layout: "parallels",
   tableHeaders: ["", "Industrial Revolution", "AI Revolution"],
   tableRows: [
-    ["Core Resource", "Energy", "Intelligence"],
+    ["Scarce Resource", "Energy", "Intelligence"],
     ["Breakthrough", "Steam Engine", "Large Language Models"],
-    ["Infrastructure", "Railroads & Factories", "Data Centers & Cloud"],
-    ["Displacement", "Manual Laborers", "Knowledge Workers"],
-    ["Unit Economics", "Cost per widget → $0", "Cost per decision → $0"],
-    ["New Entity", "🏭  The Factory", "The Cognitory  🤖"],
+    ["Infrastructure", "Railroads & Factories", "Cloud & Data Centers"],
+    ["Disrupts", "Manual Labor", "Knowledge Work"],
+    ["Economics", "Cost per widget → $0", "Cost per decision → $0"],
+    ["New Entity", "🏭 The Factory", "The Cognitory 🤖"],
   ],
-  note: "Every revolution replaces the expensive, variable human component with cheap, scalable infrastructure. We're at the start of that curve for services.",
+  note: "Every industrial revolution replaces an expensive, variable human input with cheap, scalable infrastructure. Services are next.",
 };
 
 // ============================================================
