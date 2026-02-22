@@ -17,7 +17,11 @@ export interface SlideContent {
   /** Bullet points as an array of strings */
   bullets?: string[];
   /** Layout type determines how the slide renders */
-  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text";
+  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team";
+  /** Custom HTML content for special layouts */
+  customHtml?: string;
+  /** Team members for team layout */
+  team?: { name: string; role: string; bio: string; imageUrl?: string }[];
   /** Optional note/annotation shown in a different style */
   note?: string;
   /** Table data: headers and rows */
@@ -30,14 +34,15 @@ export interface SlideContent {
 }
 
 // ============================================================
-// SLIDE 1: Title Slide
+// SLIDE 1: Title Slide — Dictionary Entry
 // ============================================================
 const slide01: SlideContent = {
   id: "slide-01",
   number: 1,
-  title: "Kinneret",
-  subtitle: "Factories for white collar services",
-  layout: "title",
+  title: "Cognitory",
+  layout: "dictionary",
+  subtitle: "/ˈkɒɡ.nɪ.tər.i/",
+  body: "noun",
 };
 
 // ============================================================

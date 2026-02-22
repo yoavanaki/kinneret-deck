@@ -74,6 +74,47 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
     color: t.subtitle,
   };
 
+  // ---- DICTIONARY LAYOUT ----
+  if (slide.layout === "dictionary") {
+    return (
+      <div style={baseStyle} className="flex flex-col justify-center px-24 py-16">
+        <div className="mb-1">
+          <EditableText
+            value={slide.title}
+            slideId={slide.id}
+            field="title"
+            editable={editable}
+            onUpdate={onUpdate}
+            tag="h1"
+            className="text-6xl font-bold"
+            style={{ ...headingStyle, letterSpacing: "-0.02em" }}
+          />
+        </div>
+        {slide.subtitle && (
+          <div className="mb-4 text-xl" style={{ color: t.subtitle, fontFamily: "monospace" }}>
+            {slide.subtitle}
+          </div>
+        )}
+        {slide.body && (
+          <div className="text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: t.accent }}>
+            {slide.body}
+          </div>
+        )}
+        <div className="border-t pt-4" style={{ borderColor: t.tableBorder }}>
+          <p className="text-xl leading-relaxed" style={{ color: t.text }}>
+            A facility or system that produces <span className="font-semibold" style={{ color: t.heading }}>services</span> at
+            scale through standardized, automated processes — as a{" "}
+            <span style={{ color: t.subtitle }}>factory</span> does for physical goods.
+          </p>
+        </div>
+        <div className="mt-6 text-sm" style={{ color: t.subtitle }}>
+          <span className="italic">&quot;The retirement TPA was transformed into a cognitory — processing
+          thousands of plans with a fraction of the headcount.&quot;</span>
+        </div>
+      </div>
+    );
+  }
+
   // ---- TITLE LAYOUT ----
   if (slide.layout === "title") {
     return (
