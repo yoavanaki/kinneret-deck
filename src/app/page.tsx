@@ -60,7 +60,7 @@ export default function Home() {
 
   // Load saved state from localStorage (version-gated to avoid stale data)
   useEffect(() => {
-    const SLIDES_VERSION = "v3";
+    const SLIDES_VERSION = "v4";
     const savedTheme = localStorage.getItem("cognitory-theme");
     if (savedTheme && themes[savedTheme]) setThemeId(savedTheme);
 

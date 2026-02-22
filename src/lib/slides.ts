@@ -66,19 +66,19 @@ const slide02: SlideContent = {
     {
       name: "Yoav Anaki",
       role: "Co-Founder",
-      bio: "Junior Partner at fresh.fund, Israel's most active pre-seed VC. Background in CS, previously founded Yodel and the Layoffs Project.",
+      bio: "Computer Science age 13 · COO at Mad Mimi, acquired by GoDaddy · IDF Counterterrorism Investigations · Partner, AI at Fresh Fund · MBA @ HBS",
       imageUrl: "/team/anaki.jpeg",
     },
     {
       name: "Yoav Segev",
       role: "Co-Founder",
-      bio: "MBA from Harvard Business School. Former Associate at Charlesbank Capital Partners, BCG, and Morgan Stanley. BA Economics & Management from Oxford.",
+      bio: "Economics @ Oxford University · Consultant at BCG · Business Services Investor at Charlesbank · Incubated Compliance Consulting firm · MBA @ HBS",
       imageUrl: "/team/segev.jpeg",
     },
     {
       name: "Jamie Kalamarides",
       role: "Chairman",
-      bio: "20+ years at Prudential Financial. Former President of Group Insurance and Head of Institutional Retirement Plan Services. Tuck MBA.",
+      bio: "President, Group Insurance at Prudential Financial · Head of Institutional Retirement Plan Services · Expert witness, U.S. Senate (SECURE Act) · Fellow, Bipartisan Policy Center · MBA @ Tuck",
       imageUrl: "/team/kalamarides.jpg",
     },
   ],
