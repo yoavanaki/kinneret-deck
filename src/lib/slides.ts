@@ -314,8 +314,11 @@ const slide16: SlideContent = {
 const slide17: SlideContent = {
   id: "slide-17",
   number: 17,
-  title: "Industry Overview",
-  layout: "big-text",
+  title: "Retirement TPA Industry Overview",
+  layout: "two-column",
+  leftText: "MARKET STRUCTURE\n\n• $8B+ total addressable market\n• 5,000+ TPA firms in the U.S.\n• Top 10 firms hold <15% market share\n• Average firm: 10-50 employees\n• 700,000+ retirement plans need administration",
+  rightText: "KEY DYNAMICS\n\n• Owner-operators are 55-65 years old on average\n• Succession crisis — limited buyer pool\n• SECURE Act 2.0 expanding plan coverage to millions of new participants\n• Technology adoption is 10+ years behind\n• Margins today: 15-25%. Post-automation target: 40-50%",
+  note: "The retirement TPA industry is at an inflection point: regulatory expansion is driving demand while the supply side is consolidating.",
 };
 
 // ============================================================
