@@ -91,26 +91,56 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           />
         </div>
         {slide.subtitle && (
-          <div className="mb-4 text-xl" style={{ color: t.subtitle, fontFamily: "monospace" }}>
-            {slide.subtitle}
-          </div>
+          <EditableText
+            value={slide.subtitle}
+            slideId={slide.id}
+            field="subtitle"
+            editable={editable}
+            onUpdate={onUpdate}
+            tag="div"
+            className="mb-4 text-xl"
+            style={{ color: t.subtitle, fontFamily: "monospace" }}
+          />
         )}
         {slide.body && (
-          <div className="text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: t.accent }}>
-            {slide.body}
+          <EditableText
+            value={slide.body}
+            slideId={slide.id}
+            field="body"
+            editable={editable}
+            onUpdate={onUpdate}
+            tag="div"
+            className="text-sm font-semibold uppercase tracking-widest mb-3"
+            style={{ color: t.accent }}
+          />
+        )}
+        {slide.customHtml && (
+          <div className="border-t pt-4" style={{ borderColor: t.tableBorder }}>
+            <EditableText
+              value={slide.customHtml}
+              slideId={slide.id}
+              field="customHtml"
+              editable={editable}
+              onUpdate={onUpdate}
+              tag="p"
+              className="text-xl leading-relaxed"
+              style={{ color: t.text }}
+            />
           </div>
         )}
-        <div className="border-t pt-4" style={{ borderColor: t.tableBorder }}>
-          <p className="text-xl leading-relaxed" style={{ color: t.text }}>
-            A facility or system that produces <span className="font-semibold" style={{ color: t.heading }}>services</span> at
-            scale through standardized, automated processes — as a{" "}
-            <span style={{ color: t.subtitle }}>factory</span> does for physical goods.
-          </p>
-        </div>
-        <div className="mt-6 text-sm" style={{ color: t.subtitle }}>
-          <span className="italic">&quot;The retirement TPA was transformed into a cognitory — processing
-          thousands of plans with a fraction of the headcount.&quot;</span>
-        </div>
+        {slide.note && (
+          <div className="mt-6 text-sm" style={{ color: t.subtitle }}>
+            <EditableText
+              value={slide.note}
+              slideId={slide.id}
+              field="note"
+              editable={editable}
+              onUpdate={onUpdate}
+              tag="span"
+              className="italic"
+            />
+          </div>
+        )}
       </div>
     );
   }
@@ -131,17 +161,30 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           style={headingStyle}
         />
         {slide.subtitle && (
-          <p className="text-sm mb-4" style={{ color: t.subtitle }}>{slide.subtitle}</p>
+          <EditableText
+            value={slide.subtitle}
+            slideId={slide.id}
+            field="subtitle"
+            editable={editable}
+            onUpdate={onUpdate}
+            tag="p"
+            className="text-sm mb-4"
+            style={{ color: t.subtitle }}
+          />
         )}
         <div className="flex-1 flex flex-col justify-center gap-1.5">
           {slide.bars.map((bar, i) => (
             <div key={i} className="flex items-center gap-3">
-              <span
+              <EditableText
+                value={bar.label}
+                slideId={slide.id}
+                field={`bars.${i}.label`}
+                editable={editable}
+                onUpdate={onUpdate}
+                tag="span"
                 className="text-xs text-right flex-shrink-0"
                 style={{ width: 90, color: bar.highlight ? t.heading : t.text, fontWeight: bar.highlight ? 700 : 400 }}
-              >
-                {bar.label}
-              </span>
+              />
               <div className="flex-1 h-5 rounded-sm overflow-hidden" style={{ backgroundColor: t.cardBg }}>
                 <div
                   className="h-full rounded-sm transition-all"
@@ -162,7 +205,16 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           ))}
         </div>
         {slide.note && (
-          <p className="text-xs mt-3" style={{ color: t.subtitle }}>{slide.note}</p>
+          <EditableText
+            value={slide.note}
+            slideId={slide.id}
+            field="note"
+            editable={editable}
+            onUpdate={onUpdate}
+            tag="p"
+            className="text-xs mt-3"
+            style={{ color: t.subtitle }}
+          />
         )}
       </div>
     );
@@ -170,8 +222,9 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
   // ---- TEAM LAYOUT ----
   if (slide.layout === "team" && slide.team) {
+    const isLargeTeam = slide.team.length > 3;
     return (
-      <div style={baseStyle} className="flex flex-col p-12">
+      <div style={baseStyle} className={`flex flex-col ${isLargeTeam ? "p-8" : "p-12"}`}>
         <EditableText
           value={slide.title}
           slideId={slide.id}
@@ -179,39 +232,60 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           editable={editable}
           onUpdate={onUpdate}
           tag="h1"
-          className="text-3xl font-bold mb-8 text-center"
+          className={`font-bold ${isLargeTeam ? "text-2xl mb-5" : "text-3xl mb-8"} text-center`}
           style={headingStyle}
         />
-        <div className="flex gap-6 flex-1 items-start">
+        <div className={`flex ${isLargeTeam ? "gap-3" : "gap-6"} flex-1 items-start`}>
           {slide.team.map((member, i) => (
             <div
               key={i}
-              className="flex-1 flex flex-col items-center text-center p-4 rounded-lg"
+              className={`flex-1 flex flex-col items-center text-center ${isLargeTeam ? "p-3" : "p-4"} rounded-lg`}
               style={{ backgroundColor: t.cardBg }}
             >
               {member.imageUrl ? (
                 <img
                   src={member.imageUrl}
                   alt={member.name}
-                  className="w-20 h-20 rounded-full mb-4 object-cover"
+                  className={`${isLargeTeam ? "w-16 h-16 mb-3" : "w-20 h-20 mb-4"} rounded-full object-cover`}
                 />
               ) : (
                 <div
-                  className="w-20 h-20 rounded-full mb-4 flex items-center justify-center text-2xl font-bold"
+                  className={`${isLargeTeam ? "w-16 h-16 mb-3 text-xl" : "w-20 h-20 mb-4 text-2xl"} rounded-full flex items-center justify-center font-bold`}
                   style={{ backgroundColor: t.accent, color: t.bg }}
                 >
                   {member.name.split(" ").map(n => n[0]).join("")}
                 </div>
               )}
-              <h3 className="text-lg font-bold mb-1" style={{ color: t.heading }}>
-                {member.name}
-              </h3>
-              <p className="text-sm font-semibold mb-2" style={{ color: t.accent }}>
-                {member.role}
-              </p>
-              <p className="text-sm leading-relaxed" style={{ color: t.text }}>
-                {member.bio}
-              </p>
+              <EditableText
+                value={member.name}
+                slideId={slide.id}
+                field={`team.${i}.name`}
+                editable={editable}
+                onUpdate={onUpdate}
+                tag="h3"
+                className={`${isLargeTeam ? "text-base" : "text-lg"} font-bold mb-1`}
+                style={{ color: t.heading }}
+              />
+              <EditableText
+                value={member.role}
+                slideId={slide.id}
+                field={`team.${i}.role`}
+                editable={editable}
+                onUpdate={onUpdate}
+                tag="p"
+                className={`${isLargeTeam ? "text-xs" : "text-sm"} font-semibold mb-2`}
+                style={{ color: t.accent }}
+              />
+              <EditableText
+                value={member.bio}
+                slideId={slide.id}
+                field={`team.${i}.bio`}
+                editable={editable}
+                onUpdate={onUpdate}
+                tag="p"
+                className={`${isLargeTeam ? "text-xs leading-snug" : "text-sm leading-relaxed"}`}
+                style={{ color: t.text }}
+              />
             </div>
           ))}
         </div>
@@ -244,9 +318,28 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
               >
                 <span className="text-2xl mb-1">{before.icon}</span>
-                <span className="text-sm font-bold" style={{ color: t.heading }}>{before.label}</span>
+                <EditableText
+                  value={before.label}
+                  slideId={slide.id}
+                  field="flows.before.label"
+                  editable={editable}
+                  onUpdate={onUpdate}
+                  tag="span"
+                  className="text-sm font-bold"
+                  style={{ color: t.heading }}
+                />
                 {before.items.map((item, i) => (
-                  <span key={i} className="text-xs mt-0.5" style={{ color: t.subtitle }}>{item}</span>
+                  <EditableText
+                    key={i}
+                    value={item}
+                    slideId={slide.id}
+                    field={`flows.before.items.${i}`}
+                    editable={editable}
+                    onUpdate={onUpdate}
+                    tag="span"
+                    className="text-xs mt-0.5"
+                    style={{ color: t.subtitle }}
+                  />
                 ))}
               </div>
             </div>
@@ -265,7 +358,13 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 }}
               >
                 <span className="text-2xl mb-1">{middle.icon}</span>
-                <span
+                <EditableText
+                  value={middle.label}
+                  slideId={slide.id}
+                  field="flows.middle.label"
+                  editable={editable}
+                  onUpdate={onUpdate}
+                  tag="span"
                   className="text-sm font-bold"
                   style={{
                     color: t.heading,
@@ -273,9 +372,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                     textDecorationColor: t.accent,
                     textDecorationThickness: "2px",
                   }}
-                >
-                  {middle.label}
-                </span>
+                />
               </div>
               {/* Replacement arrow + box */}
               {replacement && (
@@ -289,7 +386,16 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                     }}
                   >
                     <span className="text-2xl mb-1">{replacement.icon}</span>
-                    <span className="text-sm font-bold" style={{ color: t.accent }}>{replacement.label}</span>
+                    <EditableText
+                      value={replacement.label}
+                      slideId={slide.id}
+                      field="flows.replacement.label"
+                      editable={editable}
+                      onUpdate={onUpdate}
+                      tag="span"
+                      className="text-sm font-bold"
+                      style={{ color: t.accent }}
+                    />
                   </div>
                 </div>
               )}
@@ -305,9 +411,28 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
               >
                 <span className="text-2xl mb-1">{after.icon}</span>
-                <span className="text-sm font-bold" style={{ color: t.heading }}>{after.label}</span>
+                <EditableText
+                  value={after.label}
+                  slideId={slide.id}
+                  field="flows.after.label"
+                  editable={editable}
+                  onUpdate={onUpdate}
+                  tag="span"
+                  className="text-sm font-bold"
+                  style={{ color: t.heading }}
+                />
                 {after.items.map((item, i) => (
-                  <span key={i} className="text-xs mt-0.5" style={{ color: t.subtitle }}>{item}</span>
+                  <EditableText
+                    key={i}
+                    value={item}
+                    slideId={slide.id}
+                    field={`flows.after.items.${i}`}
+                    editable={editable}
+                    onUpdate={onUpdate}
+                    tag="span"
+                    className="text-xs mt-0.5"
+                    style={{ color: t.subtitle }}
+                  />
                 ))}
               </div>
             </div>
@@ -315,7 +440,15 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
         </div>
         {slide.note && (
           <div className="mt-auto p-3 rounded text-sm text-center" style={{ backgroundColor: t.noteBg, color: t.noteText }}>
-            {slide.note}
+            <EditableText
+              value={slide.note}
+              slideId={slide.id}
+              field="note"
+              editable={editable}
+              onUpdate={onUpdate}
+              tag="span"
+              className=""
+            />
           </div>
         )}
       </div>
@@ -443,7 +576,15 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
         </div>
         {slide.note && (
           <div className="mt-4 p-3 rounded text-sm" style={{ backgroundColor: t.noteBg, color: t.noteText }}>
-            {slide.note}
+            <EditableText
+              value={slide.note}
+              slideId={slide.id}
+              field="note"
+              editable={editable}
+              onUpdate={onUpdate}
+              tag="span"
+              className=""
+            />
           </div>
         )}
       </div>
@@ -495,7 +636,15 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
         )}
         {slide.note && (
           <div className="mt-auto p-3 rounded text-sm" style={{ backgroundColor: t.noteBg, color: t.noteText }}>
-            {slide.note}
+            <EditableText
+              value={slide.note}
+              slideId={slide.id}
+              field="note"
+              editable={editable}
+              onUpdate={onUpdate}
+              tag="span"
+              className=""
+            />
           </div>
         )}
       </div>
@@ -529,7 +678,16 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           />
         )}
         {slide.note && (
-          <p className="text-xs mb-3" style={{ color: t.subtitle }}>{slide.note}</p>
+          <EditableText
+            value={slide.note}
+            slideId={slide.id}
+            field="note"
+            editable={editable}
+            onUpdate={onUpdate}
+            tag="p"
+            className="text-xs mb-3"
+            style={{ color: t.subtitle }}
+          />
         )}
         {slide.tableHeaders && slide.tableRows && (
           <div className="overflow-auto flex-1">
@@ -546,7 +704,15 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                         color: t.heading,
                       }}
                     >
-                      {h}
+                      <EditableText
+                        value={h}
+                        slideId={slide.id}
+                        field={`tableHeaders.${i}`}
+                        editable={editable}
+                        onUpdate={onUpdate}
+                        tag="span"
+                        className=""
+                      />
                     </th>
                   ))}
                 </tr>
@@ -560,11 +726,16 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                         className="p-2 border"
                         style={{ borderColor: t.tableBorder }}
                       >
-                        {cell === "✓" ? (
-                          <span style={{ color: t.accent }} className="text-lg">✓</span>
-                        ) : (
-                          cell
-                        )}
+                        <EditableText
+                          value={cell}
+                          slideId={slide.id}
+                          field={`tableRows.${ri}.${ci}`}
+                          editable={editable}
+                          onUpdate={onUpdate}
+                          tag="span"
+                          className={cell === "✓" ? "text-lg" : ""}
+                          style={cell === "✓" ? { color: t.accent } : undefined}
+                        />
                       </td>
                     ))}
                   </tr>

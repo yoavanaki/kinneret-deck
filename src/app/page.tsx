@@ -60,7 +60,7 @@ export default function Home() {
 
   // Load saved state from localStorage (version-gated to avoid stale data)
   useEffect(() => {
-    const SLIDES_VERSION = "v4";
+    const SLIDES_VERSION = "v6";
     const savedTheme = localStorage.getItem("cognitory-theme");
     if (savedTheme && themes[savedTheme]) setThemeId(savedTheme);
 
@@ -113,14 +113,25 @@ export default function Home() {
     setSlideData((prev) =>
       prev.map((s) => {
         if (s.id !== slideId) return s;
-        // Handle nested bullet updates like "bullets.0"
-        if (field.startsWith("bullets.")) {
-          const idx = parseInt(field.split(".")[1]);
-          const newBullets = [...(s.bullets || [])];
-          newBullets[idx] = value;
-          return { ...s, bullets: newBullets };
+        const parts = field.split(".");
+
+        // Simple top-level field (title, subtitle, body, note, leftText, rightText)
+        if (parts.length === 1) {
+          return { ...s, [field]: value };
         }
-        return { ...s, [field]: value };
+
+        // Nested updates — clone and set value at path
+        const updated = JSON.parse(JSON.stringify(s));
+        let target: any = updated;
+        for (let i = 0; i < parts.length - 1; i++) {
+          const key = /^\d+$/.test(parts[i]) ? parseInt(parts[i]) : parts[i];
+          target = target[key];
+        }
+        const lastKey = /^\d+$/.test(parts[parts.length - 1])
+          ? parseInt(parts[parts.length - 1])
+          : parts[parts.length - 1];
+        target[lastKey] = value;
+        return updated;
       })
     );
   }

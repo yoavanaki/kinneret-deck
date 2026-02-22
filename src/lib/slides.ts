@@ -17,7 +17,7 @@ export interface SlideContent {
   /** Bullet points as an array of strings */
   bullets?: string[];
   /** Layout type determines how the slide renders */
-  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow";
+  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack";
   /** Custom HTML content for special layouts */
   customHtml?: string;
   /** Team members for team layout */
@@ -40,6 +40,15 @@ export interface SlideContent {
     after: { label: string; icon: string; items: string[] };
     replacement?: { label: string; icon: string };
   };
+  /** Stack diagram layers for stack layout (rendered bottom-to-top) */
+  stack?: {
+    label: string;
+    icon?: string;
+    description?: string;
+    items?: { label: string; icon?: string; accent?: boolean }[];
+    /** If true, items render as a grid of small cards (for "many agents" feel) */
+    grid?: boolean;
+  }[];
 }
 
 // ============================================================
@@ -52,6 +61,8 @@ const slide01: SlideContent = {
   layout: "dictionary",
   subtitle: "/ˈkɒɡ.nɪ.tər.i/",
   body: "noun",
+  customHtml: "A facility or system that produces services at scale through standardized, automated processes — as a factory does for physical goods.",
+  note: `"The retirement TPA was transformed into a cognitory — processing thousands of plans with a fraction of the headcount."`,
 };
 
 // ============================================================
@@ -80,6 +91,12 @@ const slide02: SlideContent = {
       role: "Chairman",
       bio: "President, Group Insurance at Prudential Financial · Head of Institutional Retirement Plan Services · Expert witness, U.S. Senate (SECURE Act) · Fellow, Bipartisan Policy Center · MBA @ Tuck",
       imageUrl: "/team/kalamarides.jpg",
+    },
+    {
+      name: "Eran Pinhas",
+      role: "Technologist",
+      bio: "CTO & Co-Founder of Ginzi (AI Support Automation) · Senior Software Engineer at Axonius · Full-stack & AI/ML systems · Open-source contributor · CS @ Ben-Gurion University",
+      imageUrl: "/team/pinhas.jpg",
     },
   ],
 };
@@ -113,7 +130,7 @@ const slide04: SlideContent = {
     before: { label: "Inputs", icon: "📊", items: ["Data & Information", "Documents & Records"] },
     middle: { label: "White Collar Worker", icon: "👔", strikethrough: true },
     after: { label: "Outputs", icon: "📋", items: ["Decisions & Analysis", "Reports & Content"] },
-    replacement: { label: "AI & Automation", icon: "🤖" },
+    replacement: { label: "Cognitory", icon: "🤖" },
   },
   note: "The middle component — the knowledge worker — is replaced by AI and automation, just as factories replaced artisans.",
 };
