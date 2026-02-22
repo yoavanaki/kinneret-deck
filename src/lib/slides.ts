@@ -327,14 +327,19 @@ const slide17: SlideContent = {
 const slide18: SlideContent = {
   id: "slide-18",
   number: 18,
-  title: "What automation opportunities are there?",
-  subtitle: "Implied Margin Impact",
+  title: "Automation Opportunities",
+  subtitle: "Implied margin impact per 500-plan TPA ($2M revenue)",
   layout: "table",
-  tableHeaders: ["Activity", "Current Time Per Client", "Current Owner", "Cost / Hr", "Annual Savings"],
+  tableHeaders: ["Activity", "Hrs / Plan / Yr", "Staff", "Cost / Hr", "AI Reduction", "Annual Savings"],
   tableRows: [
-    ["", "", "", "", ""],
-    ["", "", "", "", ""],
+    ["Compliance Testing", "8", "Analyst", "$45", "80%", "$144,000"],
+    ["Form 5500 Prep", "4", "Analyst", "$45", "90%", "$81,000"],
+    ["Plan Doc Drafting", "3", "Admin", "$35", "85%", "$44,625"],
+    ["Contribution Calcs", "6", "Analyst", "$45", "75%", "$101,250"],
+    ["Participant Comms", "2", "Admin", "$35", "70%", "$24,500"],
+    ["Error Corrections", "2", "Sr. Analyst", "$60", "60%", "$36,000"],
   ],
+  note: "Total estimated savings: ~$431K/year per 500-plan firm → margin expansion from ~20% to ~42%. These are conservative estimates based on current AI capabilities.",
 };
 
 // ============================================================
