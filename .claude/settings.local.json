@@ -12,7 +12,16 @@
       "Bash(git add:*)",
       "Bash(git push:*)",
       "Bash(vercel --prod:*)",
-      "WebFetch(domain:www.crunchbase.com)"
+      "WebFetch(domain:www.crunchbase.com)",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_wait_for",
+      "Bash(head:*)",
+      "Bash(pkill:*)",
+      "mcp__plugin_playwright_playwright__browser_click",
+      "Bash(tail:*)",
+      "mcp__plugin_playwright_playwright__browser_snapshot",
+      "Bash(curl:*)",
+      "mcp__plugin_playwright_playwright__browser_console_messages"
     ]
   }
 }
