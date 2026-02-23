@@ -805,7 +805,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           className="text-2xl font-bold mb-2"
           style={headingStyle}
         />
-        {slide.subtitle && (
+        {slide.subtitle && !slide.stats && (
           <EditableText
             value={slide.subtitle}
             slideId={slide.id}
@@ -816,6 +816,30 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             className="text-lg mb-4"
             style={subtitleStyle}
           />
+        )}
+        {slide.stats && (
+          <div className="flex gap-3 mb-4">
+            {slide.stats.map((stat, i) => (
+              <div
+                key={i}
+                className="flex-1 rounded-lg px-3 py-2.5 flex flex-col items-center justify-center text-center"
+                style={{
+                  backgroundColor: i === 0 ? t.accent + "15" : t.cardBg,
+                  border: `1.5px solid ${i === 0 ? t.accent + "40" : t.tableBorder}`,
+                }}
+              >
+                <span
+                  className="text-xl font-bold leading-none"
+                  style={{ color: i === 0 ? t.accent : t.heading, fontFamily: theme.headingFont }}
+                >
+                  {stat.value}
+                </span>
+                <span className="text-[9px] mt-1 uppercase tracking-wider font-medium" style={{ color: t.subtitle }}>
+                  {stat.label}
+                </span>
+              </div>
+            ))}
+          </div>
         )}
         {slide.note && (
           <EditableText

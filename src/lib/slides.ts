@@ -40,6 +40,8 @@ export interface SlideContent {
     after: { label: string; icon: string; items: string[] };
     replacement?: { label: string; icon: string };
   };
+  /** Key stats shown as prominent boxes (e.g. for pipeline slides) */
+  stats?: { value: string; label: string }[];
   /** Stack diagram layers for stack layout (rendered bottom-to-top) */
   stack?: {
     label: string;
@@ -420,7 +422,14 @@ const slide15: SlideContent = {
   number: 16,
   title: "Current M&A Pipeline",
   layout: "table",
-  subtitle: "24 active targets  |  ~$74M pipeline revenue  |  6 in Pre-LOI diligence  |  13 states",
+  subtitle: "Active acquisition pipeline across the U.S.",
+  stats: [
+    { value: "27", label: "Total Targets" },
+    { value: "24", label: "Active" },
+    { value: "~$74M", label: "Pipeline Revenue" },
+    { value: "6", label: "In Pre-LOI Diligence" },
+    { value: "13", label: "States" },
+  ],
   tableHeaders: ["Target", "Revenue", "EBITDA", "Region", "Stage"],
   tableRows: [
     ["Liberty Benefits Admin", "$1.8M", "$810K", "Mid-Atlantic", "Pre-LOI Diligence"],
