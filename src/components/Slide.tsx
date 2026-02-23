@@ -898,7 +898,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
     const highlightLastRow = lastRow && lastRow[0]?.toLowerCase().includes("cognitory");
 
     return (
-      <div style={baseStyle} className="flex flex-col p-10">
+      <div style={baseStyle} className="flex flex-col px-10 pt-8 pb-6">
         <EditableText
           value={slide.title}
           slideId={slide.id}
@@ -906,7 +906,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           editable={editable}
           onUpdate={onUpdate}
           tag="h1"
-          className="text-[22px] font-bold mb-1"
+          className="text-[22px] font-bold mb-0.5"
           style={headingStyle}
         />
         {slide.subtitle && !slide.stats && (
@@ -918,17 +918,39 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
               editable={editable}
               onUpdate={onUpdate}
               tag="h2"
-              className="text-sm mb-1"
+              className="text-sm mb-0.5"
               style={subtitleStyle}
             />
-            <AccentBar color={t.accent} className="mb-3" />
+            <AccentBar color={t.accent} className="mb-2" />
           </>
         )}
         {!slide.subtitle && !slide.stats && (
-          <AccentBar color={t.accent} className="mb-3" />
+          <AccentBar color={t.accent} className="mb-2" />
+        )}
+        {slide.bullets && slide.bullets.length > 0 && (
+          <div className="flex flex-wrap gap-x-4 gap-y-1 mb-2">
+            {slide.bullets.map((item, i) => (
+              <div key={i} className="flex items-center gap-1.5">
+                <span
+                  className="w-4 h-4 rounded flex items-center justify-center text-[10px] font-bold flex-shrink-0"
+                  style={{ backgroundColor: t.accent + "18", color: t.accent }}
+                >✓</span>
+                <EditableText
+                  value={item}
+                  slideId={slide.id}
+                  field={`bullets.${i}`}
+                  editable={editable}
+                  onUpdate={onUpdate}
+                  tag="span"
+                  className="text-[11px]"
+                  style={{ color: t.text }}
+                />
+              </div>
+            ))}
+          </div>
         )}
         {slide.stats && (
-          <div className="flex gap-3 mb-3 mt-1">
+          <div className="flex gap-3 mb-2 mt-1">
             {slide.pieChart && (() => {
               const size = 64;
               const r = 28;
@@ -1021,7 +1043,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                   {slide.tableHeaders.map((h, i) => (
                     <th
                       key={i}
-                      className="px-2.5 py-2 text-left font-semibold border text-[11px]"
+                      className="px-2 py-1.5 text-left font-semibold border text-[11px]"
                       style={{
                         backgroundColor: t.tableHeaderBg,
                         borderColor: t.tableBorder,
@@ -1058,7 +1080,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                       {row.map((cell, ci) => (
                         <td
                           key={ci}
-                          className="px-2.5 py-1.5 border"
+                          className="px-2 py-1 border"
                           style={{
                             borderColor: t.tableBorder,
                             fontWeight: isHighlighted ? 600 : undefined,
@@ -1370,6 +1392,106 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           })()}
 
         </svg>
+      </div>
+    );
+  }
+
+  // ---- BOXES LAYOUT (stats + card grid) ----
+  if (slide.layout === "boxes" && slide.boxes) {
+    return (
+      <div style={baseStyle} className="flex flex-col p-10">
+        <EditableText
+          value={slide.title}
+          slideId={slide.id}
+          field="title"
+          editable={editable}
+          onUpdate={onUpdate}
+          tag="h1"
+          className="text-[22px] font-bold mb-1"
+          style={headingStyle}
+        />
+        {slide.subtitle && (
+          <EditableText
+            value={slide.subtitle}
+            slideId={slide.id}
+            field="subtitle"
+            editable={editable}
+            onUpdate={onUpdate}
+            tag="h2"
+            className="text-[11px] mb-1"
+            style={subtitleStyle}
+          />
+        )}
+        <AccentBar color={t.accent} className="mb-3" />
+
+        {/* Stats row */}
+        {slide.stats && (
+          <div className="flex gap-2.5 mb-3">
+            {slide.stats.map((stat, i) => (
+              <div
+                key={i}
+                className="flex-1 rounded-lg px-3 py-2 flex flex-col items-center justify-center text-center"
+                style={{
+                  backgroundColor: i === 0 ? t.accent + "15" : t.cardBg,
+                  border: `1.5px solid ${i === 0 ? t.accent + "40" : t.tableBorder}`,
+                }}
+              >
+                <span
+                  className="text-[18px] font-bold leading-none"
+                  style={{ color: i === 0 ? t.accent : t.heading, fontFamily: theme.headingFont }}
+                >
+                  {stat.value}
+                </span>
+                <span className="text-[8px] mt-1 uppercase tracking-wider font-medium" style={{ color: t.subtitle }}>
+                  {stat.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Card grid */}
+        <div className="grid grid-cols-3 gap-2.5 flex-1">
+          {slide.boxes.map((box, i) => (
+            <div
+              key={i}
+              className="rounded-lg px-3.5 py-3 flex flex-col"
+              style={{
+                backgroundColor: t.cardBg,
+                border: `1.5px solid ${t.tableBorder}`,
+              }}
+            >
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="text-base leading-none">{box.icon}</span>
+                <span
+                  className="text-[11px] font-bold leading-tight"
+                  style={{ color: t.heading }}
+                >
+                  {box.title}
+                </span>
+              </div>
+              <span
+                className="text-[10px] leading-snug"
+                style={{ color: t.text, opacity: 0.85 }}
+              >
+                {box.description}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {slide.note && (
+          <NoteBlock
+            value={slide.note}
+            slideId={slide.id}
+            field="note"
+            editable={editable}
+            onUpdate={onUpdate}
+            bg={t.cardBg}
+            fg={t.subtitle}
+          />
+        )}
+        <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
   }

@@ -343,6 +343,13 @@ const slide10: SlideContent = {
   title: "Initial Candidate Industries",
   subtitle: "Fragmented, rule-based, and ripe for automation",
   layout: "table",
+  bullets: [
+    "High fragmentation",
+    "Rule-based workflows",
+    "Recurring revenue",
+    "Regulatory moat",
+    "Aging owner-operators",
+  ],
   tableHeaders: ["Sector", "Market Size", "Fragmentation", "Automation Potential", "Regulatory Moat"],
   tableRows: [
     ["Retirement TPA", "$8B+", "High — 5,000+ firms", "Very High", "Strong (ERISA/IRS)"],
@@ -364,15 +371,20 @@ const slide11: SlideContent = {
   number: 12,
   title: "Our first bet: Retirement TPA",
   subtitle: "Every business with a 401(k) needs a TPA. They can't do it themselves — and they can't stop.",
-  layout: "table",
-  tableHeaders: ["Why Retirement TPA?", "Detail"],
-  tableRows: [
-    ["💰 Recurring Revenue", "Clients pay annually, year after year"],
-    ["🔒 Near-Zero Churn", "High switching costs — plans are sticky"],
-    ["⚖️ Regulatory Mandate", "ERISA & IRS rules require professional administration"],
-    ["🧩 Fragmented Market", "5,000+ independent TPAs, most sub-$5M revenue"],
-    ["🤖 Automation Ready", "80%+ of workflows are rule-based and repetitive"],
-    ["📜 SECURE Act 2.0", "New legislation expanding plan coverage to millions"],
+  layout: "boxes",
+  stats: [
+    { value: "$8B+", label: "Market Size" },
+    { value: "5,000+", label: "TPA Firms" },
+    { value: "700K+", label: "Plans Administered" },
+    { value: "4–6×", label: "Acquisition Multiples" },
+  ],
+  boxes: [
+    { icon: "💰", title: "Recurring Revenue", description: "Clients pay annually, year after year — predictable, compounding cash flows" },
+    { icon: "🔒", title: "Near-Zero Churn", description: "High switching costs make plans extremely sticky" },
+    { icon: "⚖️", title: "Regulatory Mandate", description: "ERISA & IRS rules require professional administration" },
+    { icon: "🧩", title: "Fragmented Market", description: "5,000+ independent TPAs, most under $5M revenue" },
+    { icon: "🤖", title: "Automation Ready", description: "80%+ of workflows are rule-based and repetitive" },
+    { icon: "📜", title: "SECURE Act 2.0", description: "New legislation expanding plan coverage to millions" },
   ],
 };
 
