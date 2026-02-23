@@ -44,6 +44,8 @@ export interface SlideContent {
   stats?: { value: string; label: string }[];
   /** Pie chart segments for inline pie charts */
   pieChart?: { label: string; value: number; color?: string }[];
+  /** Callout box text — rendered as a highlighted banner */
+  callout?: string;
   /** Box cards for boxes layout */
   boxes?: { icon: string; title: string; description: string }[];
   /** Stack diagram layers for stack layout (rendered bottom-to-top) */
@@ -484,7 +486,8 @@ const slideCompetitive: SlideContent = {
     ["PE Rollups\n(Hub, NFP, CBIZ)", "Buy & integrate", "Limited", "Acquire for revenue", "Medium — no automation edge"],
     ["Cognitory", "Acquire + Automate", "AI-native platform", "Buy at 4-6x, automate", "We play to win"],
   ],
-  note: "Most competitors are either technology companies that don't acquire, or acquirers that don't automate. Cognitory is uniquely positioned to do both.",
+  note: "Most competitors are either technology companies that don't acquire, or acquirers that don't automate.",
+  callout: "Cognitory is uniquely positioned to do both.",
 };
 
 // ============================================================

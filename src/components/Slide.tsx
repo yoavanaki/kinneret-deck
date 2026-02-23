@@ -929,6 +929,56 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
         )}
         {slide.stats && (
           <div className="flex gap-3 mb-3 mt-1">
+            {slide.pieChart && (() => {
+              const size = 64;
+              const r = 28;
+              const pcx = size / 2;
+              const pcy = size / 2;
+              const pieColors = [t.accent, t.subtitle, t.heading];
+              let cumulative = 0;
+              const segments = slide.pieChart.map((seg, si) => {
+                const startAngle = (cumulative / 100) * 2 * Math.PI - Math.PI / 2;
+                cumulative += seg.value;
+                const endAngle = (cumulative / 100) * 2 * Math.PI - Math.PI / 2;
+                const largeArc = seg.value > 50 ? 1 : 0;
+                const x1 = pcx + r * Math.cos(startAngle);
+                const y1 = pcy + r * Math.sin(startAngle);
+                const x2 = pcx + r * Math.cos(endAngle);
+                const y2 = pcy + r * Math.sin(endAngle);
+                return (
+                  <path
+                    key={si}
+                    d={`M ${pcx} ${pcy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z`}
+                    fill={seg.color || pieColors[si % pieColors.length]}
+                    opacity={0.85}
+                  />
+                );
+              });
+              return (
+                <div
+                  className="flex-shrink-0 rounded-lg px-3 py-1.5 flex items-center gap-2"
+                  style={{ backgroundColor: t.cardBg, border: `1.5px solid ${t.tableBorder}` }}
+                >
+                  <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+                    {segments}
+                  </svg>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[8px] font-bold uppercase tracking-wider" style={{ color: t.subtitle }}>Sourcing</span>
+                    {slide.pieChart.map((seg, si) => (
+                      <div key={si} className="flex items-center gap-1.5">
+                        <span
+                          className="w-2 h-2 rounded-full flex-shrink-0"
+                          style={{ backgroundColor: seg.color || pieColors[si % pieColors.length], opacity: 0.85 }}
+                        />
+                        <span className="text-[8px]" style={{ color: t.text }}>
+                          {seg.value}% {seg.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
             {slide.stats.map((stat, i) => (
               <div
                 key={i}
@@ -1032,6 +1082,26 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 })}
               </tbody>
             </table>
+          </div>
+        )}
+        {slide.callout && (
+          <div
+            className="mt-3 px-4 py-2.5 rounded-lg text-center"
+            style={{
+              backgroundColor: t.accent + "12",
+              border: `1.5px solid ${t.accent}40`,
+            }}
+          >
+            <EditableText
+              value={slide.callout}
+              slideId={slide.id}
+              field="callout"
+              editable={editable}
+              onUpdate={onUpdate}
+              tag="p"
+              className="text-[13px] font-semibold"
+              style={{ color: t.accent }}
+            />
           </div>
         )}
         <SlideNumber num={slide.number} color={t.subtitle} />
