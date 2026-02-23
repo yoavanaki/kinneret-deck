@@ -51,6 +51,111 @@ function EditableText({
   );
 }
 
+/** Slide number badge - bottom right of every slide */
+function SlideNumber({ num, color }: { num: number; color: string }) {
+  return (
+    <span
+      className="absolute bottom-3 right-4 text-[10px] font-medium tracking-wide"
+      style={{ color, opacity: 0.4 }}
+    >
+      {num}
+    </span>
+  );
+}
+
+/** Short accent bar under a title */
+function AccentBar({ color, className = "" }: { color: string; className?: string }) {
+  return (
+    <div
+      className={`h-[3px] w-10 rounded-full ${className}`}
+      style={{ backgroundColor: color }}
+    />
+  );
+}
+
+/** Footnote / note block used consistently */
+function NoteBlock({
+  value, slideId, field, editable, onUpdate, bg, fg,
+}: {
+  value: string; slideId: string; field: string;
+  editable?: boolean; onUpdate?: (slideId: string, field: string, value: string) => void;
+  bg: string; fg: string;
+}) {
+  return (
+    <div className="mt-auto px-4 py-2.5 rounded-md text-[11px] leading-relaxed" style={{ backgroundColor: bg, color: fg }}>
+      <EditableText
+        value={value}
+        slideId={slideId}
+        field={field}
+        editable={editable}
+        onUpdate={onUpdate}
+        tag="span"
+        className=""
+      />
+    </div>
+  );
+}
+
+/** Parse a two-column text block with section headers + bullet lines */
+function ColumnContent({
+  text, slideId, field, editable, onUpdate, accentColor, headingColor, textColor,
+}: {
+  text: string; slideId: string; field: string;
+  editable?: boolean; onUpdate?: (slideId: string, field: string, value: string) => void;
+  accentColor: string; headingColor: string; textColor: string;
+}) {
+  if (editable) {
+    return (
+      <EditableText
+        value={text}
+        slideId={slideId}
+        field={field}
+        editable={editable}
+        onUpdate={onUpdate}
+        tag="div"
+        className="text-sm leading-relaxed whitespace-pre-line"
+      />
+    );
+  }
+
+  const lines = text.split("\n");
+  return (
+    <div className="flex flex-col gap-1">
+      {lines.map((line, i) => {
+        const trimmed = line.trim();
+        if (!trimmed) return null;
+        // Section header (ALL CAPS line)
+        if (/^[A-Z][A-Z\s&/]+$/.test(trimmed)) {
+          return (
+            <p key={i} className="text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: accentColor }}>
+              {trimmed}
+            </p>
+          );
+        }
+        // Bullet line
+        if (trimmed.startsWith("•") || trimmed.startsWith("- ")) {
+          const content = trimmed.replace(/^[•\-]\s*/, "");
+          return (
+            <div key={i} className="flex items-start gap-2 text-[13px] leading-snug mb-0.5">
+              <span className="mt-[7px] w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: accentColor }} />
+              <span style={{ color: textColor }}>{content}</span>
+            </div>
+          );
+        }
+        return <p key={i} className="text-[13px] leading-snug" style={{ color: textColor }}>{trimmed}</p>;
+      })}
+    </div>
+  );
+}
+
+// ---- CONSISTENT TYPE SCALE ----
+// H1 (slide title):     text-[22px] font-bold  — used on all content slides
+// H1 (title/dict):      text-6xl / text-5xl    — only title & dictionary layouts
+// Subtitle:             text-xs                 — slide subtitle line
+// Body:                 text-[14px]             — paragraphs, bullets, table cells
+// Caption / footnote:   text-[11px]             — notes, labels, fine print
+// Section label:        text-[10px] uppercase   — column headers, section labels
+
 export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: SlideProps) {
   const t = theme.colors;
 
@@ -63,6 +168,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
     transform: `scale(${scale})`,
     transformOrigin: "top left",
     overflow: "hidden",
+    position: "relative",
   };
 
   const headingStyle: React.CSSProperties = {
@@ -141,6 +247,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             />
           </div>
         )}
+        <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
   }
@@ -157,7 +264,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           editable={editable}
           onUpdate={onUpdate}
           tag="h1"
-          className="text-2xl font-bold mb-1"
+          className="text-[22px] font-bold mb-1"
           style={headingStyle}
         />
         {slide.subtitle && (
@@ -168,11 +275,12 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             editable={editable}
             onUpdate={onUpdate}
             tag="p"
-            className="text-sm mb-4"
+            className="text-xs mb-1"
             style={{ color: t.subtitle }}
           />
         )}
-        <div className="flex-1 flex flex-col justify-center gap-1.5">
+        <AccentBar color={t.accent} className="mb-4" />
+        <div className="flex-1 flex flex-col justify-center gap-[7px]">
           {slide.bars.map((bar, i) => (
             <div key={i} className="flex items-center gap-3">
               <EditableText
@@ -182,21 +290,21 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 editable={editable}
                 onUpdate={onUpdate}
                 tag="span"
-                className="text-[10px] text-right flex-shrink-0"
-                style={{ width: 110, color: bar.highlight ? t.heading : t.text, fontWeight: bar.highlight ? 700 : 400 }}
+                className="text-[11px] text-right flex-shrink-0"
+                style={{ width: 120, color: bar.highlight ? t.heading : t.text, fontWeight: bar.highlight ? 700 : 400 }}
               />
-              <div className="flex-1 h-5 rounded-sm overflow-hidden" style={{ backgroundColor: t.cardBg }}>
+              <div className="flex-1 h-[22px] rounded-sm overflow-hidden" style={{ backgroundColor: t.cardBg }}>
                 <div
                   className="h-full rounded-sm transition-all"
                   style={{
                     width: `${(bar.value / maxVal) * 100}%`,
                     backgroundColor: bar.highlight ? t.accent : t.subtitle,
-                    opacity: bar.highlight ? 1 : 0.5,
+                    opacity: bar.highlight ? 1 : 0.45,
                   }}
                 />
               </div>
               <span
-                className="text-xs flex-shrink-0"
+                className="text-[13px] flex-shrink-0 tabular-nums"
                 style={{ width: 48, color: bar.highlight ? t.accent : t.subtitle, fontWeight: bar.highlight ? 700 : 400 }}
               >
                 {maxVal <= 50 ? "$" : ""}{bar.value % 1 === 0 ? bar.value : bar.value.toFixed(1)}{maxVal > 50 ? "%" : "T"}
@@ -205,17 +313,9 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           ))}
         </div>
         {slide.note && (
-          <EditableText
-            value={slide.note}
-            slideId={slide.id}
-            field="note"
-            editable={editable}
-            onUpdate={onUpdate}
-            tag="p"
-            className="footnote mt-3"
-            style={{ color: t.subtitle }}
-          />
+          <NoteBlock value={slide.note} slideId={slide.id} field="note" editable={editable} onUpdate={onUpdate} bg={t.noteBg} fg={t.noteText} />
         )}
+        <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
   }
@@ -224,7 +324,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
   if (slide.layout === "team" && slide.team) {
     const isLargeTeam = slide.team.length > 3;
     return (
-      <div style={baseStyle} className={`flex flex-col items-center justify-center ${isLargeTeam ? "px-10 py-10" : "p-12"}`}>
+      <div style={baseStyle} className={`flex flex-col items-center justify-center ${isLargeTeam ? "px-8 py-8" : "p-12"}`}>
         <EditableText
           value={slide.title}
           slideId={slide.id}
@@ -232,25 +332,27 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           editable={editable}
           onUpdate={onUpdate}
           tag="h1"
-          className={`font-bold ${isLargeTeam ? "text-2xl mb-6" : "text-3xl mb-8"} text-center w-full`}
+          className={`font-bold ${isLargeTeam ? "text-[22px] mb-1" : "text-3xl mb-2"} text-center w-full`}
           style={headingStyle}
         />
-        <div className={`flex ${isLargeTeam ? "gap-4" : "gap-6"} items-stretch w-full`}>
+        <AccentBar color={t.accent} className={`mx-auto ${isLargeTeam ? "mb-5" : "mb-6"}`} />
+        <div className={`flex ${isLargeTeam ? "gap-3" : "gap-6"} items-stretch w-full`}>
           {slide.team.map((member, i) => (
             <div
               key={i}
-              className={`flex-1 flex flex-col items-center text-center ${isLargeTeam ? "px-4 py-5" : "p-4"} rounded-lg`}
+              className={`flex-1 flex flex-col items-center text-center ${isLargeTeam ? "px-3 py-4" : "p-4"} rounded-lg`}
               style={{ backgroundColor: t.cardBg }}
             >
               {member.imageUrl ? (
                 <img
                   src={member.imageUrl}
                   alt={member.name}
-                  className={`${isLargeTeam ? "w-16 h-16 mb-3" : "w-20 h-20 mb-4"} rounded-full object-cover`}
+                  className={`${isLargeTeam ? "w-14 h-14 mb-2" : "w-20 h-20 mb-4"} rounded-full object-cover`}
+                  style={{ border: `2px solid ${t.accent}30` }}
                 />
               ) : (
                 <div
-                  className={`${isLargeTeam ? "w-16 h-16 mb-3 text-xl" : "w-20 h-20 mb-4 text-2xl"} rounded-full flex items-center justify-center font-bold`}
+                  className={`${isLargeTeam ? "w-14 h-14 mb-2 text-lg" : "w-20 h-20 mb-4 text-2xl"} rounded-full flex items-center justify-center font-bold`}
                   style={{ backgroundColor: t.accent, color: t.bg }}
                 >
                   {member.name.split(" ").map(n => n[0]).join("")}
@@ -263,7 +365,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 editable={editable}
                 onUpdate={onUpdate}
                 tag="h3"
-                className={`${isLargeTeam ? "text-base" : "text-lg"} font-bold mb-1`}
+                className={`${isLargeTeam ? "text-[13px]" : "text-lg"} font-bold mb-0.5`}
                 style={{ color: t.heading }}
               />
               <EditableText
@@ -273,7 +375,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 editable={editable}
                 onUpdate={onUpdate}
                 tag="p"
-                className={`${isLargeTeam ? "text-xs" : "text-sm"} font-semibold mb-2`}
+                className={`${isLargeTeam ? "text-[10px]" : "text-xs"} font-semibold uppercase tracking-wider mb-2`}
                 style={{ color: t.accent }}
               />
               {editable ? (
@@ -284,13 +386,13 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                   editable={editable}
                   onUpdate={onUpdate}
                   tag="p"
-                  className={`${isLargeTeam ? "text-[10px] leading-snug" : "text-xs leading-relaxed"}`}
+                  className={`${isLargeTeam ? "text-[9px] leading-snug" : "text-xs leading-relaxed"}`}
                   style={{ color: t.text, whiteSpace: "pre-line" }}
                 />
               ) : (
                 <div className="flex flex-col gap-0.5 w-full">
                   {member.bio.split("\n").map((line, li) => (
-                    <p key={li} className={`${isLargeTeam ? "text-[10px]" : "text-xs"} leading-tight`}
+                    <p key={li} className={`${isLargeTeam ? "text-[9px]" : "text-xs"} leading-tight`}
                       style={{ color: t.text }}>
                       {line}
                     </p>
@@ -298,16 +400,16 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 </div>
               )}
               {member.logos && member.logos.length > 0 && (
-                <div className="flex justify-center gap-1.5 mt-2">
+                <div className="flex justify-center gap-1 mt-auto pt-2">
                   {member.logos.map((logo, li) => (
                     <div
                       key={li}
                       className="flex items-center justify-center rounded"
                       style={{
-                        width: 52,
-                        height: 36,
+                        width: isLargeTeam ? 44 : 52,
+                        height: isLargeTeam ? 30 : 36,
                         backgroundColor: "#e8e8e8",
-                        padding: "4px 5px",
+                        padding: "3px 4px",
                         flexShrink: 0,
                       }}
                       title={logo.name}
@@ -324,6 +426,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             </div>
           ))}
         </div>
+        <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
   }
@@ -340,12 +443,13 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           editable={editable}
           onUpdate={onUpdate}
           tag="h1"
-          className="text-2xl font-bold mb-6 text-center"
+          className="text-[22px] font-bold mb-1 text-center"
           style={headingStyle}
         />
+        <AccentBar color={t.accent} className="mx-auto mb-5" />
         <div className="flex-1 flex flex-col items-center justify-center gap-4">
           {/* Flow row */}
-          <div className="flex items-center gap-3 w-full justify-center">
+          <div className="flex items-center gap-4 w-full justify-center">
             {/* Input box */}
             <div className="flex flex-col items-center gap-2 w-44">
               <div
@@ -380,7 +484,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             </div>
 
             {/* Arrow */}
-            <div className="text-xl" style={{ color: t.subtitle }}>→</div>
+            <div className="text-2xl font-bold" style={{ color: t.accent }}>&#x2192;</div>
 
             {/* Middle box (struck through) */}
             <div className="flex flex-col items-center gap-2 w-52 relative">
@@ -412,7 +516,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
               {/* Replacement arrow + box */}
               {replacement && (
                 <div className="flex flex-col items-center">
-                  <div className="text-lg" style={{ color: t.accent }}>↓</div>
+                  <div className="text-lg font-bold" style={{ color: t.accent }}>&#x2193;</div>
                   <div
                     className="w-full rounded-xl p-4 flex flex-col items-center text-center"
                     style={{
@@ -437,7 +541,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             </div>
 
             {/* Arrow */}
-            <div className="text-xl" style={{ color: t.subtitle }}>→</div>
+            <div className="text-2xl font-bold" style={{ color: t.accent }}>&#x2192;</div>
 
             {/* Output box */}
             <div className="flex flex-col items-center gap-2 w-44">
@@ -474,18 +578,9 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           </div>
         </div>
         {slide.note && (
-          <div className="mt-auto p-3 rounded text-sm text-center" style={{ backgroundColor: t.noteBg, color: t.noteText }}>
-            <EditableText
-              value={slide.note}
-              slideId={slide.id}
-              field="note"
-              editable={editable}
-              onUpdate={onUpdate}
-              tag="span"
-              className=""
-            />
-          </div>
+          <NoteBlock value={slide.note} slideId={slide.id} field="note" editable={editable} onUpdate={onUpdate} bg={t.noteBg} fg={t.noteText} />
         )}
+        <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
   }
@@ -516,6 +611,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             style={subtitleStyle}
           />
         )}
+        <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
   }
@@ -534,6 +630,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           className="text-5xl font-bold text-center"
           style={headingStyle}
         />
+        <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
   }
@@ -549,9 +646,10 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           editable={editable}
           onUpdate={onUpdate}
           tag="h1"
-          className="text-3xl font-bold mb-6"
+          className="text-[22px] font-bold mb-1"
           style={headingStyle}
         />
+        <AccentBar color={t.accent} className="mb-5" />
         {slide.body && (
           <EditableText
             value={slide.body}
@@ -560,9 +658,10 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             editable={editable}
             onUpdate={onUpdate}
             tag="div"
-            className="text-lg leading-relaxed whitespace-pre-line"
+            className="text-[14px] leading-[1.75] whitespace-pre-line"
           />
         )}
+        <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
   }
@@ -570,7 +669,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
   // ---- TWO-COLUMN LAYOUT ----
   if (slide.layout === "two-column") {
     return (
-      <div style={baseStyle} className="flex flex-col p-12">
+      <div style={baseStyle} className="flex flex-col p-10">
         <EditableText
           value={slide.title}
           slideId={slide.id}
@@ -578,50 +677,44 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           editable={editable}
           onUpdate={onUpdate}
           tag="h1"
-          className="text-3xl font-bold mb-8"
+          className="text-[22px] font-bold mb-1"
           style={headingStyle}
         />
-        <div className="flex gap-8 flex-1">
-          <div className="flex-1 p-4 rounded-lg" style={{ backgroundColor: t.cardBg }}>
+        <AccentBar color={t.accent} className="mb-5" />
+        <div className="flex gap-5 flex-1">
+          <div className="flex-1 px-4 py-3 rounded-lg" style={{ backgroundColor: t.cardBg }}>
             {slide.leftText && (
-              <EditableText
-                value={slide.leftText}
+              <ColumnContent
+                text={slide.leftText}
                 slideId={slide.id}
                 field="leftText"
                 editable={editable}
                 onUpdate={onUpdate}
-                tag="div"
-                className="text-base leading-relaxed whitespace-pre-line"
+                accentColor={t.accent}
+                headingColor={t.heading}
+                textColor={t.text}
               />
             )}
           </div>
-          <div className="flex-1 p-4 rounded-lg" style={{ backgroundColor: t.cardBg }}>
+          <div className="flex-1 px-4 py-3 rounded-lg" style={{ backgroundColor: t.cardBg }}>
             {slide.rightText && (
-              <EditableText
-                value={slide.rightText}
+              <ColumnContent
+                text={slide.rightText}
                 slideId={slide.id}
                 field="rightText"
                 editable={editable}
                 onUpdate={onUpdate}
-                tag="div"
-                className="text-base leading-relaxed whitespace-pre-line"
+                accentColor={t.accent}
+                headingColor={t.heading}
+                textColor={t.text}
               />
             )}
           </div>
         </div>
         {slide.note && (
-          <div className="mt-4 p-3 rounded text-sm" style={{ backgroundColor: t.noteBg, color: t.noteText }}>
-            <EditableText
-              value={slide.note}
-              slideId={slide.id}
-              field="note"
-              editable={editable}
-              onUpdate={onUpdate}
-              tag="span"
-              className=""
-            />
-          </div>
+          <NoteBlock value={slide.note} slideId={slide.id} field="note" editable={editable} onUpdate={onUpdate} bg={t.noteBg} fg={t.noteText} />
         )}
+        <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
   }
@@ -629,7 +722,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
   // ---- BULLETS LAYOUT ----
   if (slide.layout === "bullets") {
     return (
-      <div style={baseStyle} className="flex flex-col p-12">
+      <div style={baseStyle} className="flex flex-col p-10 px-12">
         <EditableText
           value={slide.title}
           slideId={slide.id}
@@ -637,9 +730,10 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           editable={editable}
           onUpdate={onUpdate}
           tag="h1"
-          className="text-3xl font-bold mb-6"
+          className="text-[22px] font-bold mb-1"
           style={headingStyle}
         />
+        <AccentBar color={t.accent} className="mb-4" />
         {slide.body && (
           <EditableText
             value={slide.body}
@@ -648,40 +742,44 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             editable={editable}
             onUpdate={onUpdate}
             tag="p"
-            className="text-lg mb-6 leading-relaxed"
+            className="text-[14px] mb-5 leading-relaxed"
+            style={{ color: t.text }}
           />
         )}
         {slide.bullets && (
-          <ul className="space-y-3 ml-2">
-            {slide.bullets.map((bullet, i) => (
-              <li key={i} className="flex items-start gap-3 text-lg">
-                <span className="mt-2 w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: t.accent }} />
-                <EditableText
-                  value={bullet}
-                  slideId={slide.id}
-                  field={`bullets.${i}`}
-                  editable={editable}
-                  onUpdate={onUpdate}
-                  tag="span"
-                  className=""
-                />
-              </li>
-            ))}
+          <ul className="space-y-2.5 ml-1">
+            {slide.bullets.map((bullet, i) => {
+              // Split on " — " to highlight the label portion
+              const dashIdx = bullet.indexOf(" — ");
+              const hasLabel = dashIdx > 0;
+              return (
+                <li key={i} className="flex items-start gap-3 text-[14px] leading-snug">
+                  <span className="mt-[7px] w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: t.accent }} />
+                  {hasLabel && !editable ? (
+                    <span>
+                      <span className="font-semibold" style={{ color: t.heading }}>{bullet.slice(0, dashIdx)}</span>
+                      <span style={{ color: t.subtitle }}> &mdash; {bullet.slice(dashIdx + 3)}</span>
+                    </span>
+                  ) : (
+                    <EditableText
+                      value={bullet}
+                      slideId={slide.id}
+                      field={`bullets.${i}`}
+                      editable={editable}
+                      onUpdate={onUpdate}
+                      tag="span"
+                      className=""
+                    />
+                  )}
+                </li>
+              );
+            })}
           </ul>
         )}
         {slide.note && (
-          <div className="mt-auto p-3 rounded text-sm" style={{ backgroundColor: t.noteBg, color: t.noteText }}>
-            <EditableText
-              value={slide.note}
-              slideId={slide.id}
-              field="note"
-              editable={editable}
-              onUpdate={onUpdate}
-              tag="span"
-              className=""
-            />
-          </div>
+          <NoteBlock value={slide.note} slideId={slide.id} field="note" editable={editable} onUpdate={onUpdate} bg={t.noteBg} fg={t.noteText} />
         )}
+        <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
   }
@@ -702,7 +800,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           editable={editable}
           onUpdate={onUpdate}
           tag="h1"
-          className="text-[23px] font-bold mb-1"
+          className="text-[22px] font-bold mb-1"
           style={headingStyle}
         />
         {slide.subtitle && (
@@ -713,10 +811,11 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             editable={editable}
             onUpdate={onUpdate}
             tag="p"
-            className="text-xs mb-5"
+            className="text-xs mb-1"
             style={subtitleStyle}
           />
         )}
+        <AccentBar color={t.accent} className="mb-4" />
 
         {/* Comparison grid */}
         <div className="flex-1 flex flex-col">
@@ -754,7 +853,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                   <div className="flex flex-col items-center justify-center">
                     <span className="text-[8px] font-bold uppercase tracking-widest mb-1"
                       style={{ color: t.accent }}>{cat}</span>
-                    <span className="text-xl" style={{ color: t.accent }}>→</span>
+                    <span className="text-xl font-bold" style={{ color: t.accent }}>&#x2192;</span>
                   </div>
                   <div className="py-4 px-5 flex items-center">
                     <span className="text-xl font-bold" style={{ color: t.accent }}>{rightVal}</span>
@@ -787,12 +886,17 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             <p className="text-[10px] leading-relaxed" style={{ color: t.noteText }}>{slide.note}</p>
           </div>
         )}
+        <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
   }
 
   // ---- TABLE LAYOUT ----
   if (slide.layout === "table") {
+    // Detect if the last row should be highlighted (competitive landscape "Cognitory" row)
+    const lastRow = slide.tableRows?.[slide.tableRows.length - 1];
+    const highlightLastRow = lastRow && lastRow[0]?.toLowerCase().includes("cognitory");
+
     return (
       <div style={baseStyle} className="flex flex-col p-10">
         <EditableText
@@ -802,39 +906,45 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           editable={editable}
           onUpdate={onUpdate}
           tag="h1"
-          className="text-2xl font-bold mb-2"
+          className="text-[22px] font-bold mb-1"
           style={headingStyle}
         />
         {slide.subtitle && !slide.stats && (
-          <EditableText
-            value={slide.subtitle}
-            slideId={slide.id}
-            field="subtitle"
-            editable={editable}
-            onUpdate={onUpdate}
-            tag="h2"
-            className="text-lg mb-4"
-            style={subtitleStyle}
-          />
+          <>
+            <EditableText
+              value={slide.subtitle}
+              slideId={slide.id}
+              field="subtitle"
+              editable={editable}
+              onUpdate={onUpdate}
+              tag="h2"
+              className="text-sm mb-1"
+              style={subtitleStyle}
+            />
+            <AccentBar color={t.accent} className="mb-3" />
+          </>
+        )}
+        {!slide.subtitle && !slide.stats && (
+          <AccentBar color={t.accent} className="mb-3" />
         )}
         {slide.stats && (
-          <div className="flex gap-3 mb-4">
+          <div className="flex gap-3 mb-3 mt-1">
             {slide.stats.map((stat, i) => (
               <div
                 key={i}
-                className="flex-1 rounded-lg px-3 py-2.5 flex flex-col items-center justify-center text-center"
+                className="flex-1 rounded-lg px-3 py-2 flex flex-col items-center justify-center text-center"
                 style={{
                   backgroundColor: i === 0 ? t.accent + "15" : t.cardBg,
                   border: `1.5px solid ${i === 0 ? t.accent + "40" : t.tableBorder}`,
                 }}
               >
                 <span
-                  className="text-xl font-bold leading-none"
+                  className="text-lg font-bold leading-none"
                   style={{ color: i === 0 ? t.accent : t.heading, fontFamily: theme.headingFont }}
                 >
                   {stat.value}
                 </span>
-                <span className="text-[9px] mt-1 uppercase tracking-wider font-medium" style={{ color: t.subtitle }}>
+                <span className="text-[8px] mt-1 uppercase tracking-wider font-medium" style={{ color: t.subtitle }}>
                   {stat.label}
                 </span>
               </div>
@@ -849,7 +959,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             editable={editable}
             onUpdate={onUpdate}
             tag="p"
-            className="text-xs mb-3"
+            className="text-[11px] mb-2"
             style={{ color: t.subtitle }}
           />
         )}
@@ -861,7 +971,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                   {slide.tableHeaders.map((h, i) => (
                     <th
                       key={i}
-                      className="p-2 text-left font-semibold border"
+                      className="px-2.5 py-2 text-left font-semibold border text-[11px]"
                       style={{
                         backgroundColor: t.tableHeaderBg,
                         borderColor: t.tableBorder,
@@ -882,32 +992,49 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 </tr>
               </thead>
               <tbody>
-                {slide.tableRows.map((row, ri) => (
-                  <tr key={ri}>
-                    {row.map((cell, ci) => (
-                      <td
-                        key={ci}
-                        className="p-2 border"
-                        style={{ borderColor: t.tableBorder }}
-                      >
-                        <EditableText
-                          value={cell}
-                          slideId={slide.id}
-                          field={`tableRows.${ri}.${ci}`}
-                          editable={editable}
-                          onUpdate={onUpdate}
-                          tag="span"
-                          className={cell === "✓" ? "text-lg" : ""}
-                          style={cell === "✓" ? { color: t.accent } : undefined}
-                        />
-                      </td>
-                    ))}
-                  </tr>
-                ))}
+                {slide.tableRows.map((row, ri) => {
+                  const isLast = ri === slide.tableRows!.length - 1;
+                  const isHighlighted = isLast && highlightLastRow;
+                  const isEven = ri % 2 === 0;
+                  return (
+                    <tr
+                      key={ri}
+                      style={{
+                        backgroundColor: isHighlighted
+                          ? t.accent + "15"
+                          : isEven ? undefined : t.cardBg + "80",
+                      }}
+                    >
+                      {row.map((cell, ci) => (
+                        <td
+                          key={ci}
+                          className="px-2.5 py-1.5 border"
+                          style={{
+                            borderColor: t.tableBorder,
+                            fontWeight: isHighlighted ? 600 : undefined,
+                            color: isHighlighted && ci === 0 ? t.accent : undefined,
+                          }}
+                        >
+                          <EditableText
+                            value={cell}
+                            slideId={slide.id}
+                            field={`tableRows.${ri}.${ci}`}
+                            editable={editable}
+                            onUpdate={onUpdate}
+                            tag="span"
+                            className={cell === "✓" ? "text-lg" : ""}
+                            style={cell === "✓" ? { color: t.accent } : undefined}
+                          />
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         )}
+        <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
   }
@@ -921,7 +1048,6 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
     const hasHoldco = slide.holdcoAgents && slide.holdcoAgents.length > 0;
     const COL_GAP = 20;
-    // Left column: platform stack. Right column: holdco agents.
     const leftW = hasHoldco ? 540 : W - MARGIN * 2;
     const rightW = hasHoldco ? W - MARGIN * 2 - leftW - COL_GAP : 0;
     const rightX = MARGIN + leftW + COL_GAP;
@@ -945,9 +1071,15 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
               {slide.subtitle}
             </text>
           )}
+          {/* Accent bar */}
+          <rect x={MARGIN} y={50} width={40} height={3} rx={1.5} fill={t.accent} />
+
+          {/* Slide number */}
+          <text x={W - 16} y={H - 8} textAnchor="end" fill={t.subtitle} fontSize={10} opacity={0.4}>
+            {slide.number}
+          </text>
 
           {/* === LEFT: Platform Stack === */}
-          {/* Column header */}
           <text x={MARGIN + leftW / 2} y={TITLE_H - 2} textAnchor="middle"
             fill={t.subtitle} fontSize={9} fontWeight="bold" letterSpacing="0.1em">
             PORTFOLIO PLATFORM
@@ -1120,13 +1252,11 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
             return (
               <g>
-                {/* Column header */}
                 <text x={rightX + rightW / 2} y={TITLE_H - 2} textAnchor="middle"
                   fill={t.subtitle} fontSize={9} fontWeight="bold" letterSpacing="0.1em">
                   HOLDCO AI AGENTS
                 </text>
 
-                {/* Outer container */}
                 <rect x={rightX} y={colTopY} width={rightW} height={colH} rx={8}
                   fill={t.accent + "06"} stroke={t.accent + "30"} strokeWidth={1.5}
                   strokeDasharray="6,3" />
@@ -1138,25 +1268,20 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
                   return (
                     <g key={ai}>
-                      {/* Card */}
                       <rect x={cx} y={cy} width={innerW} height={cardH} rx={6}
                         fill={t.cardBg} stroke={t.accent + "60"} strokeWidth={1.5} />
-                      {/* Icon */}
                       <text x={cx + 14} y={cy + cardH / 2 + 1} fontSize={18} dominantBaseline="middle">
                         {agent.icon}
                       </text>
-                      {/* Label */}
                       <text x={cx + 38} y={cy + cardH * 0.38} fill={t.heading}
                         fontSize={11} fontWeight="bold">
                         {agent.label}
                       </text>
-                      {/* Description */}
                       {agent.description && (
                         <text x={cx + 38} y={cy + cardH * 0.68} fill={t.subtitle} fontSize={8}>
                           {agent.description.length > 55 ? agent.description.slice(0, 55) + "…" : agent.description}
                         </text>
                       )}
-                      {/* Arrow to next */}
                       {ai < agentCount - 1 && (
                         <g>
                           <line x1={rightX + rightW / 2} y1={cy + cardH + 2}
@@ -1183,6 +1308,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
   return (
     <div style={baseStyle} className="flex flex-col items-center justify-center p-16">
       <h1 className="text-4xl font-bold" style={headingStyle}>{slide.title}</h1>
+      <SlideNumber num={slide.number} color={t.subtitle} />
     </div>
   );
 }
