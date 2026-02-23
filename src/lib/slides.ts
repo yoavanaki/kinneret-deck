@@ -17,7 +17,7 @@ export interface SlideContent {
   /** Bullet points as an array of strings */
   bullets?: string[];
   /** Layout type determines how the slide renders */
-  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels" | "boxes";
+  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels" | "boxes" | "playbook";
   /** Custom HTML content for special layouts */
   customHtml?: string;
   /** Team members for team layout */
@@ -46,6 +46,8 @@ export interface SlideContent {
   pieChart?: { label: string; value: number; color?: string }[];
   /** Callout box text — rendered as a highlighted banner */
   callout?: string;
+  /** Footnote text — rendered in very small text at slide bottom */
+  footnote?: string;
   /** Box cards for boxes layout */
   boxes?: { icon: string; title: string; description: string }[];
   /** Stack diagram layers for stack layout (rendered bottom-to-top) */
@@ -235,7 +237,7 @@ const slide06: SlideContent = {
 // ============================================================
 const slideStack: SlideContent = {
   id: "slide-stack",
-  number: 8,
+  number: 7,
   title: "The Cognitory platform",
   subtitle: "AI-native software that automates any services business",
   layout: "stack",
@@ -320,17 +322,16 @@ const slide08: SlideContent = {
 // ============================================================
 const slide09: SlideContent = {
   id: "slide-09",
-  number: 10,
+  number: 8,
   title: "The Playbook",
-  layout: "table",
-  tableHeaders: ["Phase", "Action", "Outcome"],
-  tableRows: [
-    ["1. Scout", "Identify high-fragmentation services sector", "Target market selected"],
-    ["2. Partner", "Recruit industry executive as operating partner", "Domain expertise secured"],
-    ["3. Map", "Map quick-win automation opportunities", "Automation roadmap ready"],
-    ["4. Acquire", "Buy 3-5 firms at 4-6x EBITDA", "Initial portfolio built"],
-    ["5. Automate", "Deploy AI playbook → expand margins 15-25 pp", "Unit economics proven"],
-    ["6. Scale", "Roll up adjacent firms with automation edge", "Platform compounding"],
+  layout: "playbook",
+  boxes: [
+    { icon: "🔍", title: "Scout", description: "Identify high-fragmentation services sector" },
+    { icon: "🤝", title: "Partner", description: "Recruit industry executive as operating partner" },
+    { icon: "🗺️", title: "Map", description: "Map quick-win automation opportunities" },
+    { icon: "🏢", title: "Acquire", description: "Buy 3-5 firms at 4-6x EBITDA" },
+    { icon: "⚡", title: "Automate", description: "Deploy AI playbook, expand margins 15-25 pp" },
+    { icon: "📈", title: "Scale", description: "Roll up adjacent firms with automation edge" },
   ],
 };
 
@@ -339,9 +340,9 @@ const slide09: SlideContent = {
 // ============================================================
 const slide10: SlideContent = {
   id: "slide-10",
-  number: 11,
+  number: 9,
   title: "Initial Candidate Industries",
-  subtitle: "Fragmented, rule-based, and ripe for automation",
+  subtitle: "We've analyzed 20+ service sectors — Retirement TPA is our first target to disrupt",
   layout: "table",
   bullets: [
     "High fragmentation",
@@ -349,6 +350,9 @@ const slide10: SlideContent = {
     "Recurring revenue",
     "Regulatory moat",
     "Aging owner-operators",
+    "Low technology adoption",
+    "Clear path to AI automation",
+    "Defensible competitive position",
   ],
   tableHeaders: ["Sector", "Market Size", "Fragmentation", "Automation Potential", "Regulatory Moat"],
   tableRows: [
@@ -368,7 +372,7 @@ const slide10: SlideContent = {
 // ============================================================
 const slide11: SlideContent = {
   id: "slide-11",
-  number: 12,
+  number: 10,
   title: "Our first bet: Retirement TPA",
   subtitle: "Every business with a 401(k) needs a TPA. They can't do it themselves — and they can't stop.",
   layout: "boxes",
@@ -393,17 +397,17 @@ const slide11: SlideContent = {
 // ============================================================
 const slide12: SlideContent = {
   id: "slide-12",
-  number: 13,
+  number: 11,
   title: "What does a TPA do?",
-  layout: "bullets",
-  body: "A Retirement TPA handles the complex administrative and compliance work that sits between the plan sponsor (employer) and the government.",
-  bullets: [
-    "Plan design & documentation — draft plan documents, amendments, SPDs",
-    "Compliance testing — ADP/ACP, top-heavy, 415 limits, coverage tests",
-    "Government filings — Form 5500, SAR, PBGC premiums",
-    "Contribution calculations — allocation formulas, true-ups, forfeitures",
-    "Participant communications — enrollment, disclosures, benefit statements",
-    "Plan corrections — EPCRS/VCP filings for operational errors",
+  subtitle: "A Retirement TPA handles the complex administrative and compliance work between the employer and the government.",
+  layout: "boxes",
+  boxes: [
+    { icon: "📝", title: "Plan Design & Documentation", description: "Draft plan documents, amendments, summary plan descriptions" },
+    { icon: "✅", title: "Compliance Testing", description: "ADP/ACP, top-heavy, 415 limits, coverage tests" },
+    { icon: "🏛️", title: "Government Filings", description: "Form 5500, SAR, PBGC premiums, 5558 extensions" },
+    { icon: "🧮", title: "Contribution Calculations", description: "Allocation formulas, true-ups, forfeitures, match calcs" },
+    { icon: "📬", title: "Participant Communications", description: "Enrollment, disclosures, benefit statements, notices" },
+    { icon: "🔧", title: "Plan Corrections", description: "EPCRS / VCP filings for operational errors" },
   ],
   note: "Most of this work is document-heavy, rule-based, and repetitive — exactly the profile AI excels at automating.",
 };
@@ -413,7 +417,7 @@ const slide12: SlideContent = {
 // ============================================================
 const slide13: SlideContent = {
   id: "slide-13",
-  number: 14,
+  number: 12,
   title: "Jamie Kalamarides — Chairman",
   layout: "text",
   body: "Jamie brings 20+ years of senior leadership at Prudential Financial, where he served as President of Group Insurance and Head of Institutional Retirement Plan Services, overseeing billions in plan assets.\n\nHe was a key expert to the SECURE Act, testifying before the U.S. Senate Finance, HELP, and Aging Committees on retirement policy. He is a nonresident fellow at the Bipartisan Policy Center.\n\nJamie's deep domain expertise in retirement services — combined with his relationships across the industry — gives Cognitory a unique advantage in building trust with acquisition targets and navigating the regulatory landscape.",
@@ -437,7 +441,7 @@ const slide14: SlideContent = {
 // ============================================================
 const slide15: SlideContent = {
   id: "slide-15",
-  number: 16,
+  number: 13,
   title: "Current M&A Pipeline",
   layout: "table",
   subtitle: "Active acquisition pipeline across the U.S.",
@@ -456,15 +460,14 @@ const slide15: SlideContent = {
   ],
   tableHeaders: ["Target", "Revenue", "EBITDA", "Region", "Stage"],
   tableRows: [
-    ["Liberty Benefits Admin", "$1.8M", "$810K", "Mid-Atlantic", "Pre-LOI Diligence"],
-    ["Atlantic Retirement Group", "$2.0M", "$800K", "Northeast", "Pre-LOI Diligence"],
-    ["Pacific Pension Services", "$2.0M", "$600K", "West Coast", "Pre-LOI Diligence"],
-    ["Evergreen Plan Services", "$1.7M", "$425K", "Pacific NW", "Pre-LOI Diligence"],
-    ["Summit Trust Services", "$5.0M", "—", "Pacific NW", "First Meeting"],
-    ["Lone Star Admin", "$10.0M", "—", "Southwest", "First Meeting"],
+    ['"Liberty Benefits Admin"', "$1.8M", "$810K", "Mid-Atlantic", "Pre-LOI Diligence"],
+    ['"Atlantic Retirement Group"', "$2.0M", "$800K", "Northeast", "Pre-LOI Diligence"],
+    ['"Pacific Pension Services"', "$2.0M", "$600K", "West Coast", "Pre-LOI Diligence"],
+    ['"Evergreen Plan Services"', "$1.7M", "$425K", "Pacific NW", "Pre-LOI Diligence"],
+    ['"Summit Trust Services"', "$5.0M", "—", "Pacific NW", "First Meeting"],
+    ['"Lone Star Admin"', "$10.0M", "—", "Southwest", "First Meeting"],
     ["+ 18 additional targets", "$750K–$10M", "", "Nationwide", "Various"],
   ],
-  note: "Pre-LOI targets have combined ~$5M EBITDA. Revenue ranges from $750K to $10M across the full pipeline.",
 };
 
 // ============================================================
@@ -472,7 +475,7 @@ const slide15: SlideContent = {
 // ============================================================
 const slide16: SlideContent = {
   id: "slide-16",
-  number: 17,
+  number: 14,
   title: "Retirement TPA Industry Overview",
   layout: "two-column",
   leftText: "MARKET STRUCTURE\n\n• $8B+ total addressable market\n• 5,000+ TPA firms in the U.S.\n• Top 10 firms hold <15% market share\n• Average firm: 10-50 employees\n• 700,000+ retirement plans need administration",
@@ -485,7 +488,7 @@ const slide16: SlideContent = {
 // ============================================================
 const slideCompetitive: SlideContent = {
   id: "slide-competitive",
-  number: 18,
+  number: 15,
   title: "Competitive Landscape",
   subtitle: "No one is combining acquisitions with AI-native automation",
   layout: "table",
@@ -498,8 +501,7 @@ const slideCompetitive: SlideContent = {
     ["PE Rollups\n(Hub, NFP, CBIZ)", "Buy & integrate", "Limited", "Acquire for revenue", "Medium — no automation edge"],
     ["Cognitory", "Acquire + Automate", "AI-native platform", "Buy at 4-6x, automate", "We play to win"],
   ],
-  note: "Most competitors are either technology companies that don't acquire, or acquirers that don't automate.",
-  callout: "Cognitory is uniquely positioned to do both.",
+  callout: "Most competitors are either technology companies that don't acquire, or acquirers that don't automate. Cognitory is uniquely positioned to do both.",
 };
 
 // ============================================================
@@ -507,11 +509,16 @@ const slideCompetitive: SlideContent = {
 // ============================================================
 const slide17: SlideContent = {
   id: "slide-17",
-  number: 19,
+  number: 16,
   title: "Automation Opportunities",
-  subtitle:
-    "We mapped 144 processes across the TPAs we spoke with and identified 62 low-hanging automation wins — expected to reclaim 12,000+ admin hours/yr = ~$419K in EBITDA expansion per 500-plan firm.",
+  subtitle: "Process inventory mapped across partner TPAs",
   layout: "table",
+  stats: [
+    { value: "144", label: "Processes Mapped" },
+    { value: "62", label: "Quick Wins" },
+    { value: "12,000+", label: "Hours Saved / Year" },
+    { value: "$419K", label: "EBITDA Expansion" },
+  ],
   tableHeaders: [
     "Process",
     "Hrs / Plan / Yr",
@@ -528,7 +535,7 @@ const slide17: SlideContent = {
     ["Plan Document Generation", "3", "Admin", "$40", "75%", "$45,000"],
     ["Required Notices & Disclosures", "2", "Admin", "$35", "80%", "$28,000"],
   ],
-  note: 'Source: 144-process inventory mapped at partner TPA (230 plans). 62 of 144 processes rated "Easy" automation. Census: offshore team averages 3 plans/day vs. 8–10 target. 5558 extensions: "nearly zero judgment — prime batch candidate" (Craig). Trust reconciliation: Craig\'s own #1 identified target.',
+  footnote: 'Source: 144-process inventory mapped at partner TPA (230 plans). 62 of 144 processes rated "Easy" automation. Census: offshore team averages 3 plans/day vs. 8-10 target. 5558 extensions: "nearly zero judgment — prime batch candidate." Trust reconciliation: #1 identified target.',
 };
 
 // ============================================================
@@ -536,7 +543,7 @@ const slide17: SlideContent = {
 // ============================================================
 const slide18: SlideContent = {
   id: "slide-18",
-  number: 20,
+  number: 17,
   title: "Raising $10M",
   layout: "bullets",
   body: "Seed round to acquire initial TPA portfolio and deploy the automation playbook.",
@@ -554,8 +561,8 @@ const slide18: SlideContent = {
 // ============================================================
 export const slides: SlideContent[] = [
   slide01, slide02, slideParallels, slide03, slide04,
-  slide05, slide06, slideStack, slide08, slide09,
-  slide10, slide11, slide12, slide13, slide14,
+  slide05, slideStack, slide09,
+  slide10, slide11, slide12, slide13,
   slide15, slide16, slideCompetitive, slide17, slide18,
 ];
 

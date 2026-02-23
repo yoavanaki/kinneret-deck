@@ -275,7 +275,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             editable={editable}
             onUpdate={onUpdate}
             tag="p"
-            className="text-xs mb-1"
+            className="text-xs mb-3"
             style={{ color: t.subtitle }}
           />
         )}
@@ -811,7 +811,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             editable={editable}
             onUpdate={onUpdate}
             tag="p"
-            className="text-xs mb-1"
+            className="text-xs mb-3"
             style={subtitleStyle}
           />
         )}
@@ -820,7 +820,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
         {/* Comparison grid */}
         <div className="flex-1 flex flex-col">
           {/* Column headers */}
-          <div className="grid grid-cols-[1fr_100px_1fr] gap-0 mb-2">
+          <div className="grid grid-cols-[1fr_60px_1fr] gap-0 mb-2">
             <div className="rounded-lg py-2 text-center"
               style={{ backgroundColor: t.tableHeaderBg, border: `1px solid ${t.tableBorder}` }}>
               <span className="text-[11px] font-bold uppercase tracking-widest" style={{ color: t.subtitle }}>
@@ -845,7 +845,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
             if (isLast) {
               return (
-                <div key={i} className="grid grid-cols-[1fr_100px_1fr] mt-3 rounded-xl overflow-hidden"
+                <div key={i} className="grid grid-cols-[1fr_60px_1fr] mt-3 rounded-xl overflow-hidden"
                   style={{ backgroundColor: t.accent + "12", border: `2px solid ${t.accent}40` }}>
                   <div className="py-4 px-5 flex items-center justify-end">
                     <span className="text-xl font-bold" style={{ color: t.text }}>{leftVal}</span>
@@ -863,9 +863,9 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             }
 
             return (
-              <div key={i} className="grid grid-cols-[1fr_100px_1fr]"
+              <div key={i} className="grid grid-cols-[1fr_60px_1fr]"
                 style={{ borderBottom: `1px solid ${t.tableBorder}` }}>
-                <div className="py-2 px-5 flex items-center justify-end">
+                <div className="py-3 px-5 flex items-center justify-end">
                   <span className="text-[15px]" style={{ color: t.text }}>{leftVal}</span>
                 </div>
                 <div className="flex items-center justify-center">
@@ -909,48 +909,21 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           className="text-[22px] font-bold mb-0.5"
           style={headingStyle}
         />
-        {slide.subtitle && !slide.stats && (
-          <>
-            <EditableText
-              value={slide.subtitle}
-              slideId={slide.id}
-              field="subtitle"
-              editable={editable}
-              onUpdate={onUpdate}
-              tag="h2"
-              className="text-sm mb-0.5"
-              style={subtitleStyle}
-            />
-            <AccentBar color={t.accent} className="mb-2" />
-          </>
+        {slide.subtitle && (
+          <EditableText
+            value={slide.subtitle}
+            slideId={slide.id}
+            field="subtitle"
+            editable={editable}
+            onUpdate={onUpdate}
+            tag="h2"
+            className="text-sm mb-3"
+            style={subtitleStyle}
+          />
         )}
-        {!slide.subtitle && !slide.stats && (
-          <AccentBar color={t.accent} className="mb-2" />
-        )}
-        {slide.bullets && slide.bullets.length > 0 && (
-          <div className="flex flex-wrap gap-x-4 gap-y-1 mb-2">
-            {slide.bullets.map((item, i) => (
-              <div key={i} className="flex items-center gap-1.5">
-                <span
-                  className="w-4 h-4 rounded flex items-center justify-center text-[10px] font-bold flex-shrink-0"
-                  style={{ backgroundColor: t.accent + "18", color: t.accent }}
-                >✓</span>
-                <EditableText
-                  value={item}
-                  slideId={slide.id}
-                  field={`bullets.${i}`}
-                  editable={editable}
-                  onUpdate={onUpdate}
-                  tag="span"
-                  className="text-[11px]"
-                  style={{ color: t.text }}
-                />
-              </div>
-            ))}
-          </div>
-        )}
+        <AccentBar color={t.accent} className="mb-4" />
         {slide.stats && (
-          <div className="flex gap-3 mb-2 mt-1">
+          <div className="flex gap-3 mb-3">
             {slide.pieChart && (() => {
               const size = 64;
               const r = 28;
@@ -1001,26 +974,31 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 </div>
               );
             })()}
-            {slide.stats.map((stat, i) => (
-              <div
-                key={i}
-                className="flex-1 rounded-lg px-3 py-2 flex flex-col items-center justify-center text-center"
-                style={{
-                  backgroundColor: i === 0 ? t.accent + "15" : t.cardBg,
-                  border: `1.5px solid ${i === 0 ? t.accent + "40" : t.tableBorder}`,
-                }}
-              >
-                <span
-                  className="text-lg font-bold leading-none"
-                  style={{ color: i === 0 ? t.accent : t.heading, fontFamily: theme.headingFont }}
+            <div
+              className="flex-1 grid gap-2"
+              style={{ gridTemplateColumns: `repeat(${slide.pieChart ? 3 : Math.min(slide.stats.length, 4)}, 1fr)` }}
+            >
+              {slide.stats.map((stat, i) => (
+                <div
+                  key={i}
+                  className="rounded-lg px-3 py-2 flex flex-col items-center justify-center text-center"
+                  style={{
+                    backgroundColor: i === 0 ? t.accent + "15" : t.cardBg,
+                    border: `1.5px solid ${i === 0 ? t.accent + "40" : t.tableBorder}`,
+                  }}
                 >
-                  {stat.value}
-                </span>
-                <span className="text-[8px] mt-1 uppercase tracking-wider font-medium" style={{ color: t.subtitle }}>
-                  {stat.label}
-                </span>
-              </div>
-            ))}
+                  <span
+                    className="text-lg font-bold leading-none"
+                    style={{ color: i === 0 ? t.accent : t.heading, fontFamily: theme.headingFont }}
+                  >
+                    {stat.value}
+                  </span>
+                  <span className="text-[8px] mt-1 uppercase tracking-wider font-medium" style={{ color: t.subtitle }}>
+                    {stat.label}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         )}
         {slide.note && (
@@ -1075,6 +1053,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                         backgroundColor: isHighlighted
                           ? t.accent + "15"
                           : isEven ? undefined : t.cardBg + "80",
+                        height: highlightLastRow ? 36 : undefined,
                       }}
                     >
                       {row.map((cell, ci) => (
@@ -1106,6 +1085,39 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             </table>
           </div>
         )}
+        {slide.bullets && slide.bullets.length > 0 && (
+          <div
+            className="mt-3 px-4 py-2.5 rounded-lg"
+            style={{ backgroundColor: t.cardBg, border: `1.5px solid ${t.tableBorder}` }}
+          >
+            <span
+              className="text-[10px] font-bold uppercase tracking-widest"
+              style={{ color: t.accent }}
+            >
+              Checklist
+            </span>
+            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1.5">
+              {slide.bullets.map((item, i) => (
+                <div key={i} className="flex items-center gap-1.5">
+                  <span
+                    className="w-4 h-4 rounded flex items-center justify-center text-[10px] font-bold flex-shrink-0"
+                    style={{ backgroundColor: t.accent + "18", color: t.accent }}
+                  >✓</span>
+                  <EditableText
+                    value={item}
+                    slideId={slide.id}
+                    field={`bullets.${i}`}
+                    editable={editable}
+                    onUpdate={onUpdate}
+                    tag="span"
+                    className="text-[11px]"
+                    style={{ color: t.text }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         {slide.callout && (
           <div
             className="mt-3 px-4 py-2.5 rounded-lg text-center"
@@ -1126,6 +1138,11 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             />
           </div>
         )}
+        {slide.footnote && (
+          <p className="slide-footnote mt-auto pt-2" style={{ color: t.subtitle }}>
+            {slide.footnote}
+          </p>
+        )}
         <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
@@ -1135,12 +1152,12 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
   if (slide.layout === "stack" && slide.stack) {
     const W = 960, H = 540;
     const MARGIN = 28;
-    const TITLE_H = 62;
+    const TITLE_H = 68;
     const ARROW_GAP = 10;
 
     const hasHoldco = slide.holdcoAgents && slide.holdcoAgents.length > 0;
     const COL_GAP = 20;
-    const leftW = hasHoldco ? 540 : W - MARGIN * 2;
+    const leftW = hasHoldco ? 590 : W - MARGIN * 2;
     const rightW = hasHoldco ? W - MARGIN * 2 - leftW - COL_GAP : 0;
     const rightX = MARGIN + leftW + COL_GAP;
 
@@ -1155,16 +1172,16 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
       <div style={baseStyle}>
         <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} style={{ fontFamily: theme.bodyFont }}>
           {/* Title */}
-          <text x={MARGIN} y={28} fill={t.heading} fontSize={20} fontWeight="bold" fontFamily={theme.headingFont}>
+          <text x={MARGIN} y={30} fill={t.heading} fontSize={20} fontWeight="bold" fontFamily={theme.headingFont}>
             {slide.title}
           </text>
           {slide.subtitle && (
-            <text x={MARGIN} y={45} fill={t.subtitle} fontSize={11}>
+            <text x={MARGIN} y={48} fill={t.subtitle} fontSize={11}>
               {slide.subtitle}
             </text>
           )}
           {/* Accent bar */}
-          <rect x={MARGIN} y={50} width={40} height={3} rx={1.5} fill={t.accent} />
+          <rect x={MARGIN} y={55} width={40} height={3} rx={1.5} fill={t.accent} />
 
           {/* Slide number */}
           <text x={W - 16} y={H - 8} textAnchor="end" fill={t.subtitle} fontSize={10} opacity={0.4}>
@@ -1254,7 +1271,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                       const row = Math.floor(ii / cols);
                       const col = ii % cols;
                       const bw = (groupW - 20) / cols - 3;
-                      const bh = 20;
+                      const bh = 26;
                       const bx = layerX + innerPadSide + 8 + col * (bw + 4);
                       const by = layerY + innerPadTop + 20 + row * (bh + 4);
                       return (
@@ -1290,7 +1307,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                       const row = Math.floor(ii / cols);
                       const col = ii % cols;
                       const bw = (gw - 20) / cols - 3;
-                      const bh = 20;
+                      const bh = 26;
                       const bx = gx + 8 + col * (bw + 4);
                       const by = layerY + innerPadTop + 20 + row * (bh + 4);
                       return (
@@ -1337,10 +1354,26 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             const colTopY = TITLE_H;
             const colH = totalDiagramH;
             const innerPad = 8;
-            const cardGap = 4;
-            const arrowH = 12;
+            const cardGap = 3;
+            const arrowH = 6;
             const usableH = colH - innerPad * 2;
             const cardH = (usableH - (agentCount - 1) * (cardGap + arrowH)) / agentCount;
+
+            const wrapText = (text: string, maxChars: number): string[] => {
+              const words = text.split(" ");
+              const lines: string[] = [];
+              let current = "";
+              for (const word of words) {
+                if (current.length + word.length + 1 > maxChars && current.length > 0) {
+                  lines.push(current);
+                  current = word;
+                } else {
+                  current = current ? current + " " + word : word;
+                }
+              }
+              if (current) lines.push(current);
+              return lines;
+            };
 
             return (
               <g>
@@ -1357,30 +1390,29 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                   const cy = colTopY + innerPad + ai * (cardH + cardGap + arrowH);
                   const innerW = rightW - innerPad * 2;
                   const cx = rightX + innerPad;
+                  const descLines = agent.description ? wrapText(agent.description, 42) : [];
 
                   return (
                     <g key={ai}>
                       <rect x={cx} y={cy} width={innerW} height={cardH} rx={6}
                         fill={t.cardBg} stroke={t.accent + "60"} strokeWidth={1.5} />
-                      <text x={cx + 10} y={cy + cardH * 0.45} fontSize={14} dominantBaseline="middle">
-                        {agent.icon}
-                      </text>
-                      <text x={cx + 28} y={cy + cardH * 0.38} fill={t.heading}
+                      <circle cx={cx + 12} cy={cy + 16} r={4} fill={t.accent} opacity={0.6} />
+                      <text x={cx + 22} y={cy + 20} fill={t.heading}
                         fontSize={10} fontWeight="bold">
                         {agent.label}
                       </text>
-                      {agent.description && (
-                        <text x={cx + 28} y={cy + cardH * 0.7} fill={t.subtitle} fontSize={7}>
-                          {agent.description.length > 50 ? agent.description.slice(0, 50) + "…" : agent.description}
+                      {descLines.map((line, di) => (
+                        <text key={di} x={cx + 10} y={cy + 34 + di * 12} fill={t.subtitle} fontSize={7.5}>
+                          {line}
                         </text>
-                      )}
+                      ))}
                       {ai < agentCount - 1 && (
                         <g>
-                          <line x1={rightX + rightW / 2} y1={cy + cardH + 2}
-                            x2={rightX + rightW / 2} y2={cy + cardH + cardGap + arrowH - 2}
+                          <line x1={rightX + rightW / 2} y1={cy + cardH + 1}
+                            x2={rightX + rightW / 2} y2={cy + cardH + cardGap + arrowH - 1}
                             stroke={t.accent} strokeWidth={1.5} opacity={0.5} />
                           <polygon
-                            points={`${rightX + rightW / 2 - 4},${cy + cardH + cardGap + arrowH - 7} ${rightX + rightW / 2 + 4},${cy + cardH + cardGap + arrowH - 7} ${rightX + rightW / 2},${cy + cardH + cardGap + arrowH - 2}`}
+                            points={`${rightX + rightW / 2 - 3},${cy + cardH + cardGap + arrowH - 4} ${rightX + rightW / 2 + 3},${cy + cardH + cardGap + arrowH - 4} ${rightX + rightW / 2},${cy + cardH + cardGap + arrowH - 1}`}
                             fill={t.accent} opacity={0.5} />
                         </g>
                       )}
@@ -1418,11 +1450,11 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             editable={editable}
             onUpdate={onUpdate}
             tag="h2"
-            className="text-[11px] mb-1"
+            className="text-[11px] mb-3"
             style={subtitleStyle}
           />
         )}
-        <AccentBar color={t.accent} className="mb-3" />
+        <AccentBar color={t.accent} className="mb-5" />
 
         {/* Stats row */}
         {slide.stats && (
@@ -1451,11 +1483,11 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
         )}
 
         {/* Card grid */}
-        <div className="grid grid-cols-3 gap-2.5 flex-1">
+        <div className="grid grid-cols-3 gap-2">
           {slide.boxes.map((box, i) => (
             <div
               key={i}
-              className="rounded-lg px-3.5 py-3 flex flex-col"
+              className="rounded-lg px-3 py-2 flex flex-col"
               style={{
                 backgroundColor: t.cardBg,
                 border: `1.5px solid ${t.tableBorder}`,
@@ -1491,6 +1523,78 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             fg={t.subtitle}
           />
         )}
+        <SlideNumber num={slide.number} color={t.subtitle} />
+      </div>
+    );
+  }
+
+  // ---- PLAYBOOK LAYOUT (flowchart boxes) ----
+  if (slide.layout === "playbook" && slide.boxes) {
+    const cols = 3;
+    const rows = Math.ceil(slide.boxes.length / cols);
+    return (
+      <div style={baseStyle} className="flex flex-col p-10">
+        <EditableText
+          value={slide.title}
+          slideId={slide.id}
+          field="title"
+          editable={editable}
+          onUpdate={onUpdate}
+          tag="h1"
+          className="text-[22px] font-bold mb-1"
+          style={headingStyle}
+        />
+        <AccentBar color={t.accent} className="mb-6" />
+        <div className="flex-1 flex flex-col justify-center gap-3">
+          {Array.from({ length: rows }).map((_, ri) => (
+            <div key={ri} className="flex items-center gap-0">
+              {slide.boxes!.slice(ri * cols, ri * cols + cols).map((box, ci) => {
+                const stepNum = ri * cols + ci + 1;
+                const isLast = ri * cols + ci === slide.boxes!.length - 1;
+                return (
+                  <div key={ci} className="flex items-center flex-1">
+                    <div
+                      className="flex-1 rounded-xl px-4 py-4 flex flex-col items-center text-center"
+                      style={{
+                        backgroundColor: t.cardBg,
+                        border: `1.5px solid ${t.tableBorder}`,
+                      }}
+                    >
+                      <div
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold mb-2"
+                        style={{ backgroundColor: t.accent + "18", color: t.accent }}
+                      >
+                        {stepNum}
+                      </div>
+                      <span className="text-lg mb-1">{box.icon}</span>
+                      <span
+                        className="text-[13px] font-bold mb-1"
+                        style={{ color: t.heading }}
+                      >
+                        {box.title}
+                      </span>
+                      <span
+                        className="text-[10px] leading-snug"
+                        style={{ color: t.subtitle }}
+                      >
+                        {box.description}
+                      </span>
+                    </div>
+                    {!isLast && ci < cols - 1 && (
+                      <span
+                        className="text-xl font-bold flex-shrink-0 mx-1"
+                        style={{ color: t.accent }}
+                      >
+                        &#x2192;
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+          {/* Rows are connected by numbered step indicators */}
+        </div>
         <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
