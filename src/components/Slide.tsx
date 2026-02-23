@@ -1087,7 +1087,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
         )}
         {slide.bullets && slide.bullets.length > 0 && (
           <div
-            className="mt-3 px-4 py-2.5 rounded-lg"
+            className="mt-2 px-4 py-2.5 rounded-lg"
             style={{ backgroundColor: t.cardBg, border: `1.5px solid ${t.tableBorder}` }}
           >
             <span
@@ -1096,7 +1096,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             >
               Checklist
             </span>
-            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1.5">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-1 mt-1.5">
               {slide.bullets.map((item, i) => (
                 <div key={i} className="flex items-center gap-1.5">
                   <span
@@ -1165,8 +1165,29 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
     const numLayers = layers.length;
     const numArrowGaps = numLayers - 1;
     const totalDiagramH = H - TITLE_H - MARGIN;
-    const layerH = (totalDiagramH - numArrowGaps * ARROW_GAP) / numLayers;
+    const totalArrowH = numArrowGaps * ARROW_GAP;
+    const availableH = totalDiagramH - totalArrowH;
+
+    // Weight layers by content density so rows aren't swimming in empty space
     const renderLayers = [...layers].reverse();
+    const layerWeights = renderLayers.map(layer => {
+      const items = layer.items || [];
+      if (layer.grid) {
+        const cols = hasHoldco ? 5 : 9;
+        const rows = Math.ceil(items.length / cols);
+        return 0.8 + rows * 0.5;
+      }
+      const gen = items.filter(i => !i.accent);
+      const dom = items.filter(i => i.accent);
+      const maxRows = Math.max(
+        gen.length > 0 ? Math.ceil(gen.length / 2) : 0,
+        dom.length > 0 ? Math.ceil(dom.length / 2) : 0,
+        items.length > 0 ? Math.ceil(items.length / 4) : 0
+      );
+      return 0.8 + maxRows * 0.45;
+    });
+    const totalWeight = layerWeights.reduce((a, b) => a + b, 0);
+    const layerHeights = layerWeights.map(w => (w / totalWeight) * availableH);
 
     return (
       <div style={baseStyle}>
@@ -1195,12 +1216,13 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           </text>
 
           {renderLayers.map((layer, li) => {
-            const layerY = TITLE_H + li * (layerH + ARROW_GAP);
+            const layerY = TITLE_H + layerHeights.slice(0, li).reduce((a, b) => a + b, 0) + li * ARROW_GAP;
+            const thisLayerH = layerHeights[li];
             const layerX = MARGIN;
             const items = layer.items || [];
             const innerPadTop = 22;
             const innerPadSide = 10;
-            const innerH = layerH - innerPadTop - 6;
+            const innerH = thisLayerH - innerPadTop - 6;
 
             if (layer.grid) {
               const cols = Math.min(items.length, hasHoldco ? 5 : 9);
@@ -1211,7 +1233,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
               return (
                 <g key={li}>
-                  <rect x={layerX} y={layerY} width={leftW} height={layerH} rx={6}
+                  <rect x={layerX} y={layerY} width={leftW} height={thisLayerH} rx={6}
                     fill={t.cardBg} stroke={t.tableBorder} strokeWidth={1.5} />
                   <text x={layerX + innerPadSide} y={layerY + 15} fill={t.accent}
                     fontSize={9} fontWeight="bold" letterSpacing="0.08em">
@@ -1250,7 +1272,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
             return (
               <g key={li}>
-                <rect x={layerX} y={layerY} width={leftW} height={layerH} rx={6}
+                <rect x={layerX} y={layerY} width={leftW} height={thisLayerH} rx={6}
                   fill={t.cardBg} stroke={t.tableBorder} strokeWidth={1.5} />
                 <text x={layerX + innerPadSide} y={layerY + 15} fill={t.accent}
                   fontSize={9} fontWeight="bold" letterSpacing="0.08em">
@@ -1329,7 +1351,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
           {/* Arrows between platform layers */}
           {renderLayers.slice(0, -1).map((_, li) => {
-            const gapTop = TITLE_H + (li + 1) * layerH + li * ARROW_GAP;
+            const gapTop = TITLE_H + layerHeights.slice(0, li + 1).reduce((a, b) => a + b, 0) + li * ARROW_GAP;
             const gapMid = gapTop + ARROW_GAP / 2;
             const cx = MARGIN + leftW / 2;
             const chevronXs = [cx - 80, cx, cx + 80];
@@ -1483,7 +1505,10 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
         )}
 
         {/* Card grid */}
-        <div className="grid grid-cols-3 gap-2">
+        <div
+          className="flex-1 grid grid-cols-3 gap-2"
+          style={{ gridTemplateRows: `repeat(${Math.ceil(slide.boxes.length / 3)}, 1fr)` }}
+        >
           {slide.boxes.map((box, i) => (
             <div
               key={i}
