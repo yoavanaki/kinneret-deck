@@ -820,15 +820,14 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
         {/* Comparison grid */}
         <div className="flex-1 flex flex-col">
           {/* Column headers */}
-          <div className="grid grid-cols-[1fr_60px_1fr] gap-0 mb-2">
-            <div className="rounded-lg py-2 text-center"
+          <div className="flex gap-1 mb-2">
+            <div className="flex-1 rounded-lg py-2 text-center"
               style={{ backgroundColor: t.tableHeaderBg, border: `1px solid ${t.tableBorder}` }}>
               <span className="text-[11px] font-bold uppercase tracking-widest" style={{ color: t.subtitle }}>
                 {leftLabel}
               </span>
             </div>
-            <div />
-            <div className="rounded-lg py-2 text-center"
+            <div className="flex-1 rounded-lg py-2 text-center"
               style={{ backgroundColor: t.accent + "18", border: `1px solid ${t.accent}50` }}>
               <span className="text-[11px] font-bold uppercase tracking-widest" style={{ color: t.accent }}>
                 {rightLabel}
@@ -847,7 +846,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
               return (
                 <div key={i} className="grid grid-cols-[1fr_60px_1fr] mt-3 rounded-xl overflow-hidden"
                   style={{ backgroundColor: t.accent + "12", border: `2px solid ${t.accent}40` }}>
-                  <div className="py-4 px-5 flex items-center justify-end">
+                  <div className="py-4 px-5 flex items-center justify-center">
                     <span className="text-xl font-bold" style={{ color: t.text }}>{leftVal}</span>
                   </div>
                   <div className="flex flex-col items-center justify-center">
@@ -855,7 +854,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                       style={{ color: t.accent }}>{cat}</span>
                     <span className="text-xl font-bold" style={{ color: t.accent }}>&#x2192;</span>
                   </div>
-                  <div className="py-4 px-5 flex items-center">
+                  <div className="py-4 px-5 flex items-center justify-center">
                     <span className="text-xl font-bold" style={{ color: t.accent }}>{rightVal}</span>
                   </div>
                 </div>
@@ -865,14 +864,14 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             return (
               <div key={i} className="grid grid-cols-[1fr_60px_1fr]"
                 style={{ borderBottom: `1px solid ${t.tableBorder}` }}>
-                <div className="py-3 px-5 flex items-center justify-end">
+                <div className="py-3 px-5 flex items-center justify-center">
                   <span className="text-[15px]" style={{ color: t.text }}>{leftVal}</span>
                 </div>
                 <div className="flex items-center justify-center">
                   <span className="text-[8px] font-bold uppercase tracking-widest"
                     style={{ color: t.subtitle, opacity: 0.6 }}>{cat}</span>
                 </div>
-                <div className="py-2 px-5 flex items-center">
+                <div className="py-2 px-5 flex items-center justify-center">
                   <span className="text-[15px]" style={{ color: t.text }}>{rightVal}</span>
                 </div>
               </div>

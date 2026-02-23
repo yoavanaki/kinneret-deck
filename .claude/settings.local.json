@@ -21,7 +21,17 @@
       "Bash(tail:*)",
       "mcp__plugin_playwright_playwright__browser_snapshot",
       "Bash(curl:*)",
-      "mcp__plugin_playwright_playwright__browser_console_messages"
+      "mcp__plugin_playwright_playwright__browser_console_messages",
+      "Bash(kill %1:*)",
+      "Bash(git status:*)",
+      "Bash(python3:*)",
+      "Bash(lsof:*)",
+      "mcp__plugin_playwright_playwright__browser_run_code",
+      "Bash(kill 28416:*)",
+      "Bash(npm run:*)",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "Bash(open:*)",
+      "Bash(kill 28826:*)"
     ]
   }
 }
