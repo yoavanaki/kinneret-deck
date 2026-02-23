@@ -1044,7 +1044,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
     const W = 960, H = 540;
     const MARGIN = 28;
     const TITLE_H = 62;
-    const ARROW_GAP = 14;
+    const ARROW_GAP = 10;
 
     const hasHoldco = slide.holdcoAgents && slide.holdcoAgents.length > 0;
     const COL_GAP = 20;
@@ -1244,9 +1244,9 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             const agentCount = agents.length;
             const colTopY = TITLE_H;
             const colH = totalDiagramH;
-            const innerPad = 12;
-            const cardGap = 8;
-            const arrowH = 16;
+            const innerPad = 8;
+            const cardGap = 4;
+            const arrowH = 12;
             const usableH = colH - innerPad * 2;
             const cardH = (usableH - (agentCount - 1) * (cardGap + arrowH)) / agentCount;
 
@@ -1270,16 +1270,16 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                     <g key={ai}>
                       <rect x={cx} y={cy} width={innerW} height={cardH} rx={6}
                         fill={t.cardBg} stroke={t.accent + "60"} strokeWidth={1.5} />
-                      <text x={cx + 14} y={cy + cardH / 2 + 1} fontSize={18} dominantBaseline="middle">
+                      <text x={cx + 10} y={cy + cardH * 0.45} fontSize={14} dominantBaseline="middle">
                         {agent.icon}
                       </text>
-                      <text x={cx + 38} y={cy + cardH * 0.38} fill={t.heading}
-                        fontSize={11} fontWeight="bold">
+                      <text x={cx + 28} y={cy + cardH * 0.38} fill={t.heading}
+                        fontSize={10} fontWeight="bold">
                         {agent.label}
                       </text>
                       {agent.description && (
-                        <text x={cx + 38} y={cy + cardH * 0.68} fill={t.subtitle} fontSize={8}>
-                          {agent.description.length > 55 ? agent.description.slice(0, 55) + "…" : agent.description}
+                        <text x={cx + 28} y={cy + cardH * 0.7} fill={t.subtitle} fontSize={7}>
+                          {agent.description.length > 50 ? agent.description.slice(0, 50) + "…" : agent.description}
                         </text>
                       )}
                       {ai < agentCount - 1 && (
