@@ -17,7 +17,7 @@ export interface SlideContent {
   /** Bullet points as an array of strings */
   bullets?: string[];
   /** Layout type determines how the slide renders */
-  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels";
+  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels" | "boxes";
   /** Custom HTML content for special layouts */
   customHtml?: string;
   /** Team members for team layout */
@@ -42,6 +42,10 @@ export interface SlideContent {
   };
   /** Key stats shown as prominent boxes (e.g. for pipeline slides) */
   stats?: { value: string; label: string }[];
+  /** Pie chart segments for inline pie charts */
+  pieChart?: { label: string; value: number; color?: string }[];
+  /** Box cards for boxes layout */
+  boxes?: { icon: string; title: string; description: string }[];
   /** Stack diagram layers for stack layout (rendered bottom-to-top) */
   stack?: {
     label: string;
@@ -427,8 +431,14 @@ const slide15: SlideContent = {
     { value: "27", label: "Total Targets" },
     { value: "24", label: "Active" },
     { value: "~$74M", label: "Pipeline Revenue" },
+    { value: "~$5M", label: "EBITDA in DD" },
     { value: "6", label: "In Pre-LOI Diligence" },
     { value: "13", label: "States" },
+  ],
+  pieChart: [
+    { label: "Warm Intros", value: 46 },
+    { label: "Cold Outreach", value: 33 },
+    { label: "Banker-Sourced", value: 21 },
   ],
   tableHeaders: ["Target", "Revenue", "EBITDA", "Region", "Stage"],
   tableRows: [
@@ -440,7 +450,7 @@ const slide15: SlideContent = {
     ["Lone Star Admin", "$10.0M", "—", "Southwest", "First Meeting"],
     ["+ 18 additional targets", "$750K–$10M", "", "Nationwide", "Various"],
   ],
-  note: "Sourcing: 46% warm intros, 33% cold outreach, 21% banker-sourced. Pre-LOI targets have combined ~$5M EBITDA. Revenue ranges from $750K to $10M across the full pipeline.",
+  note: "Pre-LOI targets have combined ~$5M EBITDA. Revenue ranges from $750K to $10M across the full pipeline.",
 };
 
 // ============================================================
@@ -484,18 +494,26 @@ const slide17: SlideContent = {
   id: "slide-17",
   number: 19,
   title: "Automation Opportunities",
-  subtitle: "Implied margin impact per 500-plan TPA ($2M revenue)",
+  subtitle:
+    "We mapped 144 processes across the TPAs we spoke with and identified 62 low-hanging automation wins — expected to reclaim 12,000+ admin hours/yr = ~$419K in EBITDA expansion per 500-plan firm.",
   layout: "table",
-  tableHeaders: ["Activity", "Hrs / Plan / Yr", "Staff", "Cost / Hr", "AI Reduction", "Annual Savings"],
-  tableRows: [
-    ["Compliance Testing", "8", "Analyst", "$45", "80%", "$144,000"],
-    ["Form 5500 Prep", "4", "Analyst", "$45", "90%", "$81,000"],
-    ["Plan Doc Drafting", "3", "Admin", "$35", "85%", "$44,625"],
-    ["Contribution Calcs", "6", "Analyst", "$45", "75%", "$101,250"],
-    ["Participant Comms", "2", "Admin", "$35", "70%", "$24,500"],
-    ["Error Corrections", "2", "Sr. Analyst", "$60", "60%", "$36,000"],
+  tableHeaders: [
+    "Process",
+    "Hrs / Plan / Yr",
+    "Staff",
+    "Cost / Hr",
+    "AI Reduction",
+    "Annual Savings (500 plans)",
   ],
-  note: "Total estimated savings: ~$431K/year per 500-plan firm → margin expansion from ~20% to ~42%. These are conservative estimates based on current AI capabilities.",
+  tableRows: [
+    ["Census Collection & Scrubbing", "10", "Bangladesh + Admin", "$25", "85%", "$106,250"],
+    ["Form 5500 & 5558 Filing", "6", "Admin", "$40", "90%", "$108,000"],
+    ["Trust Reconciliation", "4", "Admin", "$40", "80%", "$64,000"],
+    ["Compliance Test Data Entry", "4", "Admin", "$40", "85%", "$68,000"],
+    ["Plan Document Generation", "3", "Admin", "$40", "75%", "$45,000"],
+    ["Required Notices & Disclosures", "2", "Admin", "$35", "80%", "$28,000"],
+  ],
+  note: 'Source: 144-process inventory mapped at partner TPA (230 plans). 62 of 144 processes rated "Easy" automation. Census: offshore team averages 3 plans/day vs. 8–10 target. 5558 extensions: "nearly zero judgment — prime batch candidate" (Craig). Trust reconciliation: Craig\'s own #1 identified target.',
 };
 
 // ============================================================
