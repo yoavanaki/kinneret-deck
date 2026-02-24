@@ -844,13 +844,13 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
             if (isLast) {
               return (
-                <div key={i} className="grid grid-cols-[1fr_60px_1fr] mt-3 rounded-xl overflow-hidden"
+                <div key={i} className="grid grid-cols-[1fr_auto_1fr] mt-3 rounded-xl overflow-hidden"
                   style={{ backgroundColor: t.accent + "12", border: `2px solid ${t.accent}40` }}>
                   <div className="py-4 px-5 flex items-center justify-center">
                     <span className="text-xl font-bold" style={{ color: t.text }}>{leftVal}</span>
                   </div>
-                  <div className="flex flex-col items-center justify-center">
-                    <span className="text-[8px] font-bold uppercase tracking-widest mb-1"
+                  <div className="flex flex-col items-center justify-center px-4">
+                    <span className="text-[8px] font-bold uppercase tracking-widest mb-1 whitespace-nowrap"
                       style={{ color: t.accent }}>{cat}</span>
                     <span className="text-xl font-bold" style={{ color: t.accent }}>&#x2192;</span>
                   </div>
@@ -862,13 +862,13 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             }
 
             return (
-              <div key={i} className="grid grid-cols-[1fr_60px_1fr]"
+              <div key={i} className="grid grid-cols-[1fr_auto_1fr]"
                 style={{ borderBottom: `1px solid ${t.tableBorder}` }}>
                 <div className="py-3 px-5 flex items-center justify-center">
                   <span className="text-[15px]" style={{ color: t.text }}>{leftVal}</span>
                 </div>
-                <div className="flex items-center justify-center">
-                  <span className="text-[8px] font-bold uppercase tracking-widest"
+                <div className="flex items-center justify-center px-4">
+                  <span className="text-[8px] font-bold uppercase tracking-widest whitespace-nowrap"
                     style={{ color: t.subtitle, opacity: 0.6 }}>{cat}</span>
                 </div>
                 <div className="py-2 px-5 flex items-center justify-center">
@@ -1152,6 +1152,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
     const W = 960, H = 540;
     const MARGIN = 28;
     const TITLE_H = 68;
+    const COL_LABEL_GAP = 14; // gap between column titles and diagram boxes
     const ARROW_GAP = 10;
 
     const hasHoldco = slide.holdcoAgents && slide.holdcoAgents.length > 0;
@@ -1163,7 +1164,8 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
     const layers = slide.stack;
     const numLayers = layers.length;
     const numArrowGaps = numLayers - 1;
-    const totalDiagramH = H - TITLE_H - MARGIN;
+    const DIAGRAM_TOP = TITLE_H + COL_LABEL_GAP;
+    const totalDiagramH = H - DIAGRAM_TOP - MARGIN;
     const totalArrowH = numArrowGaps * ARROW_GAP;
     const availableH = totalDiagramH - totalArrowH;
 
@@ -1215,20 +1217,21 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           </text>
 
           {renderLayers.map((layer, li) => {
-            const layerY = TITLE_H + layerHeights.slice(0, li).reduce((a, b) => a + b, 0) + li * ARROW_GAP;
+            const layerY = DIAGRAM_TOP + layerHeights.slice(0, li).reduce((a, b) => a + b, 0) + li * ARROW_GAP;
             const thisLayerH = layerHeights[li];
             const layerX = MARGIN;
             const items = layer.items || [];
-            const innerPadTop = 22;
+            const innerPadTop = 20;
             const innerPadSide = 10;
-            const innerH = thisLayerH - innerPadTop - 6;
+            const innerH = thisLayerH - innerPadTop - 4;
 
             if (layer.grid) {
               const cols = Math.min(items.length, hasHoldco ? 5 : 9);
               const boxGap = 5;
               const boxW = (leftW - innerPadSide * 2 - (cols - 1) * boxGap) / cols;
-              const boxH = innerH - 2;
               const rows = Math.ceil(items.length / cols);
+              const rowGap = 3;
+              const rowH = (innerH - (rows - 1) * rowGap) / rows;
 
               return (
                 <g key={li}>
@@ -1242,8 +1245,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                     const col = ii % cols;
                     const row = Math.floor(ii / cols);
                     const bx = layerX + innerPadSide + col * (boxW + boxGap);
-                    const rowH = rows > 1 ? (innerH - 2) / rows - 3 : boxH;
-                    const by = layerY + innerPadTop + row * (rowH + 3);
+                    const by = layerY + innerPadTop + row * (rowH + rowGap);
                     const isAccent = item.accent;
                     return (
                       <g key={ii}>
@@ -1291,10 +1293,13 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                       const cols = hasTwo ? Math.min(generalItems.length, 2) : Math.min(generalItems.length, 4);
                       const row = Math.floor(ii / cols);
                       const col = ii % cols;
+                      const numRows = Math.ceil(generalItems.length / cols);
+                      const subHeaderH = 18;
+                      const subAvail = innerH - subHeaderH - 4;
                       const bw = (groupW - 20) / cols - 3;
-                      const bh = 26;
+                      const bh = Math.min(30, (subAvail - (numRows - 1) * 4) / numRows);
                       const bx = layerX + innerPadSide + 8 + col * (bw + 4);
-                      const by = layerY + innerPadTop + 20 + row * (bh + 4);
+                      const by = layerY + innerPadTop + subHeaderH + row * (bh + 4);
                       return (
                         <g key={ii}>
                           <rect x={bx} y={by} width={bw} height={bh} rx={3}
@@ -1327,10 +1332,13 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                       const cols = hasTwo ? Math.min(domainItems.length, 2) : Math.min(domainItems.length, 3);
                       const row = Math.floor(ii / cols);
                       const col = ii % cols;
+                      const numRows = Math.ceil(domainItems.length / cols);
+                      const subHeaderH = 18;
+                      const subAvail = innerH - subHeaderH - 4;
                       const bw = (gw - 20) / cols - 3;
-                      const bh = 26;
+                      const bh = Math.min(30, (subAvail - (numRows - 1) * 4) / numRows);
                       const bx = gx + 8 + col * (bw + 4);
-                      const by = layerY + innerPadTop + 20 + row * (bh + 4);
+                      const by = layerY + innerPadTop + subHeaderH + row * (bh + 4);
                       return (
                         <g key={ii}>
                           <rect x={bx} y={by} width={bw} height={bh} rx={3}
@@ -1350,7 +1358,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
           {/* Arrows between platform layers */}
           {renderLayers.slice(0, -1).map((_, li) => {
-            const gapTop = TITLE_H + layerHeights.slice(0, li + 1).reduce((a, b) => a + b, 0) + li * ARROW_GAP;
+            const gapTop = DIAGRAM_TOP + layerHeights.slice(0, li + 1).reduce((a, b) => a + b, 0) + li * ARROW_GAP;
             const gapMid = gapTop + ARROW_GAP / 2;
             const cx = MARGIN + leftW / 2;
             const chevronXs = [cx - 80, cx, cx + 80];
@@ -1372,7 +1380,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           {hasHoldco && slide.holdcoAgents && (() => {
             const agents = slide.holdcoAgents;
             const agentCount = agents.length;
-            const colTopY = TITLE_H;
+            const colTopY = DIAGRAM_TOP;
             const colH = totalDiagramH;
             const innerPad = 8;
             const cardGap = 3;
