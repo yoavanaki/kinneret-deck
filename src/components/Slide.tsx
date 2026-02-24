@@ -2038,7 +2038,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             {/* Left side: diagram column */}
             <div className="w-[46%] flex flex-col items-center">
               {/* Trunk from Cognitory */}
-              <div style={{ width: 1.5, height: 16, backgroundColor: t.accent }} />
+              <div style={{ width: 1.5, height: 40, backgroundColor: t.accent }} />
 
               {/* OpCo row with T-branch connectors built into each cell's border */}
               <div className="flex justify-center gap-0.5 w-full">
