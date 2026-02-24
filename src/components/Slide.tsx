@@ -1771,13 +1771,12 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
         {/* Card grid */}
         <div
-          className={`flex-1 grid gap-2 ${slide.boxes.length === 4 ? 'grid-cols-2' : 'grid-cols-3'}`}
-          style={{ gridTemplateRows: `repeat(${Math.ceil(slide.boxes.length / (slide.boxes.length === 4 ? 2 : 3))}, 1fr)` }}
+          className={`flex-1 grid gap-3 content-center ${slide.boxes.length === 4 ? 'grid-cols-2' : 'grid-cols-3'}`}
         >
           {slide.boxes.map((box, i) => (
             <div
               key={i}
-              className="rounded-lg px-3 py-2 flex flex-col"
+              className="rounded-lg px-4 py-3 flex flex-col"
               style={{
                 backgroundColor: t.cardBg,
                 border: `1.5px solid ${t.tableBorder}`,
