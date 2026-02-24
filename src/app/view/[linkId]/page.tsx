@@ -11,7 +11,7 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
   const [verified, setVerified] = useState(false);
   const [linkStatus, setLinkStatus] = useState<"loading" | "ok" | "disabled">("loading");
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [themeId, setThemeId] = useState("minimal");
+  const [themeId, setThemeId] = useState("aipac");
   const [slideData, setSlideData] = useState(initialSlides);
   const slideStartTime = useRef<number>(Date.now());
   const currentSlideRef = useRef(currentSlide);
@@ -130,6 +130,36 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
     };
   }, [verified, email]);
 
+  // Keyboard navigation (must be before conditional returns to respect Rules of Hooks)
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (!verified) return;
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        setCurrentSlide((prev) => {
+          if (prev > 0) {
+            trackCurrentSlide();
+            slideStartTime.current = Date.now();
+            return prev - 1;
+          }
+          return prev;
+        });
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === " ") {
+        e.preventDefault();
+        setCurrentSlide((prev) => {
+          if (prev < slideData.length - 1) {
+            trackCurrentSlide();
+            slideStartTime.current = Date.now();
+            return prev + 1;
+          }
+          return prev;
+        });
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [slideData.length, verified, email]);
+
   function handleSubmitEmail(e: React.FormEvent) {
     e.preventDefault();
     if (email.includes("@") && email.includes(".")) {
@@ -188,35 +218,6 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
       </div>
     );
   }
-
-  // Keyboard navigation
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
-        e.preventDefault();
-        setCurrentSlide((prev) => {
-          if (prev > 0) {
-            trackCurrentSlide();
-            slideStartTime.current = Date.now();
-            return prev - 1;
-          }
-          return prev;
-        });
-      } else if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === " ") {
-        e.preventDefault();
-        setCurrentSlide((prev) => {
-          if (prev < slideData.length - 1) {
-            trackCurrentSlide();
-            slideStartTime.current = Date.now();
-            return prev + 1;
-          }
-          return prev;
-        });
-      }
-    }
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [slideData.length, verified, email]);
 
   const slide = slideData[currentSlide];
 
