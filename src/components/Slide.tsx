@@ -1994,13 +1994,12 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
         )}
         <AccentBar color={t.accent} className="mb-4" />
 
-        {/* Main diagram area */}
-        <div className="flex-1 flex items-center">
-          <div className="flex w-full gap-0 items-stretch">
-            {/* Left: the org chart diagram */}
-            <div className="flex-[3] flex flex-col items-center gap-0 py-2">
+        {/* Main diagram area — row-based so diagram and boxes align */}
+        <div className="flex-1 flex flex-col justify-center gap-3">
 
-              {/* TOP ROW: Cognitory */}
+          {/* ROW 1: Cognitory + Holding Company description */}
+          <div className="flex items-center gap-0">
+            <div className="flex-[3] flex flex-col items-center">
               <div
                 className="rounded-lg px-6 py-2.5 text-center font-bold text-[15px] tracking-tight"
                 style={{
@@ -2011,82 +2010,15 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
               >
                 {top.label}
               </div>
-
-              {/* Vertical connector */}
-              <svg width="2" height="18">
-                <line x1="1" y1="0" x2="1" y2="18" stroke={t.accent} strokeWidth="1.5" />
+            </div>
+            <div className="flex-[0.6] flex items-center">
+              <svg width="100%" height="2" className="overflow-visible">
+                <line x1="0" y1="1" x2="100%" y2="1" stroke={t.accent} strokeWidth="1.5" strokeDasharray="4,3" />
               </svg>
-
-              {/* MIDDLE ROW: OpCos */}
-              <div className="flex items-start gap-3">
-                {middle.labels.map((label, i) => (
-                  <div key={i} className="flex flex-col items-center">
-                    <div
-                      className="rounded-md px-4 py-2 text-center font-semibold text-[12px]"
-                      style={{
-                        backgroundColor: t.cardBg,
-                        border: `1.5px solid ${t.accent}`,
-                        color: t.heading,
-                        minWidth: 90,
-                      }}
-                    >
-                      {label}
-                    </div>
-
-                    {/* Vertical connector to companies */}
-                    <svg width="2" height="14">
-                      <line x1="1" y1="0" x2="1" y2="14" stroke={t.tableBorder} strokeWidth="1" />
-                    </svg>
-
-                    {/* Companies under this OpCo */}
-                    <div className="flex gap-1.5">
-                      {companyGroups[i]?.map((compName, ci) => (
-                        <div
-                          key={ci}
-                          className="rounded px-2 py-1.5 text-center text-[9px] font-medium"
-                          style={{
-                            backgroundColor: t.cardBg,
-                            border: `1px solid ${t.tableBorder}`,
-                            color: t.subtitle,
-                            minWidth: 42,
-                          }}
-                        >
-                          {compName}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
             </div>
-
-            {/* Middle: connecting lines */}
-            <div className="flex-[0.6] flex flex-col justify-between py-2">
-              {/* Line from HoldCo to its description */}
-              <div className="flex-1 flex items-start pt-3">
-                <svg width="100%" height="2" className="overflow-visible">
-                  <line x1="0" y1="1" x2="100%" y2="1" stroke={t.accent} strokeWidth="1.5" strokeDasharray="4,3" />
-                </svg>
-              </div>
-              {/* Line from OpCos to their description */}
-              <div className="flex-1 flex items-center">
-                <svg width="100%" height="2" className="overflow-visible">
-                  <line x1="0" y1="1" x2="100%" y2="1" stroke={t.accent} strokeWidth="1.5" strokeDasharray="4,3" />
-                </svg>
-              </div>
-              {/* Line from Companies to their description */}
-              <div className="flex-1 flex items-end pb-3">
-                <svg width="100%" height="2" className="overflow-visible">
-                  <line x1="0" y1="1" x2="100%" y2="1" stroke={t.tableBorder} strokeWidth="1.5" strokeDasharray="4,3" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Right: descriptions for each layer */}
-            <div className="flex-[4] flex flex-col justify-between py-0">
-              {/* Top description */}
+            <div className="flex-[4]">
               <div
-                className="rounded-lg px-4 py-3 mb-2"
+                className="rounded-lg px-4 py-3"
                 style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
               >
                 <div className="flex items-center gap-2 mb-1.5">
@@ -2103,10 +2035,46 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                   ))}
                 </ul>
               </div>
+            </div>
+          </div>
 
-              {/* Middle description */}
+          {/* Vertical connector: Cognitory → OpCos */}
+          <div className="flex">
+            <div className="flex-[3] flex justify-center">
+              <svg width="2" height="12">
+                <line x1="1" y1="0" x2="1" y2="12" stroke={t.accent} strokeWidth="1.5" />
+              </svg>
+            </div>
+            <div className="flex-[0.6]" />
+            <div className="flex-[4]" />
+          </div>
+
+          {/* ROW 2: OpCos + Operating Companies description */}
+          <div className="flex items-center gap-0">
+            <div className="flex-[3] flex justify-center gap-3">
+              {middle.labels.map((label, i) => (
+                <div
+                  key={i}
+                  className="rounded-md px-4 py-2 text-center font-semibold text-[12px]"
+                  style={{
+                    backgroundColor: t.cardBg,
+                    border: `1.5px solid ${t.accent}`,
+                    color: t.heading,
+                    minWidth: 90,
+                  }}
+                >
+                  {label}
+                </div>
+              ))}
+            </div>
+            <div className="flex-[0.6] flex items-center">
+              <svg width="100%" height="2" className="overflow-visible">
+                <line x1="0" y1="1" x2="100%" y2="1" stroke={t.accent} strokeWidth="1.5" strokeDasharray="4,3" />
+              </svg>
+            </div>
+            <div className="flex-[4]">
               <div
-                className="rounded-lg px-4 py-2.5 mb-2"
+                className="rounded-lg px-4 py-2.5"
                 style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
               >
                 <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: t.accent }}>
@@ -2116,8 +2084,52 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                   {middle.description}
                 </p>
               </div>
+            </div>
+          </div>
 
-              {/* Bottom description */}
+          {/* Vertical connectors: OpCos → Acquired */}
+          <div className="flex">
+            <div className="flex-[3] flex justify-center gap-3">
+              {middle.labels.map((_, i) => (
+                <div key={i} className="flex justify-center" style={{ minWidth: 90 }}>
+                  <svg width="2" height="10">
+                    <line x1="1" y1="0" x2="1" y2="10" stroke={t.tableBorder} strokeWidth="1" />
+                  </svg>
+                </div>
+              ))}
+            </div>
+            <div className="flex-[0.6]" />
+            <div className="flex-[4]" />
+          </div>
+
+          {/* ROW 3: Acquired companies + Acquired Businesses description */}
+          <div className="flex items-center gap-0">
+            <div className="flex-[3] flex justify-center gap-3">
+              {companyGroups.map((group, gi) => (
+                <div key={gi} className="flex gap-1.5">
+                  {group.map((compName, ci) => (
+                    <div
+                      key={ci}
+                      className="rounded px-2 py-1.5 text-center text-[9px] font-medium"
+                      style={{
+                        backgroundColor: t.cardBg,
+                        border: `1px solid ${t.tableBorder}`,
+                        color: t.subtitle,
+                        minWidth: 42,
+                      }}
+                    >
+                      {compName}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+            <div className="flex-[0.6] flex items-center">
+              <svg width="100%" height="2" className="overflow-visible">
+                <line x1="0" y1="1" x2="100%" y2="1" stroke={t.tableBorder} strokeWidth="1.5" strokeDasharray="4,3" />
+              </svg>
+            </div>
+            <div className="flex-[4]">
               <div
                 className="rounded-lg px-4 py-2.5"
                 style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
@@ -2131,6 +2143,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
               </div>
             </div>
           </div>
+
         </div>
 
         {slide.note && (
