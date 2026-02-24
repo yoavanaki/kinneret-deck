@@ -884,9 +884,10 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 </span>
               </div>
 
-              {/* Arrow down */}
-              <svg width="2" height="12">
-                <line x1="1" y1="0" x2="1" y2="12" stroke={t.accent} strokeWidth="1.5" strokeDasharray="3,2" />
+              {/* Arrow down: manager → AI */}
+              <svg width="12" height="20" viewBox="0 0 12 20">
+                <line x1="6" y1="0" x2="6" y2="14" stroke={t.accent} strokeWidth="1.5" />
+                <path d="M2,12 L6,18 L10,12" fill="none" stroke={t.accent} strokeWidth="1.5" strokeLinejoin="round" />
               </svg>
 
               {/* AI models grid */}
@@ -924,13 +925,9 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
             {/* Arrow connecting AI side to the human employee */}
             <div className="flex items-center mb-[52px]">
-              <svg width="40" height="16">
-                <defs>
-                  <marker id="connArrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                    <path d="M0,0 L6,3 L0,6" fill={t.accent} />
-                  </marker>
-                </defs>
-                <line x1="0" y1="8" x2="34" y2="8" stroke={t.accent} strokeWidth="1.5" markerEnd="url(#connArrow)" />
+              <svg width="50" height="20" viewBox="0 0 50 20">
+                <line x1="0" y1="10" x2="40" y2="10" stroke={t.accent} strokeWidth="1.5" />
+                <path d="M36,5 L44,10 L36,15" fill="none" stroke={t.accent} strokeWidth="1.5" strokeLinejoin="round" />
               </svg>
             </div>
 
@@ -950,19 +947,12 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                   </span>
                 </div>
 
-                {/* Double arrow */}
+                {/* Bidirectional arrow */}
                 <div className="flex flex-col items-center">
-                  <svg width="44" height="18" viewBox="0 0 44 18">
-                    <defs>
-                      <marker id="visionArrowR" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                        <path d="M0,0.5 L5,3 L0,5.5" fill={t.heading} />
-                      </marker>
-                      <marker id="visionArrowL" markerWidth="6" markerHeight="6" refX="1" refY="3" orient="auto">
-                        <path d="M6,0.5 L1,3 L6,5.5" fill={t.heading} />
-                      </marker>
-                    </defs>
-                    <line x1="2" y1="5" x2="36" y2="5" stroke={t.heading} strokeWidth="1.5" markerEnd="url(#visionArrowR)" />
-                    <line x1="42" y1="13" x2="8" y2="13" stroke={t.heading} strokeWidth="1.5" markerEnd="url(#visionArrowL)" />
+                  <svg width="50" height="14" viewBox="0 0 50 14">
+                    <line x1="10" y1="7" x2="40" y2="7" stroke={t.heading} strokeWidth="1.5" />
+                    <path d="M36,3 L42,7 L36,11" fill="none" stroke={t.heading} strokeWidth="1.5" strokeLinejoin="round" />
+                    <path d="M14,3 L8,7 L14,11" fill="none" stroke={t.heading} strokeWidth="1.5" strokeLinejoin="round" />
                   </svg>
                 </div>
 

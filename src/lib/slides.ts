@@ -394,7 +394,7 @@ const slide10: SlideContent = {
   ],
   tableHeaders: ["Sector", "Market Size", "Fragmentation", "Automation Potential", "Trust / Regulatory Moat"],
   tableRows: [
-    ["⭐ Retirement TPA", "$8B+", "High — 5,000+ firms", "Very High", "Strong (ERISA/IRS)"],
+    ["⭐ Retirement TPA", "$8B+", "High — 2,000+ firms", "Very High", "Strong (ERISA/IRS)"],
     ["Financial Services Compliance", "$12B+", "High", "Very High", "Strong (SEC/FINRA)"],
     ["IT Services", "$450B+", "Very High", "High", "Moderate"],
     ["Home Owner Services", "$100B+", "High — mostly local", "High", "Moderate"],
@@ -417,7 +417,7 @@ const slide11: SlideContent = {
   layout: "two-column-boxes",
   stats: [
     { value: "$8B+", label: "Market Size" },
-    { value: "5,000+", label: "TPA Firms" },
+    { value: "2,000+", label: "TPA Firms" },
     { value: "700K+", label: "Plans Administered" },
     { value: "4–6×", label: "Acquisition Multiples" },
   ],
@@ -431,7 +431,7 @@ const slide11: SlideContent = {
   rightColumnTitle: "Why we like it",
   rightBoxes: [
     { icon: "💰", title: "Recurring Revenue", description: "Clients pay annually, year after year —\npredictable, compounding cash flows" },
-    { icon: "🧩", title: "Fragmented Market", description: "5,000+ independent TPAs, most under $5M revenue — cheap to acquire at 4-6x EBITDA" },
+    { icon: "🧩", title: "Fragmented Market", description: "2,000+ independent TPAs, most under $5M revenue — cheap to acquire at 4-6x EBITDA" },
     { icon: "🤖", title: "Automation Ready", description: "80%+ of workflows are rule-based and repetitive — AI can cut cost-to-serve by 50%+" },
     { icon: "📜", title: "SECURE Act 2.0", description: "New legislation expanding plan coverage to millions — growing demand, same supply" },
   ],
@@ -524,7 +524,7 @@ const slide16: SlideContent = {
   number: 14,
   title: "Retirement TPA Industry Overview",
   layout: "two-column",
-  leftText: "MARKET STRUCTURE\n\n• $8B+ total addressable market\n• 5,000+ TPA firms in the U.S.\n• Top 10 firms hold <15% market share\n• Average firm: 10-50 employees\n• 700,000+ retirement plans need administration",
+  leftText: "MARKET STRUCTURE\n\n• $8B+ total addressable market\n• 2,000+ TPA firms in the U.S.\n• Top 10 firms hold <15% market share\n• Average firm: 10-50 employees\n• 700,000+ retirement plans need administration",
   rightText: "KEY DYNAMICS\n\n• Owner-operators are 55-65 years old on average\n• Succession crisis — limited buyer pool\n• SECURE Act 2.0 expanding plan coverage to millions of new participants\n• Technology adoption is 10+ years behind\n• Margins today: 15-25%. Post-automation target: 40-50%",
   note: "The retirement TPA industry is at an inflection point: regulatory expansion is driving demand while the supply side is consolidating.",
 };
