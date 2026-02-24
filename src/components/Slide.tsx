@@ -63,6 +63,23 @@ function SlideNumber({ num, color }: { num: number; color: string }) {
   );
 }
 
+/** Tilted sticker badge — overlaid on the top-right of a slide */
+function StickerBadge({ text, accent }: { text: string; accent: string }) {
+  return (
+    <div
+      className="absolute top-4 right-[-12px] z-10 px-4 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-md"
+      style={{
+        backgroundColor: accent,
+        transform: "rotate(12deg)",
+        borderRadius: 3,
+        letterSpacing: "0.08em",
+      }}
+    >
+      {text}
+    </div>
+  );
+}
+
 /** Short accent bar under a title */
 function AccentBar({ color, className = "" }: { color: string; className?: string }) {
   return (
@@ -797,6 +814,190 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
     );
   }
 
+  // ---- VISION LAYOUT (boxes + org diagram) ----
+  if (slide.layout === "vision" && slide.boxes) {
+    return (
+      <div style={baseStyle} className="flex flex-col p-10 px-12">
+        <EditableText
+          value={slide.title}
+          slideId={slide.id}
+          field="title"
+          editable={editable}
+          onUpdate={onUpdate}
+          tag="h1"
+          className="text-[22px] font-bold mb-1"
+          style={headingStyle}
+        />
+        {slide.subtitle && (
+          <EditableText
+            value={slide.subtitle}
+            slideId={slide.id}
+            field="subtitle"
+            editable={editable}
+            onUpdate={onUpdate}
+            tag="h2"
+            className="text-[11px] mb-3"
+            style={subtitleStyle}
+          />
+        )}
+        <AccentBar color={t.accent} className="mb-4" />
+
+        {/* Three boxes row */}
+        <div className="flex gap-2.5 mb-4">
+          {slide.boxes.map((box, i) => (
+            <div
+              key={i}
+              className="flex-1 rounded-lg px-3 py-2.5 flex flex-col"
+              style={{
+                backgroundColor: t.cardBg,
+                border: `1.5px solid ${t.tableBorder}`,
+              }}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-base leading-none">{box.icon}</span>
+                <span className="text-[11px] font-bold leading-tight" style={{ color: t.heading }}>
+                  {box.title}
+                </span>
+              </div>
+              <span className="text-[9.5px] leading-snug" style={{ color: t.subtitle }}>
+                {box.description}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Diagram: Human overseer → AI models → Human employee ↔ Client */}
+        <div className="flex-1 flex items-center justify-center">
+          <div className="relative flex items-end gap-6">
+            {/* Left side: the "behind the scenes" operation */}
+            <div className="flex flex-col items-center gap-1.5 mb-6">
+              {/* Human manager */}
+              <div className="flex flex-col items-center">
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-lg"
+                  style={{ backgroundColor: t.accent + "20", border: `2px solid ${t.accent}` }}
+                >
+                  🧑‍💼
+                </div>
+                <span className="text-[8px] font-bold mt-1 uppercase tracking-wider" style={{ color: t.accent }}>
+                  Manager
+                </span>
+              </div>
+
+              {/* Arrow down */}
+              <svg width="2" height="12">
+                <line x1="1" y1="0" x2="1" y2="12" stroke={t.accent} strokeWidth="1.5" strokeDasharray="3,2" />
+              </svg>
+
+              {/* AI models grid */}
+              <div
+                className="rounded-xl px-4 py-2.5 flex flex-col items-center gap-1.5"
+                style={{ backgroundColor: t.accent + "08", border: `1.5px dashed ${t.accent}40` }}
+              >
+                <span className="text-[7px] font-bold uppercase tracking-widest" style={{ color: t.accent }}>
+                  AI Workforce
+                </span>
+                <div className="flex gap-1.5">
+                  {Array(4).fill("🤖").map((icon, i) => (
+                    <div
+                      key={i}
+                      className="w-8 h-8 rounded-lg flex items-center justify-center text-sm"
+                      style={{ backgroundColor: t.cardBg, border: `1.5px solid ${t.accent}30` }}
+                    >
+                      {icon}
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-1.5">
+                  {Array(4).fill("🤖").map((icon, i) => (
+                    <div
+                      key={i}
+                      className="w-8 h-8 rounded-lg flex items-center justify-center text-sm"
+                      style={{ backgroundColor: t.cardBg, border: `1.5px solid ${t.accent}30` }}
+                    >
+                      {icon}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Arrow connecting AI side to the human employee */}
+            <div className="flex items-center mb-[52px]">
+              <svg width="40" height="16">
+                <defs>
+                  <marker id="connArrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                    <path d="M0,0 L6,3 L0,6" fill={t.accent} />
+                  </marker>
+                </defs>
+                <line x1="0" y1="8" x2="34" y2="8" stroke={t.accent} strokeWidth="1.5" markerEnd="url(#connArrow)" />
+              </svg>
+            </div>
+
+            {/* Right side: Human employee facing client */}
+            <div className="flex flex-col items-center">
+              <div className="flex items-center gap-4">
+                {/* Human employee */}
+                <div className="flex flex-col items-center">
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center text-xl"
+                    style={{ backgroundColor: t.accent + "18", border: `2.5px solid ${t.accent}` }}
+                  >
+                    🧑
+                  </div>
+                  <span className="text-[8px] font-semibold mt-1" style={{ color: t.heading }}>
+                    Employee
+                  </span>
+                </div>
+
+                {/* Double arrow */}
+                <div className="flex flex-col items-center">
+                  <svg width="44" height="18" viewBox="0 0 44 18">
+                    <defs>
+                      <marker id="visionArrowR" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                        <path d="M0,0.5 L5,3 L0,5.5" fill={t.heading} />
+                      </marker>
+                      <marker id="visionArrowL" markerWidth="6" markerHeight="6" refX="1" refY="3" orient="auto">
+                        <path d="M6,0.5 L1,3 L6,5.5" fill={t.heading} />
+                      </marker>
+                    </defs>
+                    <line x1="2" y1="5" x2="36" y2="5" stroke={t.heading} strokeWidth="1.5" markerEnd="url(#visionArrowR)" />
+                    <line x1="42" y1="13" x2="8" y2="13" stroke={t.heading} strokeWidth="1.5" markerEnd="url(#visionArrowL)" />
+                  </svg>
+                </div>
+
+                {/* Client */}
+                <div className="flex flex-col items-center">
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center text-xl"
+                    style={{ backgroundColor: t.tableHeaderBg, border: `2.5px solid ${t.tableBorder}` }}
+                  >
+                    🧑
+                  </div>
+                  <span className="text-[8px] font-semibold mt-1" style={{ color: t.heading }}>
+                    Client
+                  </span>
+                </div>
+              </div>
+
+              {/* Label underneath */}
+              <div
+                className="mt-2 rounded-md px-3 py-1 text-center"
+                style={{ backgroundColor: t.accent + "12", border: `1.5px solid ${t.accent}30` }}
+              >
+                <span className="text-[8.5px] font-bold uppercase tracking-wider" style={{ color: t.accent }}>
+                  Trust & Client Communications
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <SlideNumber num={slide.number} color={t.subtitle} />
+      </div>
+    );
+  }
+
   // ---- PARALLELS LAYOUT (side-by-side revolution comparison) ----
   if (slide.layout === "parallels" && slide.tableRows && slide.tableHeaders) {
     const leftLabel = slide.tableHeaders[1] || "";
@@ -911,6 +1112,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
     return (
       <div style={baseStyle} className="flex flex-col px-10 pt-8 pb-6">
+        {slide.sticker && <StickerBadge text={slide.sticker} accent={t.accent} />}
         <EditableText
           value={slide.title}
           slideId={slide.id}
@@ -1645,6 +1847,33 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           />
         )}
         <AccentBar color={t.accent} className="mb-5" />
+
+        {/* Optional stats row */}
+        {slide.stats && (
+          <div className="flex gap-2.5 mb-3">
+            {slide.stats.map((stat, i) => (
+              <div
+                key={i}
+                className="flex-1 rounded-lg px-3 py-2 flex flex-col items-center justify-center text-center"
+                style={{
+                  backgroundColor: i === 0 ? t.accent + "15" : t.cardBg,
+                  border: `1.5px solid ${i === 0 ? t.accent + "40" : t.tableBorder}`,
+                }}
+              >
+                <span
+                  className="text-[18px] font-bold leading-none"
+                  style={{ color: i === 0 ? t.accent : t.heading, fontFamily: theme.headingFont }}
+                >
+                  {stat.value}
+                </span>
+                <span className="text-[8px] mt-1 uppercase tracking-wider font-medium" style={{ color: t.subtitle }}>
+                  {stat.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
         <div className="flex-1 flex gap-5">
           {renderColumn(slide.leftColumnTitle || "Left", slide.leftBoxes, false)}
           {renderColumn(slide.rightColumnTitle || "Right", slide.rightBoxes, true)}
@@ -1732,6 +1961,200 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           ))}
           {/* Rows are connected by numbered step indicators */}
         </div>
+        <SlideNumber num={slide.number} color={t.subtitle} />
+      </div>
+    );
+  }
+
+  // ---- HOLDCO ORG CHART LAYOUT ----
+  if (slide.layout === "holdco-org" && slide.orgChart) {
+    const { top, middle, bottom } = slide.orgChart;
+    const opcoCount = middle.labels.length;
+    // Build company labels per opco group
+    const companyGroups = bottom.groups.map((count, gi) =>
+      Array.from({ length: count }, (_, ci) => {
+        const totalBefore = bottom.groups.slice(0, gi).reduce((a, b) => a + b, 0);
+        return `Company ${totalBefore + ci + 1}`;
+      })
+    );
+
+    return (
+      <div style={baseStyle} className="flex flex-col p-10 px-12">
+        <EditableText
+          value={slide.title}
+          slideId={slide.id}
+          field="title"
+          editable={editable}
+          onUpdate={onUpdate}
+          tag="h1"
+          className="text-[22px] font-bold mb-1"
+          style={headingStyle}
+        />
+        {slide.subtitle && (
+          <EditableText
+            value={slide.subtitle}
+            slideId={slide.id}
+            field="subtitle"
+            editable={editable}
+            onUpdate={onUpdate}
+            tag="h2"
+            className="text-[11px] mb-2"
+            style={subtitleStyle}
+          />
+        )}
+        <AccentBar color={t.accent} className="mb-4" />
+
+        {/* Main diagram area */}
+        <div className="flex-1 flex items-center">
+          <div className="flex w-full gap-0 items-stretch">
+            {/* Left: the org chart diagram */}
+            <div className="flex-[3] flex flex-col items-center gap-0 py-2">
+
+              {/* TOP ROW: Cognitory */}
+              <div
+                className="rounded-lg px-6 py-2.5 text-center font-bold text-[15px] tracking-tight"
+                style={{
+                  backgroundColor: t.accent,
+                  color: t.bg,
+                  minWidth: 200,
+                }}
+              >
+                {top.label}
+              </div>
+
+              {/* Vertical connector */}
+              <svg width="2" height="18">
+                <line x1="1" y1="0" x2="1" y2="18" stroke={t.accent} strokeWidth="1.5" />
+              </svg>
+
+              {/* MIDDLE ROW: OpCos */}
+              <div className="flex items-start gap-3">
+                {middle.labels.map((label, i) => (
+                  <div key={i} className="flex flex-col items-center">
+                    <div
+                      className="rounded-md px-4 py-2 text-center font-semibold text-[12px]"
+                      style={{
+                        backgroundColor: t.cardBg,
+                        border: `1.5px solid ${t.accent}`,
+                        color: t.heading,
+                        minWidth: 90,
+                      }}
+                    >
+                      {label}
+                    </div>
+
+                    {/* Vertical connector to companies */}
+                    <svg width="2" height="14">
+                      <line x1="1" y1="0" x2="1" y2="14" stroke={t.tableBorder} strokeWidth="1" />
+                    </svg>
+
+                    {/* Companies under this OpCo */}
+                    <div className="flex gap-1.5">
+                      {companyGroups[i]?.map((compName, ci) => (
+                        <div
+                          key={ci}
+                          className="rounded px-2 py-1.5 text-center text-[9px] font-medium"
+                          style={{
+                            backgroundColor: t.cardBg,
+                            border: `1px solid ${t.tableBorder}`,
+                            color: t.subtitle,
+                            minWidth: 42,
+                          }}
+                        >
+                          {compName}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Middle: connecting lines */}
+            <div className="flex-[0.6] flex flex-col justify-between py-2">
+              {/* Line from HoldCo to its description */}
+              <div className="flex-1 flex items-start pt-3">
+                <svg width="100%" height="2" className="overflow-visible">
+                  <line x1="0" y1="1" x2="100%" y2="1" stroke={t.accent} strokeWidth="1.5" strokeDasharray="4,3" />
+                </svg>
+              </div>
+              {/* Line from OpCos to their description */}
+              <div className="flex-1 flex items-center">
+                <svg width="100%" height="2" className="overflow-visible">
+                  <line x1="0" y1="1" x2="100%" y2="1" stroke={t.accent} strokeWidth="1.5" strokeDasharray="4,3" />
+                </svg>
+              </div>
+              {/* Line from Companies to their description */}
+              <div className="flex-1 flex items-end pb-3">
+                <svg width="100%" height="2" className="overflow-visible">
+                  <line x1="0" y1="1" x2="100%" y2="1" stroke={t.tableBorder} strokeWidth="1.5" strokeDasharray="4,3" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Right: descriptions for each layer */}
+            <div className="flex-[4] flex flex-col justify-between py-0">
+              {/* Top description */}
+              <div
+                className="rounded-lg px-4 py-3 mb-2"
+                style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
+              >
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: t.accent }}>
+                    Holding Company
+                  </span>
+                </div>
+                <ul className="space-y-0.5">
+                  {top.items.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-[11px] leading-snug" style={{ color: t.text }}>
+                      <span className="mt-[5px] w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: t.accent }} />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Middle description */}
+              <div
+                className="rounded-lg px-4 py-2.5 mb-2"
+                style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
+              >
+                <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: t.accent }}>
+                  Operating Companies
+                </span>
+                <p className="text-[11px] leading-snug mt-1" style={{ color: t.text }}>
+                  {middle.description}
+                </p>
+              </div>
+
+              {/* Bottom description */}
+              <div
+                className="rounded-lg px-4 py-2.5"
+                style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
+              >
+                <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: t.accent }}>
+                  Portfolio Companies
+                </span>
+                <p className="text-[11px] leading-snug mt-1" style={{ color: t.text }}>
+                  {bottom.description}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {slide.note && (
+          <NoteBlock
+            value={slide.note}
+            slideId={slide.id}
+            field="note"
+            editable={editable}
+            onUpdate={onUpdate}
+            bg={t.noteBg}
+            fg={t.noteText}
+          />
+        )}
+
         <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );

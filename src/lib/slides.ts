@@ -17,7 +17,7 @@ export interface SlideContent {
   /** Bullet points as an array of strings */
   bullets?: string[];
   /** Layout type determines how the slide renders */
-  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels" | "boxes" | "playbook" | "two-column-boxes";
+  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels" | "boxes" | "playbook" | "two-column-boxes" | "vision" | "holdco-org";
   /** Custom HTML content for special layouts */
   customHtml?: string;
   /** Team members for team layout */
@@ -50,6 +50,8 @@ export interface SlideContent {
   callout?: string;
   /** Footnote text — rendered in very small text at slide bottom */
   footnote?: string;
+  /** Sticker text — rendered as a tilted ribbon/badge on the slide */
+  sticker?: string;
   /** Box cards for boxes layout */
   boxes?: { icon: string; title: string; description: string }[];
   /** Stack diagram layers for stack layout (rendered bottom-to-top) */
@@ -68,6 +70,12 @@ export interface SlideContent {
   rightColumnTitle?: string;
   leftBoxes?: { icon: string; title: string; description: string }[];
   rightBoxes?: { icon: string; title: string; description: string }[];
+  /** Holdco org chart for holdco-org layout */
+  orgChart?: {
+    top: { label: string; items: string[] };
+    middle: { labels: string[]; description: string };
+    bottom: { groups: number[]; description: string };
+  };
 }
 
 // ============================================================
@@ -406,20 +414,26 @@ const slide11: SlideContent = {
   number: 10,
   title: "Our first bet: Retirement TPA",
   subtitle: "Every business with a 401(k) needs a TPA. They can't do it themselves — and they can't stop.",
-  layout: "boxes",
+  layout: "two-column-boxes",
   stats: [
     { value: "$8B+", label: "Market Size" },
     { value: "5,000+", label: "TPA Firms" },
     { value: "700K+", label: "Plans Administered" },
     { value: "4–6×", label: "Acquisition Multiples" },
   ],
-  boxes: [
+  leftColumnTitle: "What is a Retirement TPA?",
+  leftBoxes: [
+    { icon: "📋", title: "Plan Administration", description: "Manages 401(k) and pension plans on behalf of employers — enrollment, distributions, loans" },
+    { icon: "⚖️", title: "Compliance & Testing", description: "Runs IRS-mandated nondiscrimination tests (ADP/ACP, top-heavy) to keep plans legal" },
+    { icon: "🏛️", title: "Government Filings", description: "Prepares Form 5500, 5558 extensions, and Summary Annual Reports for every plan" },
+    { icon: "🔒", title: "Mandatory & Sticky", description: "Federal law requires professional administration — employers can't DIY, and switching is painful" },
+  ],
+  rightColumnTitle: "Why we like it",
+  rightBoxes: [
     { icon: "💰", title: "Recurring Revenue", description: "Clients pay annually, year after year — predictable, compounding cash flows" },
-    { icon: "🔒", title: "Near-Zero Churn", description: "High switching costs make plans extremely sticky" },
-    { icon: "⚖️", title: "Regulatory Mandate", description: "ERISA & IRS rules require professional administration" },
-    { icon: "🧩", title: "Fragmented Market", description: "5,000+ independent TPAs, most under $5M revenue" },
-    { icon: "🤖", title: "Automation Ready", description: "80%+ of workflows are rule-based and repetitive" },
-    { icon: "📜", title: "SECURE Act 2.0", description: "New legislation expanding plan coverage to millions" },
+    { icon: "🧩", title: "Fragmented Market", description: "5,000+ independent TPAs, most under $5M revenue — cheap to acquire at 4-6x EBITDA" },
+    { icon: "🤖", title: "Automation Ready", description: "80%+ of workflows are rule-based and repetitive — AI can cut cost-to-serve by 50%+" },
+    { icon: "📜", title: "SECURE Act 2.0", description: "New legislation expanding plan coverage to millions — growing demand, same supply" },
   ],
 };
 
@@ -528,7 +542,7 @@ const slideCompetitive: SlideContent = {
   tableRows: [
     ["Large Recordkeepers\n(Fidelity, Vanguard, Empower)", "Bundled plan services", "Internal tools only", "Acquire large RKs", "Low — don't serve small plans"],
     ["National TPAs\n(ASC, Pinnacle)", "Traditional TPA", "Minimal", "Organic growth", "Low — no tech DNA"],
-    ["Regional / Local TPAs\n(5,000+ firms)", "Owner-operated", "None", "None — aging owners", "None — these are targets"],
+    ["Regional / Local TPAs", "Owner-operated", "None", "None — aging owners", "None — these are targets"],
     ["Tech Platforms\n(Vestwell, Human Interest)", "Software for advisors", "Workflow tooling", "Not acquiring TPAs", "Medium — different segment"],
     ["PE Rollups\n(Hub, NFP, CBIZ)", "Buy & integrate", "Limited", "Acquire for revenue", "Medium — no automation edge"],
     ["Cognitory", "Acquire + Automate", "AI-native platform", "Buy at 4-6x, automate", "We play to win"],
@@ -578,12 +592,11 @@ const slideFutureBusiness: SlideContent = {
   number: 6,
   title: "What does the business of the future look like?",
   subtitle: "AI collapses the cost of intelligence — the winners will be the ones who redesign the firm around it",
-  layout: "bullets",
-  bullets: [
-    "Most service firms still run on people, email, and spreadsheets",
-    "AI doesn't just assist workers — it replaces entire workflows end-to-end",
-    "The business of the future is a thin management layer on top of autonomous AI agents",
-    "Whoever builds this first in a given vertical owns it",
+  layout: "vision",
+  boxes: [
+    { icon: "📧", title: "People, Email & Spreadsheets", description: "Most service firms still run on manual processes and human labor" },
+    { icon: "🔄", title: "End-to-End Replacement", description: "AI doesn't just assist workers — it replaces entire workflows" },
+    { icon: "🏗️", title: "Thin Management Layer", description: "The business of the future is a small team on top of autonomous AI agents" },
   ],
 };
 
@@ -595,13 +608,28 @@ const slideHoldco: SlideContent = {
   number: 7,
   title: "What we're building: a Holding Company",
   subtitle: "We acquire traditional service firms and transform them into AI-native operations",
-  layout: "bullets",
-  bullets: [
-    "Buy profitable, low-tech service businesses at 4–6× EBITDA",
-    "Deploy our AI platform to automate 60–80% of the work",
-    "Expand margins from ~20% to 40–50% within 18 months",
-    "Repeat across firms and verticals — the playbook is the moat",
-  ],
+  layout: "holdco-org",
+  orgChart: {
+    top: {
+      label: "Cognitory",
+      items: [
+        "Identifies target sectors",
+        "Leverages platform scale to attract top-tier R&D and M&A talent",
+        "Builds tech that is deployable across end markets",
+        "Finances M&A transactions",
+        "Key synergies across legal, accounting, etc. — much of which is automated",
+      ],
+    },
+    middle: {
+      labels: ["OpCo 1", "OpCo 2", "OpCo 3"],
+      description: "Repeatable playbook to build high-margin businesses in fragmented service sectors",
+    },
+    bottom: {
+      groups: [2, 3, 2],
+      description: "Companies acquired through M&A in target services industries",
+    },
+  },
+  note: "Vision: hold acquired companies indefinitely given their strategic value and differentiated performance — but each is managed as independently separable. As EBITDA aggregators, there is a built-in put option to PE, industry aggregators, or strategic buyers.",
 };
 
 // ============================================================
@@ -659,12 +687,12 @@ export const slides: SlideContent[] = [
   slide09,                // 8. Our playbook
   slide10,                // 9. Target industries
   slide11,                // 10. Our first bet: Retirement TPA
-  slide14,                // 11. Why it's attractive
-  slideCompetitive,       // 12. Competitive landscape
-  slide13,                // 13. Jamie slide
-  slide17,                // 14. Automation opps
-  slideGrowth,            // 15. How big can this be
+  slideCompetitive,       // 11. Competitive landscape
+  slide13,                // 12. Jamie slide
+  slide17,                // 13. Automation opps
+  slideGrowth,            // 14. How big can this be
   /* --- commented out slides ---
+  slide14,                // Why Retirement TPA? (merged into first bet slide)
   slide02,                // Team
   slideStack,             // Cognitory platform (stack diagram)
   slideTechOpps,          // Technology Opportunities (two-column-boxes)
