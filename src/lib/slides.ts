@@ -155,7 +155,7 @@ const slideParallels: SlideContent = {
   id: "slide-parallels",
   number: 3,
   title: "History doesn't repeat, but it rhymes",
-  subtitle: "The AI revolution follows the same playbook as the industrial revolution",
+  subtitle: "Every industrial revolution replaces an expensive, variable human input with cheap, scalable infrastructure. Services are next.",
   layout: "parallels",
   tableHeaders: ["", "Industrial Revolution", "AI Revolution"],
   tableRows: [
@@ -166,7 +166,6 @@ const slideParallels: SlideContent = {
     ["Economics", "Cost per widget → inputs + energy", "Cost per decision → compute + energy"],
     ["New Entity", "🏭 The Factory", "The Cognitory 🤖"],
   ],
-  note: "Every industrial revolution replaces an expensive, variable human input with cheap, scalable infrastructure. Services are next.",
 };
 
 // ============================================================
@@ -176,6 +175,7 @@ const slide03: SlideContent = {
   id: "slide-03",
   number: 4,
   title: "Industrial Revolution: Transformation of Production",
+  subtitle: "Mechanized production replaced skilled artisan labor, enabling mass production at dramatically lower cost.",
   layout: "flow",
   flows: {
     before: { label: "Inputs", icon: "🪵", items: ["Raw Materials", "Natural Resources"] },
@@ -183,7 +183,6 @@ const slide03: SlideContent = {
     after: { label: "Outputs", icon: "📦", items: ["Finished Goods", "Physical Products"] },
     replacement: { label: "Factory", icon: "🏭" },
   },
-  note: "Mechanized production replaced skilled artisan labor, enabling mass production at dramatically lower cost.",
 };
 
 // ============================================================
@@ -193,6 +192,7 @@ const slide04: SlideContent = {
   id: "slide-04",
   number: 5,
   title: "AI Revolution: Transformation of Knowledge Work",
+  subtitle: "The middle component — the knowledge worker — is replaced by AI and automation, just as factories replaced artisans.",
   layout: "flow",
   flows: {
     before: { label: "Inputs", icon: "📊", items: ["Data & Information", "Documents & Records"] },
@@ -200,7 +200,6 @@ const slide04: SlideContent = {
     after: { label: "Outputs", icon: "📋", items: ["Decisions & Analysis", "Reports & Content"] },
     replacement: { label: "Cognitory", icon: "🤖" },
   },
-  note: "The middle component — the knowledge worker — is replaced by AI and automation, just as factories replaced artisans.",
 };
 
 // ============================================================
@@ -210,9 +209,9 @@ const slide05: SlideContent = {
   id: "slide-05",
   number: 6,
   title: "White collar services dwarf the technology market",
-  subtitle: "U.S. Gross Output by Industry (Q3 2025, Bureau of Economic Analysis)",
+  subtitle: "White collar services are ~4x larger than the technology sector — and almost none of it runs on automation.",
   layout: "bar-chart",
-  note: "Source: U.S. Bureau of Economic Analysis (Jan 2026). White collar services are ~4x larger than the technology sector — and almost none of it runs on automation.",
+  footnote: "Source: U.S. Bureau of Economic Analysis, U.S. Gross Output by Industry (Q3 2025, Jan 2026)",
   bars: [
     { label: "White Collar Services", value: 11.3, highlight: true },
     { label: "Manufacturing", value: 7.3 },
@@ -342,6 +341,23 @@ const slideTechOpps: SlideContent = {
 };
 
 // ============================================================
+// SLIDE: Why This is the Right Way to Build a Business Today
+// ============================================================
+const slideWhyNow: SlideContent = {
+  id: "slide-why-now",
+  number: 8,
+  title: "Why this is the right way to build a business today",
+  layout: "boxes",
+  boxes: [
+    { icon: "1️⃣", title: "Acquire Distribution Cheaply", description: "Buy existing customer bases at 4-6x EBITDA instead of spending years and millions on sales & marketing to build from scratch" },
+    { icon: "2️⃣", title: "Speed to Economic Value", description: "Efficiency gains from AI hit the P&L immediately — no need to wait for product-market fit or long sales cycles" },
+    { icon: "3️⃣", title: "Real Businesses to Experiment In", description: "Acquired firms are live environments to deploy, test, and iterate on AI — with real clients, real workflows, real feedback" },
+    { icon: "4️⃣", title: "Attractive Risk-Return", description: "Built-in 'put option' — you can always flip to PE if you get stuck. Lower failure probability than venture, but an identical bull case for any given sector" },
+    { icon: "5️⃣", title: "Wrap Your Arms Around Capital", description: "As a holding company, we control the capital allocation across every portfolio company — compounding returns at the entity level" },
+  ],
+};
+
+// ============================================================
 // SLIDE 10: Mission — Acquire → Automate → Expand
 // ============================================================
 const slide08: SlideContent = {
@@ -370,7 +386,7 @@ const slide09: SlideContent = {
     { icon: "🤝", title: "Partner", description: "Recruit industry executive as operating partner" },
     { icon: "🗺️", title: "Map", description: "Map quick-win automation opportunities" },
     { icon: "🏢", title: "Acquire", description: "Buy 3-5 firms at 4-6x EBITDA" },
-    { icon: "⚡", title: "Automate", description: "Deploy AI playbook, expand margins 15-25 pp" },
+    { icon: "⚡", title: "Automate", description: "Deploy AI playbook, expand margins 15-25%" },
     { icon: "📈", title: "Scale", description: "1-3 acquisitions/month + organic growth → tech-level margins with last-mile service" },
   ],
 };
@@ -391,7 +407,6 @@ const slide10: SlideContent = {
     "Rule-based & automatable",
     "Trust or regulatory moat",
     "Low technology adoption",
-    "Under-penetrated, old-school market",
     "End-market growth above GDP (sector tailwinds)",
     "Capital light",
   ],
@@ -405,7 +420,6 @@ const slide10: SlideContent = {
     ["Benefits Administration", "$15B+", "High", "High", "Strong (ERISA/ACA)"],
     ["Insurance Brokerage", "$60B+", "Very High", "High", "Strong"],
     ["Legal Services", "$350B+", "Extreme", "Medium-High", "Strong (Bar/Court)"],
-    ["Environmental Services", "$60B+", "High", "High", "Strong (EPA)"],
   ],
 };
 
@@ -433,7 +447,7 @@ const slide11: SlideContent = {
   ],
   rightColumnTitle: "Why we like it",
   rightBoxes: [
-    { icon: "💰", title: "Recurring Revenue", description: "Clients pay annually, year after year —\npredictable,\ncompounding cash flows" },
+    { icon: "💰", title: "Recurring Revenue", description: "Clients pay annually, year after year — generating predictable, compounding cash flows" },
     { icon: "🧩", title: "Fragmented Market", description: "2,000+ independent TPAs, most under $5M revenue — cheap to acquire at 4-6x EBITDA" },
     { icon: "🤖", title: "Automation Ready", description: "80%+ of workflows are rule-based and repetitive — AI can cut cost-to-serve by 50%+" },
     { icon: "📜", title: "SECURE Act 2.0", description: "New legislation expanding plan coverage to millions — growing demand, same supply" },
@@ -466,9 +480,15 @@ const slide12: SlideContent = {
 const slide13: SlideContent = {
   id: "slide-13",
   number: 12,
-  title: "Jamie Kalamarides — Chairman",
+  title: "Partnered with top-tier retirement professional",
+  subtitle: "Jamie Kalamarides",
   layout: "text",
   imageUrl: "/team/kalamarides.jpg",
+  stats: [
+    { value: "$5T", label: "Life Insurance Managed" },
+    { value: "$285B", label: "Retirement Assets" },
+    { value: "Top 10", label: "U.S. Financial Institution" },
+  ],
   body: "Jamie brings 20+ years of senior leadership at Prudential Financial, where he served as President of Group Insurance and Head of Institutional Retirement Plan Services, overseeing billions in plan assets.\n\nHe was a key expert to the SECURE Act, testifying before the U.S. Senate Finance, HELP, and Aging Committees on retirement policy. He is a nonresident fellow at the Bipartisan Policy Center.\n\nJamie's deep domain expertise in retirement services — combined with his relationships across the industry — gives Cognitory a unique advantage in building trust with acquisition targets and navigating the regulatory landscape.",
 };
 
@@ -584,7 +604,7 @@ const slide17: SlideContent = {
     ["Plan Document Generation", "3", "Admin", "$40", "90%", "$54,000"],
     ["Required Notices & Disclosures", "2", "Admin", "$35", "75%", "$26,250"],
   ],
-  callout: "Implied margin expansion: ~20pp ($400K savings on $2M revenue across ~500 clients)",
+  callout: "Implied margin expansion: ~20% ($400K savings on $2M revenue across ~500 clients)",
   footnote: 'Source: 144-process inventory mapped at partner TPA (230 plans). 62 of 144 processes rated "Easy" automation. Census: offshore team averages 3 plans/day vs. 8-10 target. 5558 extensions: "nearly zero judgment — prime batch candidate." Trust reconciliation: #1 identified target.',
 };
 
@@ -688,7 +708,8 @@ export const slides: SlideContent[] = [
   slide05,                // 5. White collar services market size
   // slideFutureBusiness,    // 6. What does the business of the future look like
   slideHoldco,            // 7. What we're building: a Holding Company
-  slide09,                // 8. Our playbook
+  slideWhyNow,            // 8. Why this is the right way to build a business
+  slide09,                // 9. Our playbook
   slide10,                // 9. Target industries
   slide11,                // 10. Our first bet: Retirement TPA
   slideCompetitive,       // 11. Competitive landscape
