@@ -224,16 +224,8 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
   // Presentation viewer
   return (
     <div className="h-screen bg-gray-900 flex flex-col overflow-hidden">
-      {/* Top bar */}
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-800 text-white shrink-0">
-        <span className="text-sm font-medium">Cognitory Deck</span>
-        <span className="text-sm text-gray-400">
-          {currentSlide + 1} / {slideData.length}
-        </span>
-      </div>
-
       {/* Slide */}
-      <div className="flex-1 flex flex-col items-center justify-center p-4 min-h-0">
+      <div className="flex-1 flex flex-col items-center justify-center px-2 pt-2 pb-1 min-h-0">
         <div ref={containerRef} className="flex-1 w-full flex items-center justify-center min-h-0">
           <div className="shadow-2xl rounded-lg overflow-hidden" style={{ width: 960 * slideScale, height: 540 * slideScale }}>
             <Slide slide={slide} theme={theme} scale={slideScale} />
@@ -241,23 +233,24 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
         </div>
 
         {/* Navigation */}
-        <div className="flex items-center gap-4 mt-3 shrink-0">
+        <div className="flex items-center gap-4 mt-1.5 shrink-0">
           <button
             onClick={() => goToSlide(Math.max(0, currentSlide - 1))}
             disabled={currentSlide === 0}
-            className="px-4 py-2 bg-gray-700 text-white rounded-lg text-sm disabled:opacity-30 hover:bg-gray-600"
+            className="px-3 py-1.5 bg-gray-700 text-white rounded-lg text-xs disabled:opacity-30 hover:bg-gray-600"
           >
-            ← Previous
+            ←
           </button>
 
           {/* Slide dots */}
-          <div className="flex gap-1">
+          <div className="flex items-center gap-1">
+            <span className="text-[10px] text-gray-500 mr-1">{currentSlide + 1}/{slideData.length}</span>
             {slideData.map((_, i) => (
               <button
                 key={i}
                 onClick={() => goToSlide(i)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  i === currentSlide ? "bg-blue-500 w-4" : "bg-gray-600 hover:bg-gray-500"
+                className={`w-1.5 h-1.5 rounded-full transition-all ${
+                  i === currentSlide ? "bg-blue-500 w-3" : "bg-gray-600 hover:bg-gray-500"
                 }`}
               />
             ))}
@@ -266,9 +259,9 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
           <button
             onClick={() => goToSlide(Math.min(slideData.length - 1, currentSlide + 1))}
             disabled={currentSlide === slideData.length - 1}
-            className="px-4 py-2 bg-gray-700 text-white rounded-lg text-sm disabled:opacity-30 hover:bg-gray-600"
+            className="px-3 py-1.5 bg-gray-700 text-white rounded-lg text-xs disabled:opacity-30 hover:bg-gray-600"
           >
-            Next →
+            →
           </button>
         </div>
 
