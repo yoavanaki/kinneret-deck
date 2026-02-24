@@ -346,14 +346,13 @@ const slideTechOpps: SlideContent = {
 const slideWhyNow: SlideContent = {
   id: "slide-why-now",
   number: 8,
-  title: "Why this is the right way to build a business today",
+  title: "Why HoldCo is the right model",
   layout: "boxes",
   boxes: [
     { icon: "1️⃣", title: "Acquire Distribution Cheaply", description: "Buy existing customer bases at 4-6x EBITDA instead of spending years and millions on sales & marketing to build from scratch" },
     { icon: "2️⃣", title: "Speed to Economic Value", description: "Efficiency gains from AI hit the P&L immediately — no need to wait for product-market fit or long sales cycles" },
-    { icon: "3️⃣", title: "Real Businesses to Experiment In", description: "Acquired firms are live environments to deploy, test, and iterate on AI — with real clients, real workflows, real feedback" },
-    { icon: "4️⃣", title: "Attractive Risk-Return", description: "Built-in 'put option' — you can always flip to PE if you get stuck. Lower failure probability than venture, but an identical bull case for any given sector" },
-    { icon: "5️⃣", title: "Wrap Your Arms Around Capital", description: "As a holding company, we control the capital allocation across every portfolio company — compounding returns at the entity level" },
+    { icon: "3️⃣", title: "Real Businesses to Experiment In", description: "Acquired firms are live environments to deploy, test, and iterate on AI — with real clients, real workflows, and real data" },
+    { icon: "4️⃣", title: "Attractive Risk-Return", description: "Built-in put option — businesses can get acquired by PE or strategics if needed. Lower failure probability than venture but with phenomenal potential upside" },
   ],
 };
 

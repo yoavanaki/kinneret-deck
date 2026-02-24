@@ -332,6 +332,11 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
         {slide.note && (
           <NoteBlock value={slide.note} slideId={slide.id} field="note" editable={editable} onUpdate={onUpdate} bg={t.noteBg} fg={t.noteText} />
         )}
+        {slide.footnote && (
+          <p className="slide-footnote mt-auto pt-1" style={{ color: t.subtitle }}>
+            {slide.footnote}
+          </p>
+        )}
         <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
@@ -463,6 +468,18 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           className="text-[22px] font-bold mb-1 text-center"
           style={headingStyle}
         />
+        {slide.subtitle && (
+          <EditableText
+            value={slide.subtitle}
+            slideId={slide.id}
+            field="subtitle"
+            editable={editable}
+            onUpdate={onUpdate}
+            tag="h2"
+            className="text-sm mb-2 text-center"
+            style={subtitleStyle}
+          />
+        )}
         <AccentBar color={t.accent} className="mx-auto mb-5" />
         <div className="flex-1 flex flex-col items-center justify-center gap-4">
           {/* Flow row */}
@@ -666,7 +683,43 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           className="text-[22px] font-bold mb-1"
           style={headingStyle}
         />
-        <AccentBar color={t.accent} className="mb-5" />
+        {slide.subtitle && (
+          <EditableText
+            value={slide.subtitle}
+            slideId={slide.id}
+            field="subtitle"
+            editable={editable}
+            onUpdate={onUpdate}
+            tag="h2"
+            className="text-sm mb-2"
+            style={subtitleStyle}
+          />
+        )}
+        <AccentBar color={t.accent} className="mb-4" />
+        {slide.stats && (
+          <div className="flex gap-3 mb-4">
+            {slide.stats.map((stat, i) => (
+              <div
+                key={i}
+                className="flex-1 rounded-lg px-3 py-2 flex flex-col items-center justify-center text-center"
+                style={{
+                  backgroundColor: i === 0 ? t.accent + "15" : t.cardBg,
+                  border: `1.5px solid ${i === 0 ? t.accent + "40" : t.tableBorder}`,
+                }}
+              >
+                <span
+                  className="text-lg font-bold leading-none"
+                  style={{ color: i === 0 ? t.accent : t.heading, fontFamily: theme.headingFont }}
+                >
+                  {stat.value}
+                </span>
+                <span className="text-[8px] mt-1 uppercase tracking-wider font-medium" style={{ color: t.subtitle }}>
+                  {stat.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
         <div className={`flex ${slide.imageUrl ? "gap-8" : ""} flex-1`}>
           {slide.imageUrl && (
             <div className="flex-shrink-0">
@@ -1125,7 +1178,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             style={subtitleStyle}
           />
         )}
-        <AccentBar color={t.accent} className="mb-4" />
+        <AccentBar color={t.accent} className={slide.stats ? "mb-4" : "mb-6"} />
         {slide.stats && (
           <div className="flex gap-3 mb-3">
             {slide.pieChart && (() => {
@@ -1324,7 +1377,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
         )}
         {slide.callout && (
           <div
-            className="mt-3 px-4 py-2.5 rounded-lg text-center"
+            className="mt-2 px-4 py-2 rounded-lg text-center"
             style={{
               backgroundColor: t.accent + "12",
               border: `1.5px solid ${t.accent}40`,
@@ -1343,7 +1396,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           </div>
         )}
         {slide.footnote && (
-          <p className="slide-footnote mt-auto pt-2" style={{ color: t.subtitle }}>
+          <p className="slide-footnote mt-auto pt-1" style={{ color: t.subtitle }}>
             {slide.footnote}
           </p>
         )}
@@ -1718,8 +1771,8 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
         {/* Card grid */}
         <div
-          className="flex-1 grid grid-cols-3 gap-2"
-          style={{ gridTemplateRows: `repeat(${Math.ceil(slide.boxes.length / 3)}, 1fr)` }}
+          className={`flex-1 grid gap-2 ${slide.boxes.length === 4 ? 'grid-cols-2' : 'grid-cols-3'}`}
+          style={{ gridTemplateRows: `repeat(${Math.ceil(slide.boxes.length / (slide.boxes.length === 4 ? 2 : 3))}, 1fr)` }}
         >
           {slide.boxes.map((box, i) => (
             <div
