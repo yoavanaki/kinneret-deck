@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getComments, addComment } from "@/lib/store";
+import { getComments, addComment, deleteAllComments } from "@/lib/store";
 import { v4 as uuid } from "uuid";
 
 export async function GET(req: NextRequest) {
   const slideId = req.nextUrl.searchParams.get("slideId") || undefined;
   const comments = await getComments(slideId);
   return NextResponse.json(comments);
+}
+
+export async function DELETE() {
+  await deleteAllComments();
+  return NextResponse.json({ ok: true });
 }
 
 export async function POST(req: NextRequest) {

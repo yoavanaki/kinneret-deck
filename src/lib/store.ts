@@ -154,6 +154,15 @@ export async function addComment(comment: Comment): Promise<Comment> {
   return comment;
 }
 
+export async function deleteAllComments(): Promise<void> {
+  if (!useDB()) {
+    writeFileStore((d) => ({ ...d, comments: [] }));
+    return;
+  }
+  await initDB();
+  await sql`DELETE FROM comments`;
+}
+
 // ---- Share Links ----
 export async function getShareLink(id: string): Promise<ShareLink | null> {
   if (!useDB()) {
