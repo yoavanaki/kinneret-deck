@@ -1995,11 +1995,11 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
         <AccentBar color={t.accent} className="mb-4" />
 
         {/* Main diagram area — row-based so diagram and boxes align */}
-        <div className="flex-1 flex flex-col justify-center gap-3">
+        <div className="flex-1 flex flex-col justify-center gap-2">
 
           {/* ROW 1: Cognitory + Holding Company description */}
           <div className="flex items-center gap-0">
-            <div className="flex-[3] flex flex-col items-center">
+            <div className="w-[46%] flex flex-col items-center">
               <div
                 className="rounded-lg px-6 py-2.5 text-center font-bold text-[15px] tracking-tight"
                 style={{
@@ -2011,12 +2011,12 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 {top.label}
               </div>
             </div>
-            <div className="flex-[0.6] flex items-center">
+            <div className="w-[4%] flex items-center">
               <svg width="100%" height="2" className="overflow-visible">
                 <line x1="0" y1="1" x2="100%" y2="1" stroke={t.accent} strokeWidth="1.5" strokeDasharray="4,3" />
               </svg>
             </div>
-            <div className="flex-[4]">
+            <div className="w-[50%]">
               <div
                 className="rounded-lg px-4 py-3"
                 style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
@@ -2040,18 +2040,16 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
           {/* Vertical connector: Cognitory → OpCos */}
           <div className="flex">
-            <div className="flex-[3] flex justify-center">
+            <div className="w-[46%] flex justify-center">
               <svg width="2" height="12">
                 <line x1="1" y1="0" x2="1" y2="12" stroke={t.accent} strokeWidth="1.5" />
               </svg>
             </div>
-            <div className="flex-[0.6]" />
-            <div className="flex-[4]" />
           </div>
 
           {/* ROW 2: OpCos + Operating Companies description */}
           <div className="flex items-center gap-0">
-            <div className="flex-[3] flex justify-center gap-3">
+            <div className="w-[46%] flex justify-center gap-3">
               {middle.labels.map((label, i) => (
                 <div
                   key={i}
@@ -2067,12 +2065,12 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 </div>
               ))}
             </div>
-            <div className="flex-[0.6] flex items-center">
+            <div className="w-[4%] flex items-center">
               <svg width="100%" height="2" className="overflow-visible">
                 <line x1="0" y1="1" x2="100%" y2="1" stroke={t.accent} strokeWidth="1.5" strokeDasharray="4,3" />
               </svg>
             </div>
-            <div className="flex-[4]">
+            <div className="w-[50%]">
               <div
                 className="rounded-lg px-4 py-2.5"
                 style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
@@ -2089,7 +2087,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
           {/* Vertical connectors: OpCos → Acquired */}
           <div className="flex">
-            <div className="flex-[3] flex justify-center gap-3">
+            <div className="w-[46%] flex justify-center gap-3">
               {middle.labels.map((_, i) => (
                 <div key={i} className="flex justify-center" style={{ minWidth: 90 }}>
                   <svg width="2" height="10">
@@ -2098,38 +2096,52 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 </div>
               ))}
             </div>
-            <div className="flex-[0.6]" />
-            <div className="flex-[4]" />
           </div>
 
-          {/* ROW 3: Acquired companies + Acquired Businesses description */}
+          {/* ROW 3: Acquired companies (2 rows) + Acquired Businesses description */}
           <div className="flex items-center gap-0">
-            <div className="flex-[3] flex justify-center gap-3">
-              {companyGroups.map((group, gi) => (
-                <div key={gi} className="flex gap-1.5">
-                  {group.map((compName, ci) => (
-                    <div
-                      key={ci}
-                      className="rounded px-2 py-1.5 text-center text-[9px] font-medium"
-                      style={{
-                        backgroundColor: t.cardBg,
-                        border: `1px solid ${t.tableBorder}`,
-                        color: t.subtitle,
-                        minWidth: 42,
-                      }}
-                    >
-                      {compName}
-                    </div>
-                  ))}
-                </div>
-              ))}
+            <div className="w-[46%] flex flex-col items-center gap-1.5">
+              {/* Row 1 of acquired companies */}
+              <div className="flex justify-center gap-1.5">
+                {companyGroups.flat().slice(0, 4).map((compName, ci) => (
+                  <div
+                    key={ci}
+                    className="rounded px-2 py-1.5 text-center text-[9px] font-medium"
+                    style={{
+                      backgroundColor: t.cardBg,
+                      border: `1px solid ${t.tableBorder}`,
+                      color: t.subtitle,
+                      minWidth: 42,
+                    }}
+                  >
+                    {compName}
+                  </div>
+                ))}
+              </div>
+              {/* Row 2 of acquired companies */}
+              <div className="flex justify-center gap-1.5">
+                {companyGroups.flat().slice(4).map((compName, ci) => (
+                  <div
+                    key={ci}
+                    className="rounded px-2 py-1.5 text-center text-[9px] font-medium"
+                    style={{
+                      backgroundColor: t.cardBg,
+                      border: `1px solid ${t.tableBorder}`,
+                      color: t.subtitle,
+                      minWidth: 42,
+                    }}
+                  >
+                    {compName}
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="flex-[0.6] flex items-center">
+            <div className="w-[4%] flex items-center">
               <svg width="100%" height="2" className="overflow-visible">
                 <line x1="0" y1="1" x2="100%" y2="1" stroke={t.tableBorder} strokeWidth="1.5" strokeDasharray="4,3" />
               </svg>
             </div>
-            <div className="flex-[4]">
+            <div className="w-[50%]">
               <div
                 className="rounded-lg px-4 py-2.5"
                 style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
