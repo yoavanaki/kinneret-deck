@@ -161,9 +161,9 @@ const slideParallels: SlideContent = {
   tableRows: [
     ["Scarce Resource", "Energy", "Intelligence"],
     ["Breakthrough", "Steam Engine", "Large Language Models"],
-    ["Infrastructure", "Railroads & Factories", "Cloud & Data Centers"],
+    ["Infrastructure", "Railroads & Power Grid", "Cloud & Data Centers"],
     ["Disrupts", "Manual Labor", "Knowledge Work"],
-    ["Economics", "Cost per widget → $0", "Cost per decision → $0"],
+    ["Economics", "Cost per widget → inputs + energy", "Cost per decision → compute + energy"],
     ["New Entity", "🏭 The Factory", "The Cognitory 🤖"],
   ],
   note: "Every industrial revolution replaces an expensive, variable human input with cheap, scalable infrastructure. Services are next.",
@@ -371,7 +371,7 @@ const slide09: SlideContent = {
     { icon: "🗺️", title: "Map", description: "Map quick-win automation opportunities" },
     { icon: "🏢", title: "Acquire", description: "Buy 3-5 firms at 4-6x EBITDA" },
     { icon: "⚡", title: "Automate", description: "Deploy AI playbook, expand margins 15-25 pp" },
-    { icon: "📈", title: "Scale", description: "Roll up adjacent firms with automation edge" },
+    { icon: "📈", title: "Scale", description: "1-3 acquisitions/month + organic growth → tech-level margins with last-mile service" },
   ],
 };
 
@@ -391,11 +391,14 @@ const slide10: SlideContent = {
     "Rule-based & automatable",
     "Trust or regulatory moat",
     "Low technology adoption",
+    "Under-penetrated, old-school market",
+    "End-market growth above GDP (sector tailwinds)",
+    "Capital light",
   ],
   tableHeaders: ["Sector", "Market Size", "Fragmentation", "Automation Potential", "Trust / Regulatory Moat"],
   tableRows: [
-    ["⭐ Retirement TPA", "$8B+", "High — 2,000+ firms", "Very High", "Strong (ERISA/IRS)"],
-    ["Financial Services Compliance", "$12B+", "High", "Very High", "Strong (SEC/FINRA)"],
+    ["⭐ Retirement TPA", "$8B+", "Very High — 2,000+ firms", "Very High", "Strong (ERISA/IRS)"],
+    ["Financial Services Compliance", "$12B+", "High", "Very High", "Moderate"],
     ["IT Services", "$450B+", "Very High", "High", "Moderate"],
     ["Home Owner Services", "$100B+", "High — mostly local", "High", "Moderate"],
     ["Medical Billing", "$15B+", "High", "Very High", "Strong (HIPAA/CMS)"],
@@ -430,7 +433,7 @@ const slide11: SlideContent = {
   ],
   rightColumnTitle: "Why we like it",
   rightBoxes: [
-    { icon: "💰", title: "Recurring Revenue", description: "Clients pay annually, year after year —\npredictable, compounding cash flows" },
+    { icon: "💰", title: "Recurring Revenue", description: "Clients pay annually, year after year —\npredictable,\ncompounding cash flows" },
     { icon: "🧩", title: "Fragmented Market", description: "2,000+ independent TPAs, most under $5M revenue — cheap to acquire at 4-6x EBITDA" },
     { icon: "🤖", title: "Automation Ready", description: "80%+ of workflows are rule-based and repetitive — AI can cut cost-to-serve by 50%+" },
     { icon: "📜", title: "SECURE Act 2.0", description: "New legislation expanding plan coverage to millions — growing demand, same supply" },
@@ -544,7 +547,7 @@ const slideCompetitive: SlideContent = {
     ["National TPAs\n(ASC, Pinnacle)", "Traditional TPA", "Minimal", "Organic growth", "Low — no tech DNA"],
     ["Regional / Local TPAs", "Owner-operated", "None", "None — aging owners", "None — these are targets"],
     ["Tech Platforms\n(Vestwell, Human Interest)", "Software for advisors", "Workflow tooling", "Not acquiring TPAs", "Medium — different segment"],
-    ["PE Rollups\n(Hub, NFP, CBIZ)", "Buy & integrate", "Limited", "Acquire for revenue", "Medium — no automation edge"],
+    ["PE Rollups\n(Definiti, Strongpoint)", "Buy & integrate", "Limited", "Acquire for revenue", "Medium — no automation edge"],
     ["Cognitory", "Acquire + Automate", "AI-native platform", "Buy at 4-6x, automate", "We play to win"],
   ],
   callout: "Most competitors are either technology companies that don't acquire, or acquirers that don't automate. Cognitory is uniquely positioned to do both.",
@@ -562,8 +565,8 @@ const slide17: SlideContent = {
   stats: [
     { value: "144", label: "Processes Mapped" },
     { value: "62", label: "Quick Wins" },
-    { value: "12,000+", label: "Hours Saved / Year" },
-    { value: "$419K", label: "EBITDA Expansion" },
+    { value: "11,550", label: "Hours Saved / Year" },
+    { value: "+50%", label: "EBITDA Expansion" },
   ],
   tableHeaders: [
     "Process",
@@ -574,13 +577,14 @@ const slide17: SlideContent = {
     "Annual Savings (500 plans)",
   ],
   tableRows: [
-    ["Census Collection & Scrubbing", "10", "Bangladesh + Admin", "$25", "85%", "$106,250"],
+    ["Census Collection & Scrubbing", "10", "Outsource + Admin", "$25", "75%", "$93,750"],
     ["Form 5500 & 5558 Filing", "6", "Admin", "$40", "90%", "$108,000"],
-    ["Trust Reconciliation", "4", "Admin", "$40", "80%", "$64,000"],
-    ["Compliance Test Data Entry", "4", "Admin", "$40", "85%", "$68,000"],
-    ["Plan Document Generation", "3", "Admin", "$40", "75%", "$45,000"],
-    ["Required Notices & Disclosures", "2", "Admin", "$35", "80%", "$28,000"],
+    ["Trust Reconciliation", "4", "Admin", "$40", "75%", "$60,000"],
+    ["Compliance Test Data Entry", "4", "Admin", "$40", "75%", "$60,000"],
+    ["Plan Document Generation", "3", "Admin", "$40", "90%", "$54,000"],
+    ["Required Notices & Disclosures", "2", "Admin", "$35", "75%", "$26,250"],
   ],
+  callout: "Implied margin expansion: ~20pp ($400K savings on $2M revenue across ~500 clients)",
   footnote: 'Source: 144-process inventory mapped at partner TPA (230 plans). 62 of 144 processes rated "Easy" automation. Census: offshore team averages 3 plans/day vs. 8-10 target. 5558 extensions: "nearly zero judgment — prime batch candidate." Trust reconciliation: #1 identified target.',
 };
 
@@ -607,7 +611,7 @@ const slideHoldco: SlideContent = {
   id: "slide-holdco",
   number: 7,
   title: "What we're building: a Holding Company",
-  subtitle: "We acquire traditional service firms and transform them into AI-native operations",
+  subtitle: "We acquire sub-scale, traditional, white collar service firms and transform them into AI-native, high-margin businesses",
   layout: "holdco-org",
   orgChart: {
     top: {
@@ -617,7 +621,7 @@ const slideHoldco: SlideContent = {
         "Leverages platform scale to attract top-tier R&D and M&A talent",
         "Builds tech that is deployable across end markets",
         "Finances M&A transactions",
-        "Key synergies across legal, accounting, etc. — much of which is automated",
+        "Centralizes and automates back-office functions (legal, accounting, HR)",
       ],
     },
     middle: {
@@ -690,8 +694,8 @@ export const slides: SlideContent[] = [
   slideCompetitive,       // 11. Competitive landscape
   slide13,                // 12. Jamie slide
   slide17,                // 13. Automation opps
-  slideGrowth,            // 14. How big can this be
   /* --- commented out slides ---
+  slideGrowth,            // How big can this be
   slide14,                // Why Retirement TPA? (merged into first bet slide)
   slide02,                // Team
   slideStack,             // Cognitory platform (stack diagram)
