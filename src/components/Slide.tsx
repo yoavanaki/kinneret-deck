@@ -1974,7 +1974,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
     const companyGroups = bottom.groups.map((count, gi) =>
       Array.from({ length: count }, (_, ci) => {
         const totalBefore = bottom.groups.slice(0, gi).reduce((a, b) => a + b, 0);
-        return `Company ${totalBefore + ci + 1}`;
+        return `Acquired Co ${totalBefore + ci + 1}`;
       })
     );
 
@@ -2133,7 +2133,7 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
               >
                 <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: t.accent }}>
-                  Portfolio Companies
+                  Acquired Businesses
                 </span>
                 <p className="text-[11px] leading-snug mt-1" style={{ color: t.text }}>
                   {bottom.description}
