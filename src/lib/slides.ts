@@ -686,7 +686,7 @@ export const slides: SlideContent[] = [
   slide03,                // 3. Industrial Revolution
   slide04,                // 4. AI Revolution
   slide05,                // 5. White collar services market size
-  slideFutureBusiness,    // 6. What does the business of the future look like
+  // slideFutureBusiness,    // 6. What does the business of the future look like
   slideHoldco,            // 7. What we're building: a Holding Company
   slide09,                // 8. Our playbook
   slide10,                // 9. Target industries
