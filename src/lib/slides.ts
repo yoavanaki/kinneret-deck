@@ -17,7 +17,7 @@ export interface SlideContent {
   /** Bullet points as an array of strings */
   bullets?: string[];
   /** Layout type determines how the slide renders */
-  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels" | "boxes" | "playbook";
+  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels" | "boxes" | "playbook" | "two-column-boxes";
   /** Custom HTML content for special layouts */
   customHtml?: string;
   /** Team members for team layout */
@@ -44,6 +44,8 @@ export interface SlideContent {
   stats?: { value: string; label: string }[];
   /** Pie chart segments for inline pie charts */
   pieChart?: { label: string; value: number; color?: string }[];
+  /** Optional portrait / headshot image URL */
+  imageUrl?: string;
   /** Callout box text — rendered as a highlighted banner */
   callout?: string;
   /** Footnote text — rendered in very small text at slide bottom */
@@ -61,6 +63,11 @@ export interface SlideContent {
   }[];
   /** Holdco-level AI agents (shown as a separate diagram alongside stack) */
   holdcoAgents?: { label: string; icon: string; description?: string }[];
+  /** Two-column-boxes layout: column titles and box arrays */
+  leftColumnTitle?: string;
+  rightColumnTitle?: string;
+  leftBoxes?: { icon: string; title: string; description: string }[];
+  rightBoxes?: { icon: string; title: string; description: string }[];
 }
 
 // ============================================================
@@ -302,7 +309,32 @@ const slideStack: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 9: Mission — Acquire → Automate → Expand
+// SLIDE 9: Technology Opportunities (AI Agents)
+// ============================================================
+const slideTechOpps: SlideContent = {
+  id: "slide-tech-opps",
+  number: 8,
+  title: "Technology Opportunities",
+  subtitle: "Proactive AI agents that handle both general and domain-specific work",
+  layout: "two-column-boxes",
+  leftColumnTitle: "Portfolio Agent",
+  leftBoxes: [
+    { icon: "📧", title: "Email & Communications", description: "Reads, drafts, and sends client correspondence autonomously" },
+    { icon: "📅", title: "Scheduling & Coordination", description: "Manages calendars, meetings, and follow-ups" },
+    { icon: "✅", title: "Compliance Testing", description: "Runs ADP/ACP, coverage, and top-heavy tests" },
+    { icon: "🏛️", title: "Government Filings", description: "Prepares Form 5500, 5558 extensions, and SARs" },
+  ],
+  rightColumnTitle: "Holdco Agents",
+  rightBoxes: [
+    { icon: "🔎", title: "Sourcing", description: "Identifies acquisition targets across broker networks and databases" },
+    { icon: "📧", title: "Outreach", description: "Personalized multi-channel outreach to owner-operators" },
+    { icon: "📊", title: "Diligence", description: "Analyzes financials, compliance history, and automation fit" },
+    { icon: "🔗", title: "Integration", description: "Onboards acquired firms onto the Cognitory platform" },
+  ],
+};
+
+// ============================================================
+// SLIDE 10: Mission — Acquire → Automate → Expand
 // ============================================================
 const slide08: SlideContent = {
   id: "slide-08",
@@ -346,24 +378,23 @@ const slide10: SlideContent = {
   layout: "table",
   bullets: [
     "High fragmentation",
-    "Rule-based workflows",
     "Recurring revenue",
-    "Regulatory moat",
-    "Aging owner-operators",
+    "Large market",
+    "Rule-based & automatable",
+    "Trust or regulatory moat",
     "Low technology adoption",
-    "Clear path to AI automation",
-    "Defensible competitive position",
   ],
-  tableHeaders: ["Sector", "Market Size", "Fragmentation", "Automation Potential", "Regulatory Moat"],
+  tableHeaders: ["Sector", "Market Size", "Fragmentation", "Automation Potential", "Trust / Regulatory Moat"],
   tableRows: [
-    ["Retirement TPA", "$8B+", "High — 5,000+ firms", "Very High", "Strong (ERISA/IRS)"],
-    ["Payroll Services", "$25B+", "High — 10,000+ firms", "Very High", "Strong (IRS/DOL)"],
-    ["IRA Administration", "$3B+", "High", "High", "Strong (IRS)"],
-    ["Property Management", "$100B+", "High — mostly local", "High", "Moderate"],
-    ["Insurance Brokerage", "$60B+", "Very High", "High", "Strong"],
-    ["Accounting / Bookkeeping", "$150B+", "Extreme — 90k+ firms", "Medium-High", "Moderate (CPA)"],
+    ["⭐ Retirement TPA", "$8B+", "High — 5,000+ firms", "Very High", "Strong (ERISA/IRS)"],
+    ["Financial Services Compliance", "$12B+", "High", "Very High", "Strong (SEC/FINRA)"],
+    ["IT Services", "$450B+", "Very High", "High", "Moderate"],
+    ["Home Owner Services", "$100B+", "High — mostly local", "High", "Moderate"],
+    ["Medical Billing", "$15B+", "High", "Very High", "Strong (HIPAA/CMS)"],
     ["Benefits Administration", "$15B+", "High", "High", "Strong (ERISA/ACA)"],
-    ["Staffing / Recruiting", "$200B+", "High", "Medium", "Low"],
+    ["Insurance Brokerage", "$60B+", "Very High", "High", "Strong"],
+    ["Legal Services", "$350B+", "Extreme", "Medium-High", "Strong (Bar/Court)"],
+    ["Environmental Services", "$60B+", "High", "High", "Strong (EPA)"],
   ],
 };
 
@@ -420,6 +451,7 @@ const slide13: SlideContent = {
   number: 12,
   title: "Jamie Kalamarides — Chairman",
   layout: "text",
+  imageUrl: "/team/kalamarides.jpg",
   body: "Jamie brings 20+ years of senior leadership at Prudential Financial, where he served as President of Group Insurance and Head of Institutional Retirement Plan Services, overseeing billions in plan assets.\n\nHe was a key expert to the SECURE Act, testifying before the U.S. Senate Finance, HELP, and Aging Committees on retirement policy. He is a nonresident fellow at the Bipartisan Policy Center.\n\nJamie's deep domain expertise in retirement services — combined with his relationships across the industry — gives Cognitory a unique advantage in building trust with acquisition targets and navigating the regulatory landscape.",
 };
 
@@ -539,7 +571,64 @@ const slide17: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 20: Fundraise
+// SLIDE: What does the business of the future look like?
+// ============================================================
+const slideFutureBusiness: SlideContent = {
+  id: "slide-future-business",
+  number: 6,
+  title: "What does the business of the future look like?",
+  subtitle: "AI collapses the cost of intelligence — the winners will be the ones who redesign the firm around it",
+  layout: "bullets",
+  bullets: [
+    "Most service firms still run on people, email, and spreadsheets",
+    "AI doesn't just assist workers — it replaces entire workflows end-to-end",
+    "The business of the future is a thin management layer on top of autonomous AI agents",
+    "Whoever builds this first in a given vertical owns it",
+  ],
+};
+
+// ============================================================
+// SLIDE: What we're building — a Holding Company
+// ============================================================
+const slideHoldco: SlideContent = {
+  id: "slide-holdco",
+  number: 7,
+  title: "What we're building: a Holding Company",
+  subtitle: "We acquire traditional service firms and transform them into AI-native operations",
+  layout: "bullets",
+  bullets: [
+    "Buy profitable, low-tech service businesses at 4–6× EBITDA",
+    "Deploy our AI platform to automate 60–80% of the work",
+    "Expand margins from ~20% to 40–50% within 18 months",
+    "Repeat across firms and verticals — the playbook is the moat",
+  ],
+};
+
+// ============================================================
+// SLIDE 20: Growth Potential
+// ============================================================
+const slideGrowth: SlideContent = {
+  id: "slide-growth",
+  number: 18,
+  title: "How big can this be?",
+  subtitle: "The playbook scales from one vertical to an entire economy of services",
+  layout: "boxes",
+  stats: [
+    { value: "$8B", label: "Phase 1: Retirement TPA" },
+    { value: "$51B", label: "Phase 2: Adjacent Verticals" },
+    { value: "$400B+", label: "Phase 3: All White Collar Services" },
+  ],
+  boxes: [
+    { icon: "🏁", title: "Year 1–3: Prove the Model", description: "Acquire 5-10 TPAs, deploy automation, expand margins from ~20% to 40-50%" },
+    { icon: "🔁", title: "Year 3–5: Replicate", description: "Enter payroll ($25B), benefits admin ($15B), and IRA services ($3B) using the same playbook" },
+    { icon: "🌐", title: "Year 5–10: Platform Play", description: "License the Cognitory platform to PE rollups and service firms across insurance, accounting, legal, and beyond" },
+    { icon: "📐", title: "The Math", description: "10 verticals × $500M revenue each = $5B revenue platform at 50%+ margins. Every vertical we enter compounds the automation advantage." },
+  ],
+  note: "The Cognitory platform is vertical-agnostic by design. Every new vertical reuses 80% of the existing infrastructure — only the domain-specific agents change.",
+};
+
+// ============================================================
+// SLIDE 21: Fundraise
 // ============================================================
 const slide18: SlideContent = {
   id: "slide-18",
@@ -560,10 +649,32 @@ const slide18: SlideContent = {
 // ALL SLIDES - exported as a single array
 // ============================================================
 export const slides: SlideContent[] = [
-  slide01, slide02, slideParallels, slide03, slide04,
-  slide05, slideStack, slide09,
-  slide10, slide11, slide12, slide13,
-  slide15, slide16, slideCompetitive, slide17, slide18,
+  slide01,                // 1. Title slide
+  slideParallels,         // 2. History doesn't repeat itself
+  slide03,                // 3. Industrial Revolution
+  slide04,                // 4. AI Revolution
+  slide05,                // 5. White collar services market size
+  slideFutureBusiness,    // 6. What does the business of the future look like
+  slideHoldco,            // 7. What we're building: a Holding Company
+  slide09,                // 8. Our playbook
+  slide10,                // 9. Target industries
+  slide11,                // 10. Our first bet: Retirement TPA
+  slide14,                // 11. Why it's attractive
+  slideCompetitive,       // 12. Competitive landscape
+  slide13,                // 13. Jamie slide
+  slide17,                // 14. Automation opps
+  slideGrowth,            // 15. How big can this be
+  /* --- commented out slides ---
+  slide02,                // Team
+  slideStack,             // Cognitory platform (stack diagram)
+  slideTechOpps,          // Technology Opportunities (two-column-boxes)
+  slide08,                // Building the world's first services factories
+  slide06,                // Service factories are highly generalizable
+  slide12,                // What does a TPA do?
+  slide15,                // Current M&A Pipeline
+  slide16,                // Retirement TPA Industry Overview
+  slide18,                // Raising $10M
+  */
 ];
 
 // ============================================================
