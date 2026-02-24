@@ -413,7 +413,7 @@ const slide11: SlideContent = {
   id: "slide-11",
   number: 10,
   title: "Our first bet: Retirement TPA",
-  subtitle: "Every business with a 401(k) needs a TPA. They can't do it themselves — and they can't stop.",
+  subtitle: "Every business needs a retirement TPA to help set up, manage and audit their employees' retirement plans.",
   layout: "two-column-boxes",
   stats: [
     { value: "$8B+", label: "Market Size" },
@@ -430,7 +430,7 @@ const slide11: SlideContent = {
   ],
   rightColumnTitle: "Why we like it",
   rightBoxes: [
-    { icon: "💰", title: "Recurring Revenue", description: "Clients pay annually, year after year — predictable, compounding cash flows" },
+    { icon: "💰", title: "Recurring Revenue", description: "Clients pay annually, year after year —\npredictable, compounding cash flows" },
     { icon: "🧩", title: "Fragmented Market", description: "5,000+ independent TPAs, most under $5M revenue — cheap to acquire at 4-6x EBITDA" },
     { icon: "🤖", title: "Automation Ready", description: "80%+ of workflows are rule-based and repetitive — AI can cut cost-to-serve by 50%+" },
     { icon: "📜", title: "SECURE Act 2.0", description: "New legislation expanding plan coverage to millions — growing demand, same supply" },
