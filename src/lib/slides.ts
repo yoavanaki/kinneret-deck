@@ -17,7 +17,7 @@ export interface SlideContent {
   /** Bullet points as an array of strings */
   bullets?: string[];
   /** Layout type determines how the slide renders */
-  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels" | "boxes" | "playbook" | "two-column-boxes" | "vision" | "holdco-org";
+  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels" | "boxes" | "playbook" | "two-column-boxes" | "vision" | "holdco-org" | "rollup-model";
   /** Custom HTML content for special layouts */
   customHtml?: string;
   /** Team members for team layout */
@@ -70,6 +70,13 @@ export interface SlideContent {
   rightColumnTitle?: string;
   leftBoxes?: { icon: string; title: string; description: string }[];
   rightBoxes?: { icon: string; title: string; description: string }[];
+  /** Rollup model for rollup-model layout */
+  rollupModel?: {
+    targets: { name: string; revenue: string; ebitda: string; margin: string; highlight?: boolean; buyNote?: string }[];
+    steps: string[];
+    result: { name: string; revenue: string; highlights: string[] };
+    dealStructure: string[];
+  };
   /** Holdco org chart for holdco-org layout */
   orgChart?: {
     top: { label: string; items: string[] };
@@ -102,19 +109,8 @@ const slide02: SlideContent = {
   layout: "team",
   team: [
     {
-      name: "Yoav Segev",
-      role: "Business",
-      bio: "Economics @ Oxford University\nConsultant at BCG\nBusiness Services Investor at Charlesbank\nIncubated Compliance Consulting firm\nMBA @ HBS",
-      imageUrl: "/team/segev.jpeg",
-      logos: [
-        { name: "HBS", imageUrl: "/logos/hbs.svg" },
-        { name: "BCG", imageUrl: "/logos/bcg.svg" },
-        { name: "Charlesbank", imageUrl: "/logos/charlesbank.svg" },
-      ],
-    },
-    {
       name: "Yoav Anaki",
-      role: "Business",
+      role: "",
       bio: "Computer Science age 13\nCOO at Mad Mimi, acquired by GoDaddy\nIDF Counterterrorism Investigations\nPartner, AI at Fresh Fund\nMBA @ HBS",
       imageUrl: "/team/anaki.jpeg",
       logos: [
@@ -124,25 +120,36 @@ const slide02: SlideContent = {
       ],
     },
     {
-      name: "Eran Pinhas",
-      role: "Tech",
-      bio: "CTO & Co-Founder of Ginzi (AI Support Automation)\nPrincipal Software Engineer at Axonius\nFull-stack & AI/ML systems\nOpen-source contributor\nCS @ Ben-Gurion University",
-      imageUrl: "/team/pinhas.jpg",
+      name: "Yoav Segev",
+      role: "",
+      bio: "Economics @ Oxford University\nConsultant at BCG\nBusiness Services Investor at Charlesbank\nIncubated Compliance Consulting firm\nMBA @ HBS",
+      imageUrl: "/team/segev.jpeg",
       logos: [
-        { name: "IDF 8200", imageUrl: "/logos/idf8200.svg" },
-        { name: "Ben Gurion Uni", imageUrl: "/logos/bgu.svg" },
-        { name: "Axonius", imageUrl: "/logos/axonius.png" },
+        { name: "HBS", imageUrl: "/logos/hbs.svg" },
+        { name: "BCG", imageUrl: "/logos/bcg.svg" },
+        { name: "Charlesbank", imageUrl: "/logos/charlesbank.svg" },
       ],
     },
     {
       name: "Jamie Kalamarides",
-      role: "Retirement",
+      role: "",
       bio: "President, Group Insurance at Prudential Financial\nHead of Institutional Retirement Plan Services\nExpert witness, U.S. Senate (SECURE Act)\nFellow, Bipartisan Policy Center\nMBA @ Tuck",
       imageUrl: "/team/kalamarides.jpg",
       logos: [
         { name: "Dartmouth", imageUrl: "/logos/dartmouth.svg" },
         { name: "US Gov", imageUrl: "/logos/usgov.svg" },
         { name: "Prudential", imageUrl: "/logos/prudential.png" },
+      ],
+    },
+    {
+      name: "Eran Pinhas",
+      role: "",
+      bio: "CTO & Co-Founder of Ginzi (AI Support Automation)\nPrincipal Software Engineer at Axonius\nFull-stack & AI/ML systems\nOpen-source contributor\nCS @ Ben-Gurion University",
+      imageUrl: "/team/pinhas.jpg",
+      logos: [
+        { name: "IDF 8200", imageUrl: "/logos/idf8200.svg" },
+        { name: "Ben Gurion Uni", imageUrl: "/logos/bgu.svg" },
+        { name: "Axonius", imageUrl: "/logos/axonius.png" },
       ],
     },
   ],
@@ -220,7 +227,7 @@ const slide05: SlideContent = {
     { label: "Healthcare", value: 3.9 },
     { label: "Wholesale Trade", value: 3.2 },
     { label: "Retail Trade", value: 3.0 },
-    { label: "Technology", value: 2.9 },
+    { label: "Technology", value: 2.9, highlight: true },
     { label: "Construction", value: 2.5 },
     { label: "Transportation", value: 1.9 },
   ],
@@ -348,6 +355,7 @@ const slideWhyNow: SlideContent = {
   number: 8,
   title: "Why HoldCo is the right model",
   layout: "boxes",
+  body: "Our software stack is reusable across industries. AI agents source companies, conduct outreach, run diligence, support acquisitions, and integrate businesses. Additional software oversees and manages agent-driven operations inside portfolio companies. Because the stack and playbook are reusable, the model expands into adjacent fragmented service industries — making a multi-industry roll-up strategy logical and scalable.",
   boxes: [
     { icon: "1️⃣", title: "Acquire Distribution Cheaply", description: "Buy existing customer bases at 4-6x EBITDA instead of spending years and millions on sales & marketing to build from scratch" },
     { icon: "2️⃣", title: "Speed to Economic Value", description: "Efficiency gains from AI hit the P&L immediately — no need to wait for product-market fit or long sales cycles" },
@@ -381,13 +389,53 @@ const slide09: SlideContent = {
   title: "The Playbook",
   layout: "playbook",
   boxes: [
-    { icon: "🔍", title: "Scout", description: "Identify high-fragmentation services sector" },
-    { icon: "🤝", title: "Partner", description: "Recruit industry executive as operating partner" },
-    { icon: "🗺️", title: "Map", description: "Map quick-win automation opportunities" },
-    { icon: "🏢", title: "Acquire", description: "Buy 3-5 firms at 4-6x EBITDA" },
-    { icon: "⚡", title: "Automate", description: "Deploy AI playbook, expand margins 15-25%" },
-    { icon: "📈", title: "Scale", description: "1-3 acquisitions/month + organic growth → tech-level margins with last-mile service" },
+    { icon: "🔍", title: "Plan", description: "Identify a highly fragmented services sector with sticky, recurring revenue" },
+    { icon: "🤝", title: "Partner", description: "Recruit an industry-specific operating partner (experienced industry executive)" },
+    { icon: "🗺️", title: "Map the Market", description: "Map the entire industry and identify initial acquisition opportunities and automation opportunities" },
+    { icon: "🏢", title: "Acquire Platform", description: "Acquire one well-operated platform company" },
+    { icon: "⚡", title: "Automate", description: "Build the AI automation playbook for the platform: expand workforce capacity (~50%), automate operational workflows, improve margins" },
+    { icon: "🔄", title: "Roll-In Acquisitions", description: "Acquire additional firms (3–5 total) at ~4–6× EBITDA and integrate them into the platform" },
+    { icon: "📊", title: "Demonstrate Expansion", description: "Show EBITDA expansion driven by automation, increased capacity, and operational leverage" },
+    { icon: "📈", title: "Scale", description: "Accelerate acquisition pace to ~2 acquisitions per month alongside organic growth" },
   ],
+};
+
+// ============================================================
+// SLIDE: How Acquisitions Work — Rollup Model
+// ============================================================
+const slideRollupModel: SlideContent = {
+  id: "slide-rollup-model",
+  number: 9,
+  title: "How Acquisitions Work",
+  subtitle: "Buy adjacent firms, roll up operations, expand margins with AI",
+  layout: "rollup-model",
+  rollupModel: {
+    targets: [
+      { name: "TPA 1 — Platform", revenue: "$2.0M", ebitda: "$700K", margin: "35%", highlight: true, buyNote: "Buy at 4.5× EBITDA ($3.2M) · 12 employees" },
+      { name: "TPA 2 — Tuck-in", revenue: "$1.8M", ebitda: "$250K", margin: "14%", buyNote: "Buy at 4.4× EBITDA ($1.1M) · 10 employees" },
+    ],
+    steps: [
+      "Deploy AI to expand TPA 1 capacity",
+      "Gradually roll TPA 2 clients into TPA 1",
+      "Gradually wind down TPA 2 operations",
+    ],
+    result: {
+      name: "Combined Entity",
+      revenue: "$3.8M",
+      highlights: [
+        "EBITDA: ~$2.0M (53% margin)",
+        "Headcount: ~14 (from 22)",
+        "AI handles volume expansion",
+        "TPA 2 cost structure eliminated",
+      ],
+    },
+    dealStructure: [
+      "Refinancing",
+      "Performance-based compensation incentives",
+      "Minimal upfront capital required",
+      "In some cases, equity rolls into Cognitory",
+    ],
+  },
 };
 
 // ============================================================
@@ -697,11 +745,29 @@ const slide18: SlideContent = {
 
 
 // ============================================================
+// SLIDE: TLDR
+// ============================================================
+const slideTldr: SlideContent = {
+  id: "slide-tldr",
+  number: 2,
+  title: "TLDR",
+  layout: "bullets",
+  bullets: [
+    "Rolling up businesses in retirement administration — hyper-fragmented, sticky revenue",
+    "Pipeline of 40+ businesses, 5 in LOI stage",
+    "Will close on $5M in ARR at Seed",
+    "EBITDA expansion potential to 70%",
+    "Vision: expand AI-centric rollup playbook (agentic sourcing, DD tooling, integration) to adjacent verticals, building a holdco with multiple rollups",
+  ],
+};
+
+// ============================================================
 // ALL SLIDES - exported as a single array
 // ============================================================
 export const slides: SlideContent[] = [
   slide01,                // 1. Title slide
-  slideParallels,         // 2. History doesn't repeat itself
+  slideTldr,              // 2. TLDR
+  slideParallels,         // 3. History doesn't repeat itself
   slide03,                // 3. Industrial Revolution
   slide04,                // 4. AI Revolution
   slide05,                // 5. White collar services market size
@@ -709,15 +775,16 @@ export const slides: SlideContent[] = [
   slideHoldco,            // 7. What we're building: a Holding Company
   slideWhyNow,            // 8. Why this is the right way to build a business
   slide09,                // 9. Our playbook
-  slide10,                // 9. Target industries
+  slideRollupModel,       // 10. How acquisitions work
+  slide10,                // 11. Target industries
   slide11,                // 10. Our first bet: Retirement TPA
   slideCompetitive,       // 11. Competitive landscape
   slide13,                // 12. Jamie slide
   slide17,                // 13. Automation opps
+  slide02,                // Team
   /* --- commented out slides ---
   slideGrowth,            // How big can this be
   slide14,                // Why Retirement TPA? (merged into first bet slide)
-  slide02,                // Team
   slideStack,             // Cognitory platform (stack diagram)
   slideTechOpps,          // Technology Opportunities (two-column-boxes)
   slide08,                // Building the world's first services factories

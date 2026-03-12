@@ -1,0 +1,135 @@
+[   83685ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/comments?slideId=slide-12:0
+[   84598ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/1e4436cbfe7a7b24.webpack.hot-update.json:0
+[  111355ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<SegmentViewNode>} forbidden={undefined} ...>
+      <RedirectBoundary>
+        <RedirectErrorBoundary router={{...}}>
+          <InnerLayoutRouter url="/" tree={[...]} cacheNode={{lazyData:null, ...}} segmentPath={[...]}>
+            <SegmentViewNode type="page" pagePath="page.tsx">
+              <SegmentTrieNode>
+              <ClientPageRoot Component={function Home} searchParams={{}} params={{}}>
+                <Home params={Promise} searchParams={Promise}>
+                  <div className="h-screen b...">
+                    <ThemePicker>
+                    <div>
+                    <div className="flex-1 fle...">
+                      <div>
+                      <div ref={{current:null}} className="flex-1 fle...">
+                        <div className="shadow-2xl..." style={{width:960, ...}}>
+                          <Slide slide={{id:"slide-01", ...}} theme={{id:"minimal", ...}} editable={true} ...>
+                            <div style={{...}} className="flex flex-...">
+                              <div className="mb-1">
+                                <EditableText value="Cognitory" slideId="slide-01" field="title" editable={true} ...>
+                                  <h1
+                                    className="text-6xl font-bold outline-none cursor-text hover:ring-2 hover:ring-blu..."
+                                    style={{
++                                     fontFamily: "'Inter', sans-serif"
++                                     color: "#111827"
+-                                     color: "rgb(17, 24, 39)"
++                                     letterSpacing: "-0.02em"
+-                                     font-family: "Inter, sans-serif"
+-                                     letter-spacing: "-0.02em"
+                                    }}
+                                    contentEditable={true}
+                                    suppressContentEditableWarning={true}
+                                    onBlur={function onBlur}
+                                    dangerouslySetInnerHTML={{__html:"Cognitory"}}
+                                  >
+                              <EditableText value="/ˈkɒɡ.nɪ.t..." slideId="slide-01" field="subtitle" editable={true} ...>
+                                <div
+                                  className="mb-4 text-xl outline-none cursor-text hover:ring-2 hover:ring-blue-300 fo..."
+                                  style={{
++                                   color: "#6b7280"
+-                                   color: "rgb(107, 114, 128)"
++                                   fontFamily: "monospace"
+-                                   font-family: "monospace"
+                                  }}
+                                  contentEditable={true}
+                                  suppressContentEditableWarning={true}
+                                  onBlur={function onBlur}
+                                  dangerouslySetInnerHTML={{__html:"/ˈkɒɡ.nɪ.t..."}}
+                                >
+                              <EditableText value="noun" slideId="slide-01" field="body" editable={true} ...>
+                                <div
+                                  className="text-sm font-semibold uppercase tracking-widest mb-3 outline-none cursor-..."
+                                  style={{
++                                   color: "#2563eb"
+-                                   color: "rgb(37, 99, 235)"
+                                  }}
+                                  contentEditable={true}
+                                  suppressContentEditableWarning={true}
+                                  onBlur={function onBlur}
+                                  dangerouslySetInnerHTML={{__html:"noun"}}
+                                >
+                              <div className="border-t pt-4" style={{...}}>
+                                <EditableText value="A facility..." slideId="slide-01" field="customHtml" editable={true} ...>
+                                  <p
+                                    className="text-xl leading-relaxed outline-none cursor-text hover:ring-2 hover:rin..."
+                                    style={{
++                                     color: "#374151"
+-                                     color: "rgb(55, 65, 81)"
+                                    }}
+                                    contentEditable={true}
+                                    suppressContentEditableWarning={true}
+                                    onBlur={function onBlur}
+                                    dangerouslySetInnerHTML={{__html:"A facility..."}}
+                                  >
+                              ...
+                        ...
+                      <div className="w-80 bg-wh...">
+                        <Comments slideId="slide-01" theme="light" onCommentPosted={function refreshCommentCounts}>
+                          <div className="flex flex-...">
+                            <div>
+                            <div>
+                            <div className="p-3 border...">
+                              <input
+                                placeholder="Your name"
+                                value=""
+                                onChange={function onChange}
+                                className="w-full px-3 py-1.5 rounded text-xs mb-2 bg-gray-50 border-gray-200 border"
+-                               style={{}}
+                              >
+                              <div className="flex gap-2">
+                                <textarea
+                                  placeholder="Add a comment..."
+                                  value=""
+                                  onChange={function onChange}
+                                  onKeyDown={function onKeyDown}
+                                  rows={2}
+                                  className="flex-1 px-3 py-1.5 rounded text-sm resize-none bg-gray-50 border-gray-200..."
+-                                 style={{}}
+                                >
+                                ...
+            ...
+          ...
+ @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[ 1761752ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/css/app/layout.css?v=1771809446718:0
+[ 1762175ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/chunks/main-app.js?v=1771809446718:0
+[ 1762175ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/chunks/app-pages-internals.js:0
+[ 1765594ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/css/app/layout.css?v=1771809451197:0
+[ 1765670ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/chunks/main-app.js?v=1771809451197:0
+[ 1765726ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/chunks/app-pages-internals.js:0
+[ 1766187ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/favicon.ico:0
+[ 1774940ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/css/app/layout.css?v=1771809460373:0
+[ 1775136ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/chunks/main-app.js?v=1771809460373:0
+[ 1775136ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/chunks/app-pages-internals.js:0
+[ 1775229ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/favicon.ico:0
+[ 1777226ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/css/app/layout.css?v=1771809462888:0
+[ 1777361ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/chunks/main-app.js?v=1771809462888:0
+[ 1777361ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/chunks/app-pages-internals.js:0
+[ 1777567ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/favicon.ico:0
+[ 1780543ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/css/app/layout.css?v=1771809466125:0
+[ 1780644ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/chunks/main-app.js?v=1771809466125:0
+[ 1780644ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/chunks/app-pages-internals.js:0

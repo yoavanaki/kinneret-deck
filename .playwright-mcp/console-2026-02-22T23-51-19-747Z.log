@@ -1,0 +1,8 @@
+[   43190ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/css/app/layout.css?v=1771804319406:0
+[   43717ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/c318b6c1a180ac51.webpack.hot-update.json:0
+[   46913ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/c318b6c1a180ac51.webpack.hot-update.json:0
+[   47119ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1771804319406 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/:0
+[   47834ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/c318b6c1a180ac51.webpack.hot-update.json:0
+[   54311ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/c318b6c1a180ac51.webpack.hot-update.json:0
+[   54470ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/c318b6c1a180ac51.webpack.hot-update.json:0
+[   54953ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/:0

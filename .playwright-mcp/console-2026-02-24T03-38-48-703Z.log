@@ -1,0 +1,7 @@
+[   10462ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/favicon.ico:0
+[   46837ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/4f6a14cdfa93769d.webpack.hot-update.json:0
+[   53146ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/4f6a14cdfa93769d.webpack.hot-update.json:0
+[   56017ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/4f6a14cdfa93769d.webpack.hot-update.json:0
+[   90400ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/4f6a14cdfa93769d.webpack.hot-update.json:0
+[  108426ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/4f6a14cdfa93769d.webpack.hot-update.json:0
+[  123296ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/:0

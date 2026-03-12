@@ -1,0 +1,70 @@
+[   26884ms] Error: Hydration failed because the server rendered text didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <SegmentViewNode type="page" pagePath="page.tsx">
+      <SegmentTrieNode>
+      <ClientPageRoot Component={function Home} searchParams={{}} params={{}}>
+        <Home params={Promise} searchParams={Promise}>
+          <div className="h-screen b...">
+            <ThemePicker>
+            <div>
+            <div className="flex-1 fle...">
+              <div className="w-48 bg-wh...">
+                <div>
+                <div>
+                <div>
+                <div>
+                <div>
+                <div>
+                <div>
+                <div>
+                <div>
+                <div>
+                <div>
+                <div>
+                <div>
+                <div>
+                <div>
+                <div>
+                <div>
+                <div>
+                  <button draggable={true} onDragStart={function onDragStart} onDragOver={function onDragOver} ...>
+                    <div className="relative" style={{width:"100%", ...}}>
+                      <div className="absolute i...">
+                        <Slide slide={{id:"slide-...", ...}} theme={{id:"minimal", ...}} scale={0.18}>
+                          <div style={{...}} className="flex flex-...">
+                            <EditableText>
+                            <EditableText>
+                            <AccentBar>
+                            <EditableText value={"Most com..."} slideId="slide-comp..." field="note" editable={undefined} ...>
+                              <p className="text-[11px] mb-2" style={{color:"#6b7280"}}>
++                               ...utomate.
+-                               ...utomate. Cognitory is uniquely positioned to do both.
+                            ...
+                    ...
+                ...
+                ...
+              ...
+    ...
+
+    at throwOnHydrationMismatch (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:4506:11)
+    at prepareToHydrateHostInstance (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:4602:21)
+    at completeWork (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:11635:15)
+    at runWithFiberInDEV (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:872:30)
+    at completeUnitOfWork (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:15863:19)
+    at performUnitOfWork (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:15744:11)
+    at workLoopSync (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:15547:41)
+    at renderRootSync (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:15527:11)
+    at performWorkOnRoot (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:14991:13)
+    at performWorkOnRootViaSchedulerTask (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:16816:7)
+    at MessagePort.performWorkUntilDeadline (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/scheduler/cjs/scheduler.development.js:45:48)

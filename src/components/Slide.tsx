@@ -6,49 +6,25 @@ import { Theme } from "@/lib/themes";
 interface SlideProps {
   slide: SlideContent;
   theme: Theme;
-  editable?: boolean;
-  onUpdate?: (slideId: string, field: string, value: string) => void;
   scale?: number;
 }
 
 function EditableText({
   value,
-  slideId,
-  field,
-  editable,
-  onUpdate,
   className,
   style,
   tag: Tag = "div",
 }: {
   value: string;
-  slideId: string;
-  field: string;
+  slideId?: string;
+  field?: string;
   editable?: boolean;
   onUpdate?: (slideId: string, field: string, value: string) => void;
   className?: string;
   style?: React.CSSProperties;
   tag?: "h1" | "h2" | "h3" | "p" | "div" | "span" | "li";
 }) {
-  if (!editable) {
-    return <Tag className={className} style={style}>{value}</Tag>;
-  }
-
-  return (
-    <Tag
-      className={`${className} outline-none cursor-text hover:ring-2 hover:ring-blue-300 focus:ring-2 focus:ring-blue-500 rounded px-1 -mx-1`}
-      style={style}
-      contentEditable
-      suppressContentEditableWarning
-      onBlur={(e) => {
-        const newValue = (e.target as HTMLElement).innerText;
-        if (newValue !== value && onUpdate) {
-          onUpdate(slideId, field, newValue);
-        }
-      }}
-      dangerouslySetInnerHTML={{ __html: value }}
-    />
-  );
+  return <Tag className={className} style={style}>{value}</Tag>;
 }
 
 /** Slide number badge - bottom right of every slide */
@@ -92,49 +68,27 @@ function AccentBar({ color, className = "" }: { color: string; className?: strin
 
 /** Footnote / note block used consistently */
 function NoteBlock({
-  value, slideId, field, editable, onUpdate, bg, fg,
+  value, bg, fg,
 }: {
-  value: string; slideId: string; field: string;
+  value: string; slideId?: string; field?: string;
   editable?: boolean; onUpdate?: (slideId: string, field: string, value: string) => void;
   bg: string; fg: string;
 }) {
   return (
     <div className="mt-auto px-4 py-2.5 rounded-md text-[11px] leading-relaxed" style={{ backgroundColor: bg, color: fg }}>
-      <EditableText
-        value={value}
-        slideId={slideId}
-        field={field}
-        editable={editable}
-        onUpdate={onUpdate}
-        tag="span"
-        className=""
-      />
+      <span>{value}</span>
     </div>
   );
 }
 
 /** Parse a two-column text block with section headers + bullet lines */
 function ColumnContent({
-  text, slideId, field, editable, onUpdate, accentColor, headingColor, textColor,
+  text, accentColor, textColor,
 }: {
-  text: string; slideId: string; field: string;
+  text: string; slideId?: string; field?: string;
   editable?: boolean; onUpdate?: (slideId: string, field: string, value: string) => void;
-  accentColor: string; headingColor: string; textColor: string;
+  accentColor: string; headingColor?: string; textColor: string;
 }) {
-  if (editable) {
-    return (
-      <EditableText
-        value={text}
-        slideId={slideId}
-        field={field}
-        editable={editable}
-        onUpdate={onUpdate}
-        tag="div"
-        className="text-sm leading-relaxed whitespace-pre-line"
-      />
-    );
-  }
-
   const lines = text.split("\n");
   return (
     <div className="flex flex-col gap-1">
@@ -173,7 +127,10 @@ function ColumnContent({
 // Caption / footnote:   text-[11px]             — notes, labels, fine print
 // Section label:        text-[10px] uppercase   — column headers, section labels
 
-export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: SlideProps) {
+export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
+  // Editing is disabled — these are kept as constants so internal components still compile
+  const editable = false;
+  const onUpdate = undefined;
   const t = theme.colors;
 
   const baseStyle: React.CSSProperties = {
@@ -390,16 +347,18 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 className={`${isLargeTeam ? "text-[13px]" : "text-lg"} font-bold mb-0.5`}
                 style={{ color: t.heading }}
               />
-              <EditableText
-                value={member.role}
-                slideId={slide.id}
-                field={`team.${i}.role`}
-                editable={editable}
-                onUpdate={onUpdate}
-                tag="p"
-                className={`${isLargeTeam ? "text-[10px]" : "text-xs"} font-semibold uppercase tracking-wider mb-2`}
-                style={{ color: t.accent }}
-              />
+              {(member.role || editable) && (
+                <EditableText
+                  value={member.role}
+                  slideId={slide.id}
+                  field={`team.${i}.role`}
+                  editable={editable}
+                  onUpdate={onUpdate}
+                  tag="p"
+                  className={`${isLargeTeam ? "text-[10px]" : "text-xs"} font-semibold uppercase tracking-wider mb-2`}
+                  style={{ color: t.accent }}
+                />
+              )}
               {editable ? (
                 <EditableText
                   value={member.bio}
@@ -1741,7 +1700,26 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
             style={subtitleStyle}
           />
         )}
-        <AccentBar color={t.accent} className="mb-5" />
+        <AccentBar color={t.accent} className="mb-4" />
+
+        {/* Top callout box (body field) */}
+        {slide.body && (
+          <div
+            className="rounded-lg px-4 py-3 mb-3"
+            style={{ backgroundColor: t.accent + "0c", border: `1.5px solid ${t.accent}30` }}
+          >
+            <EditableText
+              value={slide.body}
+              slideId={slide.id}
+              field="body"
+              editable={editable}
+              onUpdate={onUpdate}
+              tag="p"
+              className="text-[11px] leading-relaxed"
+              style={{ color: t.text, whiteSpace: "pre-line" }}
+            />
+          </div>
+        )}
 
         {/* Stats row */}
         {slide.stats && (
@@ -1938,7 +1916,8 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
 
   // ---- PLAYBOOK LAYOUT (flowchart boxes) ----
   if (slide.layout === "playbook" && slide.boxes) {
-    const cols = 3;
+    const isLargePlaybook = slide.boxes.length > 6;
+    const cols = isLargePlaybook ? 4 : 3;
     const rows = Math.ceil(slide.boxes.length / cols);
     return (
       <div style={baseStyle} className="flex flex-col p-10">
@@ -1952,8 +1931,8 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           className="text-[22px] font-bold mb-1"
           style={headingStyle}
         />
-        <AccentBar color={t.accent} className="mb-6" />
-        <div className="flex-1 flex flex-col justify-center gap-3">
+        <AccentBar color={t.accent} className={isLargePlaybook ? "mb-4" : "mb-6"} />
+        <div className={`flex-1 flex flex-col justify-center ${isLargePlaybook ? "gap-2" : "gap-3"}`}>
           {Array.from({ length: rows }).map((_, ri) => (
             <div key={ri} className="flex items-center gap-0">
               {slide.boxes!.slice(ri * cols, ri * cols + cols).map((box, ci) => {
@@ -1962,27 +1941,27 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
                 return (
                   <div key={ci} className="flex items-center flex-1">
                     <div
-                      className="flex-1 rounded-xl px-4 py-4 flex flex-col items-center text-center"
+                      className={`flex-1 rounded-xl ${isLargePlaybook ? "px-3 py-2.5" : "px-4 py-4"} flex flex-col items-center text-center`}
                       style={{
                         backgroundColor: t.cardBg,
                         border: `1.5px solid ${t.tableBorder}`,
                       }}
                     >
                       <div
-                        className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold mb-2"
+                        className={`${isLargePlaybook ? "w-6 h-6 text-[10px] mb-1" : "w-8 h-8 text-xs mb-2"} rounded-full flex items-center justify-center font-bold`}
                         style={{ backgroundColor: t.accent + "18", color: t.accent }}
                       >
                         {stepNum}
                       </div>
-                      <span className="text-lg mb-1">{box.icon}</span>
+                      <span className={`${isLargePlaybook ? "text-sm" : "text-lg"} mb-1`}>{box.icon}</span>
                       <span
-                        className="text-[13px] font-bold mb-1"
+                        className={`${isLargePlaybook ? "text-[11px]" : "text-[13px]"} font-bold mb-1`}
                         style={{ color: t.heading }}
                       >
                         {box.title}
                       </span>
                       <span
-                        className="text-[10px] leading-snug"
+                        className={`${isLargePlaybook ? "text-[8.5px]" : "text-[10px]"} leading-snug`}
                         style={{ color: t.subtitle }}
                       >
                         {box.description}
@@ -2003,6 +1982,192 @@ export default function Slide({ slide, theme, editable, onUpdate, scale = 1 }: S
           ))}
           {/* Rows are connected by numbered step indicators */}
         </div>
+        <SlideNumber num={slide.number} color={t.subtitle} />
+      </div>
+    );
+  }
+
+  // ---- ROLLUP MODEL LAYOUT ----
+  if (slide.layout === "rollup-model" && slide.rollupModel) {
+    const { targets, steps, result, dealStructure } = slide.rollupModel;
+    return (
+      <div style={baseStyle} className="flex flex-col p-8 pb-6">
+        {/* Header */}
+        <EditableText
+          value={slide.title}
+          slideId={slide.id}
+          field="title"
+          editable={editable}
+          onUpdate={onUpdate}
+          tag="h1"
+          className="text-[22px] font-bold mb-1"
+          style={headingStyle}
+        />
+        {slide.subtitle && (
+          <EditableText
+            value={slide.subtitle}
+            slideId={slide.id}
+            field="subtitle"
+            editable={editable}
+            onUpdate={onUpdate}
+            tag="p"
+            className="text-xs mb-2"
+            style={{ color: t.subtitle }}
+          />
+        )}
+        <AccentBar color={t.accent} className="mb-4" />
+
+        {/* Main 3-column diagram */}
+        <div className="flex-1 flex items-stretch gap-0">
+          {/* Left: Acquire */}
+          <div className="flex flex-col w-[265px] flex-shrink-0">
+            <div
+              className="text-[9px] font-bold uppercase tracking-[0.15em] mb-2 text-center py-1 rounded"
+              style={{ color: t.accent, backgroundColor: t.accent + "10" }}
+            >
+              Step 1 — Acquire
+            </div>
+            <div className="flex flex-col gap-2 flex-1 justify-center">
+              {targets.map((target, i) => (
+                <div
+                  key={i}
+                  className="rounded-lg p-3"
+                  style={{
+                    backgroundColor: target.highlight ? t.accent + "0c" : t.cardBg,
+                    border: `${target.highlight ? "2px" : "1px"} solid ${target.highlight ? t.accent : t.tableBorder}`,
+                  }}
+                >
+                  <div className="text-[13px] font-bold mb-1.5" style={{ color: target.highlight ? t.accent : t.heading }}>
+                    {target.name}
+                  </div>
+                  <div className="flex gap-4">
+                    <div>
+                      <div className="text-[9px] uppercase tracking-wider" style={{ color: t.subtitle }}>Revenue</div>
+                      <div className="text-[14px] font-semibold" style={{ color: t.heading }}>{target.revenue}</div>
+                    </div>
+                    <div>
+                      <div className="text-[9px] uppercase tracking-wider" style={{ color: t.subtitle }}>EBITDA</div>
+                      <div className="text-[14px] font-semibold" style={{ color: t.heading }}>{target.ebitda}</div>
+                    </div>
+                    <div>
+                      <div className="text-[9px] uppercase tracking-wider" style={{ color: t.subtitle }}>Margin</div>
+                      <div className="text-[14px] font-semibold" style={{ color: t.heading }}>{target.margin}</div>
+                    </div>
+                  </div>
+                  {target.buyNote && (
+                    <div
+                      className="text-[10px] mt-2 pt-1.5 font-medium"
+                      style={{ color: target.highlight ? t.accent : t.subtitle, borderTop: `1px solid ${t.tableBorder}` }}
+                    >
+                      {target.buyNote}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Arrow 1 */}
+          <div className="flex items-center justify-center w-[28px] flex-shrink-0">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M4 10h12M12 6l4 4-4 4" stroke={t.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+
+          {/* Center: Integrate */}
+          <div className="flex flex-col w-[230px] flex-shrink-0">
+            <div
+              className="text-[9px] font-bold uppercase tracking-[0.15em] mb-2 text-center py-1 rounded"
+              style={{ color: t.accent, backgroundColor: t.accent + "10" }}
+            >
+              Step 2 — Integrate
+            </div>
+            <div className="flex-1 flex flex-col justify-center">
+              <div
+                className="rounded-lg p-4 flex flex-col gap-3"
+                style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
+              >
+                {steps.map((step, i) => (
+                  <div key={i} className="flex items-start gap-2.5">
+                    <div
+                      className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-bold mt-0.5"
+                      style={{ backgroundColor: t.accent, color: t.bg }}
+                    >
+                      {i + 1}
+                    </div>
+                    <span className="text-[12px] leading-snug" style={{ color: t.text }}>{step}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Arrow 2 */}
+          <div className="flex items-center justify-center w-[28px] flex-shrink-0">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M4 10h12M12 6l4 4-4 4" stroke={t.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+
+          {/* Right: Result */}
+          <div className="flex flex-col flex-1 min-w-0">
+            <div
+              className="text-[9px] font-bold uppercase tracking-[0.15em] mb-2 text-center py-1 rounded"
+              style={{ color: t.accent, backgroundColor: t.accent + "10" }}
+            >
+              Step 3 — Result
+            </div>
+            <div className="flex-1 flex flex-col justify-center">
+              <div
+                className="rounded-lg p-4"
+                style={{ backgroundColor: t.accent + "0c", border: `2px solid ${t.accent}` }}
+              >
+                <div className="text-[11px] font-bold uppercase tracking-wider mb-1" style={{ color: t.accent }}>
+                  {result.name}
+                </div>
+                <div className="text-[28px] font-bold leading-none" style={{ color: t.heading }}>
+                  {result.revenue}
+                </div>
+                <div className="text-[10px] mb-3" style={{ color: t.subtitle }}>
+                  Combined Revenue
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  {result.highlights.map((h, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: t.accent }} />
+                      <span className="text-[11px]" style={{ color: t.text }}>{h}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom: Deal Structure */}
+        <div
+          className="mt-3 rounded-lg px-4 py-2.5 flex items-start gap-3"
+          style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
+        >
+          <span className="text-base mt-0.5">💰</span>
+          <div className="flex-1">
+            <div className="text-[9px] font-bold uppercase tracking-[0.15em] mb-1" style={{ color: t.accent }}>
+              Deal Structure
+            </div>
+            <div className="flex gap-4">
+              {dealStructure.map((point, i) => (
+                <div key={i} className="flex items-center gap-1.5 flex-1">
+                  <div className="w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: t.accent }} />
+                  <span className="text-[10px] leading-tight" style={{ color: t.text }}>{point}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {slide.note && (
+          <NoteBlock value={slide.note} slideId={slide.id} field="note" editable={editable} onUpdate={onUpdate} bg={t.noteBg} fg={t.noteText} />
+        )}
         <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );

@@ -1,0 +1,390 @@
+[  382956ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  387981ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  387982ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  416190ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  416387ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  424954ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  425325ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  509829ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  510681ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  514535ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  514697ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  519541ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  519987ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  524051ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  526561ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  528331ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  528630ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  579666ms] [ERROR] ./src/lib/themes.ts
+Error:   x Expected ';', '}' or <eof>
+     ,-[/Users/yoav/Kinneret-deck/src/lib/themes.ts:205:1]
+ 202 |       // THEME 8: AIPAC — Dark navy with warm accent, serif titles
+ 203 |       // ----------------------------------------------------------
+ 204 |       aipac: {
+ 205 | ,->     id: "aipac",
+ 206 | |->     name: "AIPAC",
+     : `---        ^
+     : `---- This is the expression part of an expression statement
+ 207 |         description: "Dark navy, warm brown accent, elegant serif headings",
+ 208 |         slideClass: "theme-aipac",
+ 209 |         headingFont: "'Instrument Serif', serif",
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/themes.ts
+./src/app/page.tsx @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  587684ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/?_rsc=fsnpp:0
+[  588525ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/webpack.9cc12e55ad90b943.hot-update.js:0
+[  588528ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/app/page.9cc12e55ad90b943.hot-update.js:0
+[  588557ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js:111
+[  591905ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/:0
