@@ -17,7 +17,7 @@ export interface SlideContent {
   /** Bullet points as an array of strings */
   bullets?: string[];
   /** Layout type determines how the slide renders */
-  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels" | "boxes" | "playbook" | "two-column-boxes" | "vision" | "holdco-org" | "rollup-model";
+  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels" | "boxes" | "playbook" | "two-column-boxes" | "vision" | "holdco-org" | "rollup-model" | "exec-summary";
   /** Custom HTML content for special layouts */
   customHtml?: string;
   /** Team members for team layout */
@@ -749,13 +749,18 @@ const slideTldr: SlideContent = {
   id: "slide-tldr",
   number: 2,
   title: "Executive Summary",
-  layout: "bullets",
-  bullets: [
-    "Rolling up businesses in retirement administration — hyper-fragmented, sticky revenue",
-    "Pipeline of 40+ businesses, 5 in LOI stage",
-    "Will close on $5M in ARR at Seed",
-    "EBITDA expansion potential to 50%+ margins (from ~25% blended)",
-    "Vision: expand AI-centric rollup playbook to adjacent verticals, building a multi-industry holdco",
+  subtitle: "Acquiring and automating white-collar service businesses using AI",
+  layout: "exec-summary",
+  stats: [
+    { value: "40+", label: "Pipeline Targets" },
+    { value: "5", label: "Active LOIs" },
+    { value: "$5M", label: "ARR at Close" },
+    { value: "50%+", label: "Target EBITDA Margin" },
+  ],
+  boxes: [
+    { icon: "🏢", title: "Roll Up Retirement Admin", description: "Acquiring businesses in a hyper-fragmented, $8B+ market with sticky, recurring revenue at 4–6x EBITDA" },
+    { icon: "⚡", title: "Automate with AI", description: "Deploying AI to automate 80%+ of rule-based workflows, expanding margins from ~25% blended to 50%+" },
+    { icon: "📐", title: "Replicate Across Verticals", description: "Proven playbook scales to adjacent service sectors — building a multi-industry AI-native holding company" },
   ],
 };
 

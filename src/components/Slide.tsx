@@ -761,6 +761,73 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
     );
   }
 
+  // ---- EXEC SUMMARY LAYOUT ----
+  if (slide.layout === "exec-summary") {
+    return (
+      <div style={baseStyle} className="flex flex-col justify-center p-10 px-12">
+        {/* Header */}
+        <h1
+          className="text-[22px] font-bold mb-1"
+          style={headingStyle}
+        >
+          {slide.title}
+        </h1>
+        <AccentBar color={t.accent} className="mb-2" />
+        {slide.subtitle && (
+          <p className="text-xs mb-6 leading-relaxed" style={subtitleStyle}>
+            {slide.subtitle}
+          </p>
+        )}
+
+        {/* Stats row */}
+        {slide.stats && (
+          <div className="flex gap-3 mb-5">
+            {slide.stats.map((stat, i) => (
+              <div
+                key={i}
+                className="flex-1 rounded-lg px-4 py-3.5 text-center"
+                style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
+              >
+                <div
+                  className="text-[24px] font-bold leading-tight"
+                  style={{ color: t.accent, fontFamily: theme.headingFont }}
+                >
+                  {stat.value}
+                </div>
+                <div className="text-[10px] mt-1.5 font-medium uppercase tracking-wider" style={{ color: t.subtitle }}>
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Key points as horizontal cards */}
+        {slide.boxes && (
+          <div className="flex gap-3">
+            {slide.boxes.map((box, i) => (
+              <div
+                key={i}
+                className="flex-1 rounded-lg px-5 py-4"
+                style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
+              >
+                <div className="text-xl mb-2">{box.icon}</div>
+                <div className="text-[13px] font-semibold mb-1.5" style={{ color: t.heading }}>
+                  {box.title}
+                </div>
+                <div className="text-[11px] leading-relaxed" style={{ color: t.subtitle }}>
+                  {box.description}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <SlideNumber num={slide.number} color={t.subtitle} />
+      </div>
+    );
+  }
+
   // ---- BULLETS LAYOUT ----
   if (slide.layout === "bullets") {
     return (
@@ -1932,55 +1999,43 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
           style={headingStyle}
         />
         <AccentBar color={t.accent} className={isLargePlaybook ? "mb-4" : "mb-6"} />
-        <div className={`flex-1 flex flex-col justify-center ${isLargePlaybook ? "gap-2" : "gap-3"}`}>
-          {Array.from({ length: rows }).map((_, ri) => (
-            <div key={ri} className="flex items-center gap-0">
-              {slide.boxes!.slice(ri * cols, ri * cols + cols).map((box, ci) => {
-                const stepNum = ri * cols + ci + 1;
-                const isLast = ri * cols + ci === slide.boxes!.length - 1;
-                return (
-                  <div key={ci} className="flex items-center flex-1">
-                    <div
-                      className={`flex-1 rounded-xl ${isLargePlaybook ? "px-3 py-2.5" : "px-4 py-4"} flex flex-col items-center text-center`}
-                      style={{
-                        backgroundColor: t.cardBg,
-                        border: `1.5px solid ${t.tableBorder}`,
-                      }}
-                    >
-                      <div
-                        className={`${isLargePlaybook ? "w-6 h-6 text-[10px] mb-1" : "w-8 h-8 text-xs mb-2"} rounded-full flex items-center justify-center font-bold`}
-                        style={{ backgroundColor: t.accent + "18", color: t.accent }}
-                      >
-                        {stepNum}
-                      </div>
-                      <span className={`${isLargePlaybook ? "text-sm" : "text-lg"} mb-1`}>{box.icon}</span>
-                      <span
-                        className={`${isLargePlaybook ? "text-[11px]" : "text-[13px]"} font-bold mb-1`}
-                        style={{ color: t.heading }}
-                      >
-                        {box.title}
-                      </span>
-                      <span
-                        className={`${isLargePlaybook ? "text-[8.5px]" : "text-[10px]"} leading-snug`}
-                        style={{ color: t.subtitle }}
-                      >
-                        {box.description}
-                      </span>
-                    </div>
-                    {!isLast && ci < cols - 1 && (
-                      <span
-                        className="text-xl font-bold flex-shrink-0 mx-1"
-                        style={{ color: t.accent }}
-                      >
-                        &#x2192;
-                      </span>
-                    )}
-                  </div>
-                );
-              })}
+        <div
+          className="flex-1 grid content-center"
+          style={{
+            gridTemplateColumns: `repeat(${cols}, 1fr)`,
+            gap: isLargePlaybook ? "8px" : "12px",
+          }}
+        >
+          {slide.boxes.map((box, i) => (
+            <div
+              key={i}
+              className={`rounded-xl ${isLargePlaybook ? "px-3 py-2.5" : "px-4 py-4"} flex flex-col items-center text-center`}
+              style={{
+                backgroundColor: t.cardBg,
+                border: `1.5px solid ${t.tableBorder}`,
+              }}
+            >
+              <div
+                className={`${isLargePlaybook ? "w-6 h-6 text-[10px] mb-1" : "w-8 h-8 text-xs mb-2"} rounded-full flex items-center justify-center font-bold`}
+                style={{ backgroundColor: t.accent + "18", color: t.accent }}
+              >
+                {i + 1}
+              </div>
+              <span className={`${isLargePlaybook ? "text-sm" : "text-lg"} mb-1`}>{box.icon}</span>
+              <span
+                className={`${isLargePlaybook ? "text-[11px]" : "text-[13px]"} font-bold mb-1`}
+                style={{ color: t.heading }}
+              >
+                {box.title}
+              </span>
+              <span
+                className={`${isLargePlaybook ? "text-[8.5px]" : "text-[10px]"} leading-snug`}
+                style={{ color: t.subtitle }}
+              >
+                {box.description}
+              </span>
             </div>
           ))}
-          {/* Rows are connected by numbered step indicators */}
         </div>
         <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
