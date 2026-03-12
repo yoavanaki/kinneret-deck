@@ -110,7 +110,7 @@ const slide02: SlideContent = {
   team: [
     {
       name: "Yoav Anaki",
-      role: "",
+      role: "Co-Founder",
       bio: "Computer Science age 13\nCOO at Mad Mimi, acquired by GoDaddy\nIDF Counterterrorism Investigations\nPartner, AI at Fresh Fund\nMBA @ HBS",
       imageUrl: "/team/anaki.jpeg",
       logos: [
@@ -121,7 +121,7 @@ const slide02: SlideContent = {
     },
     {
       name: "Yoav Segev",
-      role: "",
+      role: "Co-Founder",
       bio: "Economics @ Oxford University\nConsultant at BCG\nBusiness Services Investor at Charlesbank\nIncubated Compliance Consulting firm\nMBA @ HBS",
       imageUrl: "/team/segev.jpeg",
       logos: [
@@ -132,7 +132,7 @@ const slide02: SlideContent = {
     },
     {
       name: "Jamie Kalamarides",
-      role: "",
+      role: "Operating Partner",
       bio: "President, Group Insurance at Prudential Financial\nHead of Institutional Retirement Plan Services\nExpert witness, U.S. Senate (SECURE Act)\nFellow, Bipartisan Policy Center\nMBA @ Tuck",
       imageUrl: "/team/kalamarides.jpg",
       logos: [
@@ -143,7 +143,7 @@ const slide02: SlideContent = {
     },
     {
       name: "Eran Pinhas",
-      role: "",
+      role: "CTO",
       bio: "CTO & Co-Founder of Ginzi (AI Support Automation)\nPrincipal Software Engineer at Axonius\nFull-stack & AI/ML systems\nOpen-source contributor\nCS @ Ben-Gurion University",
       imageUrl: "/team/pinhas.jpg",
       logos: [
@@ -360,7 +360,7 @@ const slideWhyNow: SlideContent = {
     { icon: "1️⃣", title: "Acquire Distribution Cheaply", description: "Buy existing customer bases at 4-6x EBITDA instead of spending years and millions on sales & marketing to build from scratch" },
     { icon: "2️⃣", title: "Speed to Economic Value", description: "Efficiency gains from AI hit the P&L immediately — no need to wait for product-market fit or long sales cycles" },
     { icon: "3️⃣", title: "Real Businesses to Experiment In", description: "Acquired firms are live environments to deploy, test, and iterate on AI — with real clients, real workflows, and real data" },
-    { icon: "4️⃣", title: "Attractive Risk-Return", description: "Built-in put option — businesses can get acquired by PE or strategics if needed. Lower failure probability than venture but with phenomenal potential upside" },
+    { icon: "4️⃣", title: "Compounding Platform", description: "Each acquisition makes the next one faster and cheaper — shared tech, shared ops, shared playbook. The platform compounds with every deal." },
   ],
 };
 
@@ -430,7 +430,7 @@ const slideRollupModel: SlideContent = {
       ],
     },
     dealStructure: [
-      "Refinancing",
+      "Seller-financed over 3 years",
       "Performance-based compensation incentives",
       "Minimal upfront capital required",
       "In some cases, equity rolls into Cognitory",
@@ -477,7 +477,7 @@ const slide11: SlideContent = {
   id: "slide-11",
   number: 10,
   title: "Our first bet: Retirement TPA",
-  subtitle: "Every business needs a retirement TPA to help set up, manage and audit their employees' retirement plans.",
+  subtitle: "Federal law requires professional administration for retirement plans — TPAs fill that critical role for 700K+ plans nationwide.",
   layout: "two-column-boxes",
   stats: [
     { value: "$8B+", label: "Market Size" },
@@ -562,12 +562,10 @@ const slide15: SlideContent = {
   layout: "table",
   subtitle: "Active acquisition pipeline across the U.S.",
   stats: [
-    { value: "27", label: "Total Targets" },
-    { value: "24", label: "Active" },
-    { value: "~$74M", label: "Pipeline Revenue" },
-    { value: "~$5M", label: "EBITDA in DD" },
-    { value: "6", label: "In Pre-LOI Diligence" },
-    { value: "13", label: "States" },
+    { value: "40+", label: "Total Targets" },
+    { value: "5", label: "In LOI Stage" },
+    { value: "~$5M", label: "ARR in LOI" },
+    { value: "15+", label: "States" },
   ],
   pieChart: [
     { label: "Warm Intros", value: 46 },
@@ -582,7 +580,7 @@ const slide15: SlideContent = {
     ['"Evergreen Plan Services"', "$1.7M", "$425K", "Pacific NW", "Pre-LOI Diligence"],
     ['"Summit Trust Services"', "$5.0M", "—", "Pacific NW", "First Meeting"],
     ['"Lone Star Admin"', "$10.0M", "—", "Southwest", "First Meeting"],
-    ["+ 18 additional targets", "$750K–$10M", "", "Nationwide", "Various"],
+    ["+ 34 additional targets", "$750K–$10M", "", "Nationwide", "Various"],
   ],
 };
 
@@ -615,7 +613,7 @@ const slideCompetitive: SlideContent = {
     ["Regional / Local TPAs", "Owner-operated", "None", "None — aging owners", "None — these are targets"],
     ["Tech Platforms\n(Vestwell, Human Interest)", "Software for advisors", "Workflow tooling", "Not acquiring TPAs", "Medium — different segment"],
     ["PE Rollups\n(Definiti, Strongpoint)", "Buy & integrate", "Limited", "Acquire for revenue", "Medium — no automation edge"],
-    ["Cognitory", "Acquire + Automate", "AI-native platform", "Buy at 4-6x, automate", "We play to win"],
+    ["Cognitory", "Acquire + Automate", "AI-native platform", "Buy at 4-6x, automate", "Unique — both acquire & automate"],
   ],
   callout: "Most competitors are either technology companies that don't acquire, or acquirers that don't automate. Cognitory is uniquely positioned to do both.",
 };
@@ -633,7 +631,7 @@ const slide17: SlideContent = {
     { value: "144", label: "Processes Mapped" },
     { value: "62", label: "Quick Wins" },
     { value: "11,550", label: "Hours Saved / Year" },
-    { value: "+50%", label: "EBITDA Expansion" },
+    { value: "+20pp", label: "Margin Expansion" },
   ],
   tableHeaders: [
     "Process",
@@ -651,7 +649,7 @@ const slide17: SlideContent = {
     ["Plan Document Generation", "3", "Admin", "$40", "90%", "$54,000"],
     ["Required Notices & Disclosures", "2", "Admin", "$35", "75%", "$26,250"],
   ],
-  callout: "Implied margin expansion: ~20% ($400K savings on $2M revenue across ~500 clients)",
+  callout: "Implied margin expansion: ~20 percentage points ($400K savings on $2M revenue across ~500 plans). Combined with tuck-in rollups, margins reach 50%+.",
   footnote: 'Source: 144-process inventory mapped at partner TPA (230 plans). 62 of 144 processes rated "Easy" automation. Census: offshore team averages 3 plans/day vs. 8-10 target. 5558 extensions: "nearly zero judgment — prime batch candidate." Trust reconciliation: #1 identified target.',
 };
 
@@ -700,7 +698,7 @@ const slideHoldco: SlideContent = {
       description: "Companies acquired through M&A in target services industries",
     },
   },
-  note: "Vision: hold acquired companies indefinitely given their strategic value and differentiated performance — but each is managed as independently separable. As EBITDA aggregators, there is a built-in put option to PE, industry aggregators, or strategic buyers.",
+  note: "Each OpCo is managed as independently separable — creating strategic optionality as the portfolio grows. The platform compounds: every new vertical reuses 80% of existing infrastructure.",
 };
 
 // ============================================================
@@ -750,14 +748,14 @@ const slide18: SlideContent = {
 const slideTldr: SlideContent = {
   id: "slide-tldr",
   number: 2,
-  title: "TLDR",
+  title: "Executive Summary",
   layout: "bullets",
   bullets: [
     "Rolling up businesses in retirement administration — hyper-fragmented, sticky revenue",
     "Pipeline of 40+ businesses, 5 in LOI stage",
     "Will close on $5M in ARR at Seed",
-    "EBITDA expansion potential to 70%",
-    "Vision: expand AI-centric rollup playbook (agentic sourcing, DD tooling, integration) to adjacent verticals, building a holdco with multiple rollups",
+    "EBITDA expansion potential to 50%+ margins (from ~25% blended)",
+    "Vision: expand AI-centric rollup playbook to adjacent verticals, building a multi-industry holdco",
   ],
 };
 
@@ -765,34 +763,42 @@ const slideTldr: SlideContent = {
 // ALL SLIDES - exported as a single array
 // ============================================================
 export const slides: SlideContent[] = [
-  slide01,                // 1. Title slide
-  slideTldr,              // 2. TLDR
-  slideParallels,         // 3. History doesn't repeat itself
-  slide03,                // 3. Industrial Revolution
-  slide04,                // 4. AI Revolution
-  slide05,                // 5. White collar services market size
-  // slideFutureBusiness,    // 6. What does the business of the future look like
-  slideHoldco,            // 7. What we're building: a Holding Company
-  slideWhyNow,            // 8. Why this is the right way to build a business
-  slide09,                // 9. Our playbook
-  slideRollupModel,       // 10. How acquisitions work
-  slide10,                // 11. Target industries
-  slide11,                // 10. Our first bet: Retirement TPA
-  slideCompetitive,       // 11. Competitive landscape
-  slide13,                // 12. Jamie slide
-  slide17,                // 13. Automation opps
-  slide02,                // Team
+  // === ACT 1: Context ===
+  slide01,                // 1. Cognitory (title)
+  slideTldr,              // 2. Executive Summary
+  slideParallels,         // 3. History doesn't repeat (one slide of macro context)
+
+  // === ACT 2: The Business — TPA as proof ===
+  slideHoldco,            // 4. What we're building: a Holding Company
+  slide11,                // 5. Our first bet: Retirement TPA
+  slide13,                // 6. Jamie (credibility right after TPA intro)
+  slideRollupModel,       // 7. How Acquisitions Work (grounded in TPA)
+  slide17,                // 8. Automation Opportunities (the hard evidence)
+  slideCompetitive,       // 9. Competitive Landscape
+
+  // === ACT 3: The Vision — zoom out ===
+  slide09,                // 10. The Playbook (the repeatable system)
+  slide05,                // 11. White collar services market ($11T — the "wow" after proof)
+  slide10,                // 12. Candidate Industries (where we go next)
+  slideWhyNow,            // 13. Why HoldCo is the right model (now with full context)
+
+  // === ACT 4: The Close ===
+  slide15,                // 14. Pipeline / Traction
+  slide18,                // 15. The Ask
+  slide02,                // 16. Team
+
   /* --- commented out slides ---
   slideGrowth,            // How big can this be
   slide14,                // Why Retirement TPA? (merged into first bet slide)
   slideStack,             // Cognitory platform (stack diagram)
   slideTechOpps,          // Technology Opportunities (two-column-boxes)
   slide08,                // Building the world's first services factories
+  slideFutureBusiness,    // What does the business of the future look like
   slide06,                // Service factories are highly generalizable
   slide12,                // What does a TPA do?
-  slide15,                // Current M&A Pipeline
   slide16,                // Retirement TPA Industry Overview
-  slide18,                // Raising $10M
+  slide03,                // Industrial Revolution flow (redundant with parallels)
+  slide04,                // AI Revolution flow (redundant with parallels)
   */
 ];
 
