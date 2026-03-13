@@ -9,6 +9,13 @@ function sessionToken() {
 
 // GET — check if authenticated
 export async function GET(req: NextRequest) {
+  const debug = req.nextUrl.searchParams.get("debug");
+  if (debug === "1") {
+    return NextResponse.json({
+      hasPassword: !!PASSWORD,
+      length: PASSWORD.length,
+    });
+  }
   const cookie = req.cookies.get("admin_session")?.value;
   const valid = PASSWORD && cookie === sessionToken();
   return NextResponse.json({ authenticated: valid });
