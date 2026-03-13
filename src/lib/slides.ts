@@ -120,7 +120,7 @@ const slide02: SlideContent = {
   team: [
     {
       name: "Yoav Anaki",
-      role: "Co-Founder",
+      role: "",
       bio: "Computer Science age 13\nCOO at Mad Mimi, acquired by GoDaddy\nIDF Counterterrorism Investigations\nPartner, AI at Fresh Fund\nMBA @ HBS",
       imageUrl: "/team/anaki.jpeg",
       logos: [
@@ -131,7 +131,7 @@ const slide02: SlideContent = {
     },
     {
       name: "Yoav Segev",
-      role: "Co-Founder",
+      role: "",
       bio: "Economics @ Oxford University\nConsultant at BCG\nBusiness Services Investor at Charlesbank\nIncubated Compliance Consulting firm\nMBA @ HBS",
       imageUrl: "/team/segev.jpeg",
       logos: [
@@ -141,25 +141,25 @@ const slide02: SlideContent = {
       ],
     },
     {
-      name: "Jamie Kalamarides",
-      role: "Operating Partner",
-      bio: "President, Group Insurance at Prudential Financial\nHead of Institutional Retirement Plan Services\nExpert witness, U.S. Senate (SECURE Act)\nFellow, Bipartisan Policy Center\nMBA @ Tuck",
-      imageUrl: "/team/kalamarides.jpg",
-      logos: [
-        { name: "Dartmouth", imageUrl: "/logos/dartmouth.svg" },
-        { name: "US Gov", imageUrl: "/logos/usgov.svg" },
-        { name: "Prudential", imageUrl: "/logos/prudential.png" },
-      ],
-    },
-    {
       name: "Eran Pinhas",
-      role: "CTO",
+      role: "",
       bio: "CTO & Co-Founder of Ginzi (AI Support Automation)\nPrincipal Software Engineer at Axonius\nFull-stack & AI/ML systems\nOpen-source contributor\nCS @ Ben-Gurion University",
       imageUrl: "/team/pinhas.jpg",
       logos: [
         { name: "IDF 8200", imageUrl: "/logos/idf8200.svg" },
         { name: "Ben Gurion Uni", imageUrl: "/logos/bgu.svg" },
         { name: "Axonius", imageUrl: "/logos/axonius.png" },
+      ],
+    },
+    {
+      name: "Jamie Kalamarides",
+      role: "",
+      bio: "President, Group Insurance at Prudential\nHead of Institutional Retirement Plan Services\nExpert witness, U.S. Senate (SECURE Act)\nFellow, Bipartisan Policy Center\nMBA @ Tuck",
+      imageUrl: "/team/kalamarides.jpg",
+      logos: [
+        { name: "Dartmouth", imageUrl: "/logos/dartmouth.svg" },
+        { name: "US Gov", imageUrl: "/logos/usgov.svg" },
+        { name: "Prudential", imageUrl: "/logos/prudential.png" },
       ],
     },
   ],
@@ -823,20 +823,20 @@ const _slides: SlideContent[] = [
 
   // === ACT 3: The Business — TPA as proof ===
   slide11,                // 7. Our first bet: Retirement TPA
-  slide13,                // 8. Jamie (credibility right after TPA intro)
-  slideRollupModel,       // 9. How Acquisitions Work (grounded in TPA)
-  slide17,                // 10. Automation Opportunities (the hard evidence)
-  slideCompetitive,       // 11. Competitive Landscape
+  slide13,                // 8. Jamie
+  slideRollupModel,       // 9. How Acquisitions Work
+  slide17,                // 10. Automation Opportunities
+  slide15,                // 11. M&A Pipeline
+  slideCompetitive,       // 12. Competitive Landscape
 
   // === ACT 4: The Vision — zoom out ===
-  slide09,                // 12. The Playbook (the repeatable system)
-  slide10,                // 13. Candidate Industries (where we go next)
-  slideHoldco,            // 14. What we're building: a Holding Company
-  slideWhyNow,            // 15. Why HoldCo is the right model
+  slideHoldco,            // 13. Cognitory Structure
+  slideWhyNow,            // 14. Why HoldCo is the right model
+  slide09,                // 15. The Playbook
+  slide10,                // 16. Candidate Industries
 
   // === ACT 5: The Close ===
-  slide15,                // 16. Pipeline / Traction
-  slide18,                // 17. The Ask
+  slide18,                // 17. Thank You
 
   /* --- commented out slides ---
   slideGrowth,            // How big can this be
