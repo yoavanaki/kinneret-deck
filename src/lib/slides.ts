@@ -96,7 +96,7 @@ const slide01: SlideContent = {
   subtitle: "/ˈkɒɡ.nɪ.tər.i/",
   body: "noun",
   customHtml: "A facility or system that produces services at scale through standardized, automated processes — as a factory does for physical goods.",
-  note: "",
+  note: '"The next $1T company will be a software company masquerading as a services firm." — Sequoia',
 };
 
 // ============================================================
@@ -765,32 +765,58 @@ const slideTldr: SlideContent = {
 };
 
 // ============================================================
+// SLIDE: We're Building Cognitories
+// ============================================================
+const slideCognitories: SlideContent = {
+  id: "slide-cognitories",
+  number: 0, // auto-numbered below
+  title: "We're building cognitories",
+  subtitle: "A cognitory maintains human interfaces with clients, but the backend is run by a series of agents interacting with existing business software.",
+  layout: "two-column-boxes",
+  leftColumnTitle: "TopCo: The Cognitory Platform",
+  leftBoxes: [
+    { icon: "🏗️", title: "Rapid Agent Builder", description: "Systems that enable us to build and deploy new agents quickly for each cognitory we operate" },
+    { icon: "📡", title: "Agent Control Center", description: "Software that allows us to monitor, manage, and intervene across all agents operating in the field" },
+    { icon: "🔎", title: "Acquisition Agents", description: "AI agents that scrape, source, outreach, diligence, and integrate new businesses into our cognitories" },
+  ],
+  rightColumnTitle: "Each Cognitory (OpCo)",
+  rightBoxes: [
+    { icon: "🤝", title: "Human Client Interface", description: "Clients interact with real people — relationships and trust stay intact" },
+    { icon: "🤖", title: "Agent-Powered Backend", description: "Behind the scenes, AI agents handle workflows end-to-end using existing business software" },
+    { icon: "📈", title: "Radical Margin Expansion", description: "Same revenue, fraction of the cost — AI replaces manual labor across compliance, filings, and admin" },
+  ],
+};
+
+// ============================================================
 // ALL SLIDES - exported as a single array
 // ============================================================
-export const slides: SlideContent[] = [
+const _slides: SlideContent[] = [
   // === ACT 1: Context ===
   slide01,                // 1. Cognitory (title)
   slideTldr,              // 2. Executive Summary
-  slideParallels,         // 3. History doesn't repeat (one slide of macro context)
+  slideParallels,         // 3. History doesn't repeat
+  slide05,                // 4. White collar services dwarf tech market
 
-  // === ACT 2: The Business — TPA as proof ===
-  slideHoldco,            // 4. What we're building: a Holding Company
-  slide11,                // 5. Our first bet: Retirement TPA
-  slide13,                // 6. Jamie (credibility right after TPA intro)
-  slideRollupModel,       // 7. How Acquisitions Work (grounded in TPA)
-  slide17,                // 8. Automation Opportunities (the hard evidence)
-  slideCompetitive,       // 9. Competitive Landscape
+  // === ACT 2: The Thesis ===
+  slideCognitories,       // 5. We're building cognitories
 
-  // === ACT 3: The Vision — zoom out ===
-  slide09,                // 10. The Playbook (the repeatable system)
-  slide05,                // 11. White collar services market ($11T — the "wow" after proof)
+  // === ACT 3: The Business — TPA as proof ===
+  slide11,                // 6. Our first bet: Retirement TPA
+  slide13,                // 7. Jamie (credibility right after TPA intro)
+  slideRollupModel,       // 8. How Acquisitions Work (grounded in TPA)
+  slide17,                // 9. Automation Opportunities (the hard evidence)
+  slideCompetitive,       // 10. Competitive Landscape
+
+  // === ACT 4: The Vision — zoom out ===
+  slide09,                // 11. The Playbook (the repeatable system)
   slide10,                // 12. Candidate Industries (where we go next)
-  slideWhyNow,            // 13. Why HoldCo is the right model (now with full context)
+  slideHoldco,            // 13. What we're building: a Holding Company
+  slideWhyNow,            // 14. Why HoldCo is the right model
 
-  // === ACT 4: The Close ===
-  slide15,                // 14. Pipeline / Traction
-  slide18,                // 15. The Ask
-  slide02,                // 16. Team
+  // === ACT 5: The Close ===
+  slide15,                // 15. Pipeline / Traction
+  slide18,                // 16. The Ask
+  slide02,                // 17. Team
 
   /* --- commented out slides ---
   slideGrowth,            // How big can this be
@@ -806,6 +832,9 @@ export const slides: SlideContent[] = [
   slide04,                // AI Revolution flow (redundant with parallels)
   */
 ];
+
+// Auto-number slides based on array position
+export const slides: SlideContent[] = _slides.map((s, i) => ({ ...s, number: i + 1 }));
 
 // ============================================================
 // APPLY EDITS — merges server-stored field overrides onto slides
