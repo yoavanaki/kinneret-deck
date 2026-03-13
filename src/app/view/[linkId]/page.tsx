@@ -7,8 +7,19 @@ import Slide from "@/components/Slide";
 
 export default function ViewPage({ params }: { params: Promise<{ linkId: string }> }) {
   const { linkId } = use(params);
-  const [email, setEmail] = useState("");
-  const [verified, setVerified] = useState(false);
+  const [email, setEmail] = useState(() => {
+    if (typeof document !== "undefined") {
+      const match = document.cookie.match(/(?:^|; )viewer_email=([^;]*)/);
+      return match ? decodeURIComponent(match[1]) : "";
+    }
+    return "";
+  });
+  const [verified, setVerified] = useState(() => {
+    if (typeof document !== "undefined") {
+      return !!document.cookie.match(/(?:^|; )viewer_email=([^;]*)/);
+    }
+    return false;
+  });
   const [linkStatus, setLinkStatus] = useState<"loading" | "ok" | "disabled">("loading");
   const [currentSlide, setCurrentSlide] = useState(0);
   const [themeId, setThemeId] = useState("aipac-light");
@@ -67,7 +78,9 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
     if (!verified) return;
     const duration = (Date.now() - slideStartTime.current) / 1000;
     const slideId = slideData[currentSlideRef.current]?.id;
-    if (duration > 0.5 && slideId) {
+    // Cap at 5 minutes – longer durations are idle tabs, not real viewing
+    const cappedDuration = Math.min(duration, 300);
+    if (cappedDuration > 0.5 && slideId) {
       fetch("/api/analytics/track", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -75,10 +88,12 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
           linkId,
           email,
           slideId,
-          duration: Math.round(duration * 10) / 10,
+          duration: Math.round(cappedDuration * 10) / 10,
         }),
       }).catch(() => {});
     }
+    // Reset timer so subsequent fires (e.g. cleanup + beforeunload) don't double-count
+    slideStartTime.current = Date.now();
   }
 
   function goToSlide(index: number) {
@@ -130,6 +145,7 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
   function handleSubmitEmail(e: React.FormEvent) {
     e.preventDefault();
     if (email.includes("@") && email.includes(".")) {
+      document.cookie = `viewer_email=${encodeURIComponent(email)}; max-age=${60 * 60 * 24 * 365}; path=/; SameSite=Lax`;
       setVerified(true);
       slideStartTime.current = Date.now();
     }

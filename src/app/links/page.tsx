@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { slides as initialSlides, applyEdits } from "@/lib/slides";
+import AdminAuth from "@/components/AdminAuth";
 
 interface ShareLink {
   id: string;
@@ -150,6 +151,7 @@ export default function LinksPage() {
   }
 
   return (
+    <AdminAuth>
     <div className={`min-h-screen ${dark ? "bg-gray-950" : "bg-gray-50"}`}>
       {/* Header */}
       <div className={`${dark ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"} border-b px-6 py-4`}>
@@ -329,5 +331,6 @@ export default function LinksPage() {
         )}
       </div>
     </div>
+    </AdminAuth>
   );
 }

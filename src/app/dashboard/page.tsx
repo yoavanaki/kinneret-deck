@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { slides as initialSlides, applyEdits } from "@/lib/slides";
+import AdminAuth from "@/components/AdminAuth";
 
 interface ShareLink {
   id: string;
@@ -61,15 +62,17 @@ export default function DashboardPage() {
     });
   }, []);
 
-  // Aggregate analytics by recipient
+  // Aggregate analytics by recipient (cap per-event at 5 min to discard idle-tab noise)
+  const MAX_EVENT_DURATION = 300;
   const recipients: Record<string, RecipientData> = {};
   for (const e of events) {
+    const dur = Math.min(e.duration, MAX_EVENT_DURATION);
     if (!recipients[e.email]) {
       recipients[e.email] = { email: e.email, totalTime: 0, slideViews: {}, lastSeen: e.timestamp };
     }
     const r = recipients[e.email];
-    r.totalTime += e.duration;
-    r.slideViews[e.slide_id] = (r.slideViews[e.slide_id] || 0) + e.duration;
+    r.totalTime += dur;
+    r.slideViews[e.slide_id] = (r.slideViews[e.slide_id] || 0) + dur;
     if (e.timestamp > r.lastSeen) r.lastSeen = e.timestamp;
   }
   const recipientList = Object.values(recipients).sort(
@@ -95,6 +98,7 @@ export default function DashboardPage() {
   }
 
   return (
+    <AdminAuth>
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -301,5 +305,6 @@ export default function DashboardPage() {
         )}
       </div>
     </div>
+    </AdminAuth>
   );
 }

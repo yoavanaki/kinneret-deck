@@ -5,6 +5,7 @@ import { slides as initialSlides, SlideContent, applyEdits } from "@/lib/slides"
 import { themes } from "@/lib/themes";
 import Slide from "@/components/Slide";
 import ThemePicker from "@/components/ThemePicker";
+import AdminAuth from "@/components/AdminAuth";
 
 export default function Home() {
   const [themeId, setThemeId] = useState("aipac");
@@ -109,6 +110,7 @@ export default function Home() {
   const slide = slideData[currentSlide];
 
   return (
+    <AdminAuth>
     <div className="h-screen bg-gray-100 flex flex-col overflow-hidden">
       {/* Theme Picker */}
       <ThemePicker currentTheme={themeId} onSelect={setThemeId} />
@@ -223,5 +225,6 @@ export default function Home() {
         </div>
       </div>
     </div>
+    </AdminAuth>
   );
 }
