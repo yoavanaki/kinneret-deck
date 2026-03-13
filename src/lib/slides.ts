@@ -17,7 +17,7 @@ export interface SlideContent {
   /** Bullet points as an array of strings */
   bullets?: string[];
   /** Layout type determines how the slide renders */
-  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels" | "boxes" | "playbook" | "two-column-boxes" | "vision" | "holdco-org" | "rollup-model" | "exec-summary";
+  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels" | "boxes" | "playbook" | "two-column-boxes" | "vision" | "holdco-org" | "rollup-model" | "exec-summary" | "cognitory";
   /** Custom HTML content for special layouts */
   customHtml?: string;
   /** Team members for team layout */
@@ -82,6 +82,16 @@ export interface SlideContent {
     top: { label: string; items: string[] };
     middle: { labels: string[]; description: string };
     bottom: { groups: number[]; description: string };
+  };
+  /** Cognitory anatomy diagram for cognitory layout */
+  cognitoryDiagram?: {
+    clientNote: string;
+    humanItems: { icon: string; label: string }[];
+    humanNote: string;
+    agents: { icon: string; label: string }[];
+    agentNote: string;
+    oversightItems: { icon: string; label: string }[];
+    oversightNote: string;
   };
 }
 
@@ -675,7 +685,7 @@ const slideFutureBusiness: SlideContent = {
 const slideHoldco: SlideContent = {
   id: "slide-holdco",
   number: 7,
-  title: "What we're building: a Holding Company",
+  title: "Cognitory Structure",
   subtitle: "We acquire sub-scale, traditional, white collar service firms and transform them into AI-native, high-margin businesses",
   layout: "holdco-org",
   orgChart: {
@@ -749,7 +759,7 @@ const slideTldr: SlideContent = {
   id: "slide-tldr",
   number: 2,
   title: "Executive Summary",
-  subtitle: "Acquiring and automating white-collar service businesses using AI",
+  subtitle: "Building factories for white collar services in highly regulated industries",
   layout: "exec-summary",
   stats: [
     { value: "40+", label: "Pipeline Targets" },
@@ -770,21 +780,38 @@ const slideTldr: SlideContent = {
 const slideCognitories: SlideContent = {
   id: "slide-cognitories",
   number: 0, // auto-numbered below
-  title: "We're building cognitories",
-  subtitle: "A cognitory maintains human interfaces with clients, but the backend is run by a series of agents interacting with existing business software.",
-  layout: "two-column-boxes",
-  leftColumnTitle: "TopCo: The Cognitory Platform",
-  leftBoxes: [
-    { icon: "🏗️", title: "Rapid Agent Builder", description: "Systems that enable us to build and deploy new agents quickly for each cognitory we operate" },
-    { icon: "📡", title: "Agent Control Center", description: "Software that allows us to monitor, manage, and intervene across all agents operating in the field" },
-    { icon: "🔎", title: "Acquisition Agents", description: "AI agents that scrape, source, outreach, diligence, and integrate new businesses into our cognitories" },
-  ],
-  rightColumnTitle: "Each Cognitory (OpCo)",
-  rightBoxes: [
-    { icon: "🤝", title: "Human Client Interface", description: "Clients interact with real people — relationships and trust stay intact" },
-    { icon: "🤖", title: "Agent-Powered Backend", description: "Behind the scenes, AI agents handle workflows end-to-end using existing business software" },
-    { icon: "📈", title: "Radical Margin Expansion", description: "Same revenue, fraction of the cost — AI replaces manual labor across compliance, filings, and admin" },
-  ],
+  title: "Building cognitories for highly regulated industries",
+  subtitle: "A better way to organize capital, labor, and technology to produce services at much lower cost and higher volume",
+  layout: "cognitory",
+  cognitoryDiagram: {
+    clientNote: "Industries that require a high degree of trust and white glove support",
+    humanItems: [
+      { icon: "🤝", label: "Client Relationships" },
+      { icon: "💼", label: "Sales & Advisory" },
+      { icon: "📞", label: "Trust & Support" },
+    ],
+    humanNote: "Cognitories maintain the human interfaces — the client-facing layer stays personal",
+    agents: [
+      { icon: "📅", label: "Scheduling" },
+      { icon: "💰", label: "Billing" },
+      { icon: "📧", label: "Communications" },
+      { icon: "📊", label: "Data Gathering" },
+      { icon: "📋", label: "Report Generation" },
+      { icon: "🏛️", label: "Form Filing" },
+      { icon: "✅", label: "Compliance" },
+      { icon: "📝", label: "Document Drafting" },
+      { icon: "🔧", label: "Error Corrections" },
+      { icon: "📬", label: "Notices" },
+    ],
+    agentNote: "AI agents replace the backend — from scheduling and billing to gathering unstructured data, producing reports, and filing forms",
+    oversightItems: [
+      { icon: "📡", label: "Monitoring" },
+      { icon: "🎛️", label: "Remote Intervention" },
+      { icon: "⛏️", label: "Process Mining" },
+      { icon: "⚙️", label: "Process Automation" },
+    ],
+    oversightNote: "Because we operate many businesses, centralized oversight of all agents across all cognitories is a core part of the solution",
+  },
 };
 
 // ============================================================
@@ -794,29 +821,29 @@ const _slides: SlideContent[] = [
   // === ACT 1: Context ===
   slide01,                // 1. Cognitory (title)
   slideTldr,              // 2. Executive Summary
-  slideParallels,         // 3. History doesn't repeat
-  slide05,                // 4. White collar services dwarf tech market
+  slide02,                // 3. Team
+  slideParallels,         // 4. History doesn't repeat
+  slide05,                // 5. White collar services dwarf tech market
 
   // === ACT 2: The Thesis ===
-  slideCognitories,       // 5. We're building cognitories
+  slideCognitories,       // 6. We're building cognitories
 
   // === ACT 3: The Business — TPA as proof ===
-  slide11,                // 6. Our first bet: Retirement TPA
-  slide13,                // 7. Jamie (credibility right after TPA intro)
-  slideRollupModel,       // 8. How Acquisitions Work (grounded in TPA)
-  slide17,                // 9. Automation Opportunities (the hard evidence)
-  slideCompetitive,       // 10. Competitive Landscape
+  slide11,                // 7. Our first bet: Retirement TPA
+  slide13,                // 8. Jamie (credibility right after TPA intro)
+  slideRollupModel,       // 9. How Acquisitions Work (grounded in TPA)
+  slide17,                // 10. Automation Opportunities (the hard evidence)
+  slideCompetitive,       // 11. Competitive Landscape
 
   // === ACT 4: The Vision — zoom out ===
-  slide09,                // 11. The Playbook (the repeatable system)
-  slide10,                // 12. Candidate Industries (where we go next)
-  slideHoldco,            // 13. What we're building: a Holding Company
-  slideWhyNow,            // 14. Why HoldCo is the right model
+  slide09,                // 12. The Playbook (the repeatable system)
+  slide10,                // 13. Candidate Industries (where we go next)
+  slideHoldco,            // 14. What we're building: a Holding Company
+  slideWhyNow,            // 15. Why HoldCo is the right model
 
   // === ACT 5: The Close ===
-  slide15,                // 15. Pipeline / Traction
-  slide18,                // 16. The Ask
-  slide02,                // 17. Team
+  slide15,                // 16. Pipeline / Traction
+  slide18,                // 17. The Ask
 
   /* --- commented out slides ---
   slideGrowth,            // How big can this be

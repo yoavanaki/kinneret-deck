@@ -1067,6 +1067,179 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
     );
   }
 
+  // ---- COGNITORY LAYOUT (layered anatomy diagram) ----
+  if (slide.layout === "cognitory" && slide.cognitoryDiagram) {
+    const d = slide.cognitoryDiagram;
+
+    const downArrow = (
+      <svg width="12" height="14" viewBox="0 0 12 14">
+        <line x1="6" y1="0" x2="6" y2="8" stroke={t.accent} strokeWidth="1.5" />
+        <path d="M2,7 L6,13 L10,7" fill="none" stroke={t.accent} strokeWidth="1.5" strokeLinejoin="round" />
+      </svg>
+    );
+
+    return (
+      <div style={baseStyle} className="flex flex-col p-8 px-10">
+        <EditableText
+          value={slide.title}
+          slideId={slide.id}
+          field="title"
+          editable={editable}
+          onUpdate={onUpdate}
+          tag="h1"
+          className="text-[22px] font-bold mb-1"
+          style={headingStyle}
+        />
+        {slide.subtitle && (
+          <EditableText
+            value={slide.subtitle}
+            slideId={slide.id}
+            field="subtitle"
+            editable={editable}
+            onUpdate={onUpdate}
+            tag="h2"
+            className="text-[11px] mb-2.5"
+            style={subtitleStyle}
+          />
+        )}
+        <AccentBar color={t.accent} className="mb-3" />
+
+        <div className="flex-1 flex flex-col">
+          {/* CLIENT LAYER */}
+          <div className="flex items-center gap-4">
+            <div
+              className="flex-[3] rounded-lg px-4 py-2 flex items-center gap-3"
+              style={{ backgroundColor: t.tableHeaderBg, border: `1.5px solid ${t.tableBorder}` }}
+            >
+              <div className="flex gap-1 text-base leading-none">
+                <span>🧑</span><span>👩</span><span>🧑‍💼</span><span>👩‍💼</span>
+              </div>
+              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: t.heading }}>
+                Clients
+              </span>
+            </div>
+            <div className="flex-[2] text-[9px] leading-snug italic" style={{ color: t.subtitle }}>
+              {d.clientNote}
+            </div>
+          </div>
+
+          {/* Arrow */}
+          <div className="flex items-center gap-4 py-0.5">
+            <div className="flex-[3] flex justify-center">{downArrow}</div>
+            <div className="flex-[2]" />
+          </div>
+
+          {/* HUMAN INTERFACE LAYER */}
+          <div className="flex items-start gap-4">
+            <div
+              className="flex-[3] rounded-xl px-4 py-2.5"
+              style={{ backgroundColor: t.cardBg, border: `1.5px solid ${t.tableBorder}` }}
+            >
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: t.accent }}>
+                  Human Interface
+                </span>
+              </div>
+              <div className="flex gap-1.5">
+                {d.humanItems.map((item, i) => (
+                  <div
+                    key={i}
+                    className="rounded-md px-2 py-1.5 flex flex-col items-center gap-0.5 flex-1"
+                    style={{ backgroundColor: t.bg, border: `1px solid ${t.tableBorder}` }}
+                  >
+                    <span className="text-sm leading-none">{item.icon}</span>
+                    <span className="text-[7.5px] font-medium text-center leading-tight" style={{ color: t.heading }}>
+                      {item.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex-[2] text-[9px] leading-snug italic" style={{ color: t.subtitle }}>
+              {d.humanNote}
+            </div>
+          </div>
+
+          {/* Arrow */}
+          <div className="flex items-center gap-4 py-0.5">
+            <div className="flex-[3] flex justify-center">{downArrow}</div>
+            <div className="flex-[2]" />
+          </div>
+
+          {/* AI AGENT BACKEND */}
+          <div className="flex items-start gap-4">
+            <div
+              className="flex-[3] rounded-xl px-4 py-2.5"
+              style={{ backgroundColor: t.cardBg, border: `1.5px solid ${t.tableBorder}` }}
+            >
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: t.accent }}>
+                  AI Agent Backend
+                </span>
+              </div>
+              <div className="grid grid-cols-5 gap-1.5">
+                {d.agents.map((agent, i) => (
+                  <div
+                    key={i}
+                    className="rounded-md px-1.5 py-1.5 flex flex-col items-center gap-0.5"
+                    style={{ backgroundColor: t.bg, border: `1px solid ${t.tableBorder}` }}
+                  >
+                    <span className="text-sm leading-none">{agent.icon}</span>
+                    <span className="text-[7.5px] font-medium text-center leading-tight" style={{ color: t.heading }}>
+                      {agent.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex-[2] text-[9px] leading-snug italic" style={{ color: t.subtitle }}>
+              {d.agentNote}
+            </div>
+          </div>
+
+          {/* Arrow */}
+          <div className="flex items-center gap-4 py-0.5">
+            <div className="flex-[3] flex justify-center">{downArrow}</div>
+            <div className="flex-[2]" />
+          </div>
+
+          {/* OVERSIGHT & CONTROL LAYER */}
+          <div className="flex items-start gap-4">
+            <div
+              className="flex-[3] rounded-xl px-4 py-2.5"
+              style={{ backgroundColor: t.cardBg, border: `1.5px solid ${t.tableBorder}` }}
+            >
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: t.accent }}>
+                  Oversight & Control
+                </span>
+              </div>
+              <div className="flex gap-1.5">
+                {d.oversightItems.map((item, i) => (
+                  <div
+                    key={i}
+                    className="rounded-md px-2 py-1.5 flex flex-col items-center gap-0.5 flex-1"
+                    style={{ backgroundColor: t.bg, border: `1px solid ${t.tableBorder}` }}
+                  >
+                    <span className="text-sm leading-none">{item.icon}</span>
+                    <span className="text-[7.5px] font-medium text-center leading-tight" style={{ color: t.heading }}>
+                      {item.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex-[2] text-[9px] leading-snug italic" style={{ color: t.subtitle }}>
+              {d.oversightNote}
+            </div>
+          </div>
+        </div>
+
+        <SlideNumber num={slide.number} color={t.subtitle} />
+      </div>
+    );
+  }
+
   // ---- PARALLELS LAYOUT (side-by-side revolution comparison) ----
   if (slide.layout === "parallels" && slide.tableRows && slide.tableHeaders) {
     const leftLabel = slide.tableHeaders[1] || "";
