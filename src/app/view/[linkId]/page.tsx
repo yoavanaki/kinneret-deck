@@ -37,7 +37,7 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
     const rect = containerRef.current.getBoundingClientRect();
     const scaleX = rect.width / 960;
     const scaleY = rect.height / 540;
-    setSlideScale(Math.min(scaleX, scaleY));
+    setSlideScale(Math.min(scaleX, scaleY) * 1.1);
   }, []);
 
   useEffect(() => {
@@ -235,7 +235,7 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
         </div>
 
         {/* Navigation */}
-        <div className="flex items-center gap-4 mt-1.5 shrink-0">
+        <div className="flex items-center gap-4 mt-1.5 mb-3 shrink-0">
           <button
             onClick={() => goToSlide(Math.max(0, currentSlide - 1))}
             disabled={currentSlide === 0}

@@ -12,6 +12,8 @@ export interface SlideContent {
   title: string;
   /** Subtitle or secondary text */
   subtitle?: string;
+  /** Summary paragraph shown as a styled box */
+  summary?: string;
   /** Body text - supports multiple paragraphs */
   body?: string;
   /** Bullet points as an array of strings */
@@ -48,6 +50,8 @@ export interface SlideContent {
   pieChart?: { label: string; value: number; color?: string }[];
   /** Optional portrait / headshot image URL */
   imageUrl?: string;
+  /** Logos to display (e.g. company/institution logos) */
+  logos?: { name: string; imageUrl: string }[];
   /** Callout box text — rendered as a highlighted banner */
   callout?: string;
   /** Footnote text — rendered in very small text at slide bottom */
@@ -160,7 +164,7 @@ const slide02: SlideContent = {
       name: "Jamie Kalamarides",
       role: "",
       bio: "President, Group Insurance at Prudential\nHead of Institutional Retirement Plan Services\nExpert witness, U.S. Senate (SECURE Act)\nFellow, Bipartisan Policy Center\nMBA @ Tuck",
-      imageUrl: "/team/kalamarides.jpg",
+      imageUrl: "/team/kalamarides.png",
       linkedIn: "https://www.linkedin.com/in/kalamarides/",
       logos: [
         { name: "Dartmouth", imageUrl: "/logos/dartmouth.svg" },
@@ -520,9 +524,9 @@ const slide11: SlideContent = {
   rightColumnTitle: "Why We Like It",
   rightBoxes: [
     { icon: "💰", title: "Recurring Revenue", description: "Clients pay annually, year after year — generating predictable, compounding cash flows" },
-    { icon: "🧩", title: "Fragmented Market", description: "2,000+ independent TPAs, most under $5M revenue — cheap to acquire at 4-6x EBITDA" },
+    { icon: "🧩", title: "Fragmented Market", description: "2,000+ independent TPAs, most under $5M revenue — cheap to acquire at 4-6x EBITDA. A wave of owners lacking succession plans" },
     { icon: "🤖", title: "Automation Ready", description: "80%+ of workflows are rule-based and repetitive — AI can cut cost-to-serve by 50%+" },
-    { icon: "📜", title: "SECURE Act 2.0", description: "New legislation expanding plan coverage to millions — growing demand, same supply" },
+    { icon: "📜", title: "Retirement Coverage Expansion", description: "New Federal & State legislation expanding plan coverage to millions — growing demand, same supply" },
   ],
 };
 
@@ -555,13 +559,18 @@ const slide13: SlideContent = {
   title: "Partnered with top-tier retirement professional",
   subtitle: "Jamie Kalamarides",
   layout: "text",
-  imageUrl: "/team/kalamarides.jpg",
+  imageUrl: "/team/kalamarides.png",
   stats: [
     { value: "$5T", label: "Life Insurance Managed" },
     { value: "$285B", label: "Retirement Assets" },
     { value: "Top 10", label: "U.S. Financial Institution" },
   ],
   body: "Jamie brings 20+ years of senior leadership at Prudential Financial, where he served as President of Group Insurance and Head of Institutional Retirement Plan Services, overseeing billions in plan assets.\n\nHe was a key expert to the SECURE Act, testifying before the U.S. Senate Finance, HELP, and Aging Committees on retirement policy. He is a nonresident fellow at the Bipartisan Policy Center.\n\nJamie's deep domain expertise in retirement services — combined with his relationships across the industry — gives Cognitory a unique advantage in building trust with acquisition targets and navigating the regulatory landscape.",
+  logos: [
+    { name: "Prudential", imageUrl: "/logos/prudential.png" },
+    { name: "US Gov", imageUrl: "/logos/usgov.svg" },
+    { name: "Dartmouth", imageUrl: "/logos/dartmouth.svg" },
+  ],
 };
 
 // ============================================================
@@ -675,7 +684,7 @@ const slide17: SlideContent = {
     ["Required Notices & Disclosures", "2", "Admin", "$35", "75%", "$26,250"],
   ],
   callout: "Implied margin expansion: ~20 percentage points ($400K savings on $2M revenue across ~500 plans). Combined with tuck-in rollups, margins reach 50%+.",
-  footnote: 'Source: 144-process inventory mapped at partner TPA (230 plans). 62 of 144 processes rated "Easy" automation. Census: offshore team averages 3 plans/day vs. 8-10 target. 5558 extensions: "nearly zero judgment — prime batch candidate." Trust reconciliation: #1 identified target.',
+  footnote: 'Source: 144-process inventory mapped at partner TPA.',
 };
 
 // ============================================================
@@ -767,7 +776,7 @@ const slideTldr: SlideContent = {
   id: "slide-tldr",
   number: 2,
   title: "Executive Summary",
-  subtitle: "AI is reshaping white-collar service industries — we're building the company to lead that transition",
+  summary: "At Cognitory, we're building \"factories\" for white-collar services — replacing labor-intensive workflows with AI. We identify attractive verticals and leverage our agentic toolkit to acquire, automate, and scale traditional service firms. We're starting with the massive retirement administration market, where we have a 40+ firm pipeline and are nearing close on ~$5M of ARR.",
   layout: "exec-summary",
   stats: [
     { value: "6 : 1", label: "Services vs. Tech Spend" },
@@ -777,7 +786,7 @@ const slideTldr: SlideContent = {
   ],
   boxes: [
     { icon: "🧠", title: "Purpose-Built Team", description: "M&A, AI, and industry expertise under one roof — PE deal sourcing, production AI systems, and retirement operations at scale" },
-    { icon: "🏗️", title: "Massive Vision, Proven Model", description: "Building an AI-native holding company that acquires and automates service businesses across multiple trillion-dollar industries" },
+    { icon: "🏗️", title: "Massive Vision, Proven Model", description: "Building an AI-native holding company that acquires and automates service businesses across multiple industries" },
     { icon: "🚀", title: "Strong First-Vertical Momentum", description: "Retirement admin: 40+ pipeline targets, 5 active LOIs, and $5M ARR at close in an $8B+ hyper-fragmented market" },
   ],
 };

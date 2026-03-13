@@ -60,7 +60,7 @@ function StickerBadge({ text, accent }: { text: string; accent: string }) {
 function AccentBar({ color, className = "" }: { color: string; className?: string }) {
   return (
     <div
-      className={`h-[3px] w-10 rounded-full ${className}`}
+      className={`h-[3px] w-10 rounded-full flex-shrink-0 ${className}`}
       style={{ backgroundColor: color }}
     />
   );
@@ -734,12 +734,36 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
         )}
         <div className={`flex ${slide.imageUrl ? "gap-8" : ""} flex-1`}>
           {slide.imageUrl && (
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 flex flex-col items-center">
               <img
                 src={slide.imageUrl}
                 alt={slide.title}
                 className="w-[140px] h-[140px] rounded-lg object-cover"
               />
+              {slide.logos && slide.logos.length > 0 && (
+                <div className="flex gap-1.5 mt-3">
+                  {slide.logos.map((logo, li) => (
+                    <div
+                      key={li}
+                      className="flex items-center justify-center rounded"
+                      style={{
+                        width: 44,
+                        height: 30,
+                        backgroundColor: "rgba(255,255,255,0.9)",
+                        padding: "3px 4px",
+                        flexShrink: 0,
+                      }}
+                      title={logo.name}
+                    >
+                      <img
+                        src={logo.imageUrl}
+                        alt={logo.name}
+                        className="max-w-full max-h-full object-contain"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
           <div className="flex-1">
@@ -820,16 +844,21 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
       <div style={baseStyle} className="flex flex-col justify-center p-10 px-12">
         {/* Header */}
         <h1
-          className="text-[22px] font-bold mb-1"
+          className="text-[22px] font-bold mb-0.5"
           style={headingStyle}
         >
           {slide.title}
         </h1>
-        <AccentBar color={t.accent} className="mb-2" />
-        {slide.subtitle && (
-          <p className="text-xs mb-6 leading-relaxed" style={subtitleStyle}>
-            {slide.subtitle}
-          </p>
+        <AccentBar color={t.accent} className="mb-3" />
+
+        {/* Summary box */}
+        {slide.summary && (
+          <div
+            className="rounded-lg px-5 py-3.5 mb-4 text-[12.5px] leading-relaxed"
+            style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}`, color: t.text }}
+          >
+            {slide.summary}
+          </div>
         )}
 
         {/* Stats row */}
@@ -2147,6 +2176,7 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
           className="text-[22px] font-bold mb-1"
           style={headingStyle}
         />
+        <AccentBar color={t.accent} className="mb-2" />
         {slide.subtitle && (
           <EditableText
             value={slide.subtitle}
@@ -2155,11 +2185,10 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
             editable={editable}
             onUpdate={onUpdate}
             tag="h2"
-            className="text-[11px] mb-3"
+            className="text-[11px] mb-4"
             style={subtitleStyle}
           />
         )}
-        <AccentBar color={t.accent} className="mb-5" />
 
         {/* Optional stats row */}
         {slide.stats && (
