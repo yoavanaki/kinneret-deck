@@ -21,7 +21,9 @@ export interface SlideContent {
   /** Custom HTML content for special layouts */
   customHtml?: string;
   /** Team members for team layout */
-  team?: { name: string; role: string; bio: string; imageUrl?: string; logos?: { name: string; imageUrl: string }[] }[];
+  team?: { name: string; role: string; bio: string; imageUrl?: string; linkedIn?: string; logos?: { name: string; imageUrl: string }[] }[];
+  /** Footer banner for team slide — additional hires with logos */
+  teamFooter?: { text: string; logos: { name: string; imageUrl: string }[] };
   /** Bar chart data for bar-chart layout */
   bars?: { label: string; value: number; highlight?: boolean }[];
   /** Optional note/annotation shown in a different style */
@@ -105,7 +107,7 @@ const slide01: SlideContent = {
   layout: "dictionary",
   subtitle: "/ˈkɒɡ.nɪ.tər.i/",
   body: "noun",
-  customHtml: "A facility or system that produces services at scale through standardized, automated processes — as a factory does for physical goods.",
+  customHtml: "A facility or system that produces knowledge services at scale through standardized, automated processes: as a factory does for physical goods.",
   note: '"The next $1T company will be a software company masquerading as a services firm." — Sequoia',
 };
 
@@ -121,8 +123,9 @@ const slide02: SlideContent = {
     {
       name: "Yoav Anaki",
       role: "",
-      bio: "Computer Science age 13\nCOO at Mad Mimi, acquired by GoDaddy\nIDF Counterterrorism Investigations\nPartner, AI at Fresh Fund\nMBA @ HBS",
+      bio: "Computer Science age 13\nCOO @ Yala by Mad Mimi, acq. GoDaddy\nIDF Counterterrorism Investigations\nPartner, AI at Fresh Fund\nMBA @ HBS",
       imageUrl: "/team/anaki.jpeg",
+      linkedIn: "https://www.linkedin.com/in/yoavanaki/",
       logos: [
         { name: "HBS", imageUrl: "/logos/hbs.svg" },
         { name: "IDF", imageUrl: "/logos/idf.svg" },
@@ -132,8 +135,9 @@ const slide02: SlideContent = {
     {
       name: "Yoav Segev",
       role: "",
-      bio: "Economics @ Oxford University\nConsultant at BCG\nBusiness Services Investor at Charlesbank\nIncubated Compliance Consulting firm\nMBA @ HBS",
+      bio: "Economics @ Oxford University\nConsultant at BCG\nBusiness Services Investor at Charlesbank\nIncubated Salus, $20M ARR compliance firm\nMBA @ HBS",
       imageUrl: "/team/segev.jpeg",
+      linkedIn: "https://www.linkedin.com/in/ysegev/",
       logos: [
         { name: "HBS", imageUrl: "/logos/hbs.svg" },
         { name: "BCG", imageUrl: "/logos/bcg.svg" },
@@ -143,8 +147,9 @@ const slide02: SlideContent = {
     {
       name: "Eran Pinhas",
       role: "",
-      bio: "CTO & Co-Founder of Ginzi (AI Support Automation)\nPrincipal Software Engineer at Axonius\nFull-stack & AI/ML systems\nOpen-source contributor\nCS @ Ben-Gurion University",
+      bio: "CTO & Co-Founder of Ginzi (AI Support Automation)\nPrincipal Software Engineer at Axonius\nIDF Intelligence Team Lead\nCS M.Sc @ Ben-Gurion University",
       imageUrl: "/team/pinhas.jpg",
+      linkedIn: "https://www.linkedin.com/in/eran-pinhas-915041149/",
       logos: [
         { name: "IDF 8200", imageUrl: "/logos/idf8200.svg" },
         { name: "Ben Gurion Uni", imageUrl: "/logos/bgu.svg" },
@@ -156,6 +161,7 @@ const slide02: SlideContent = {
       role: "",
       bio: "President, Group Insurance at Prudential\nHead of Institutional Retirement Plan Services\nExpert witness, U.S. Senate (SECURE Act)\nFellow, Bipartisan Policy Center\nMBA @ Tuck",
       imageUrl: "/team/kalamarides.jpg",
+      linkedIn: "https://www.linkedin.com/in/kalamarides/",
       logos: [
         { name: "Dartmouth", imageUrl: "/logos/dartmouth.svg" },
         { name: "US Gov", imageUrl: "/logos/usgov.svg" },
@@ -163,6 +169,16 @@ const slide02: SlideContent = {
       ],
     },
   ],
+  teamFooter: {
+    text: "+3 founding team hires across technology and operations",
+    logos: [
+      { name: "McKinsey", imageUrl: "/logos/mckinsey.svg" },
+      { name: "Palo Alto Net.", imageUrl: "/logos/paloalto.svg" },
+      { name: "Cyera", imageUrl: "/logos/cyera.svg" },
+      { name: "Unit 81", imageUrl: "/logos/unit81.svg" },
+      { name: "8200", imageUrl: "/logos/idf8200.svg" },
+    ],
+  },
 };
 
 // ============================================================
@@ -269,7 +285,7 @@ const slide06: SlideContent = {
 const slideStack: SlideContent = {
   id: "slide-stack",
   number: 7,
-  title: "The Cognitory platform",
+  title: "The Cognitory Platform",
   subtitle: "AI-native software that automates any services business",
   layout: "stack",
   stack: [
@@ -358,14 +374,13 @@ const slideTechOpps: SlideContent = {
 };
 
 // ============================================================
-// SLIDE: Why This is the Right Way to Build a Business Today
+// SLIDE: Why HoldCo is the Right Model
 // ============================================================
 const slideWhyNow: SlideContent = {
   id: "slide-why-now",
   number: 8,
-  title: "Why HoldCo is the right model",
+  title: "Appendix: Why HoldCo Is the Right Model",
   layout: "boxes",
-  body: "Our software stack is reusable across industries. AI agents source companies, conduct outreach, run diligence, support acquisitions, and integrate businesses. Additional software oversees and manages agent-driven operations inside portfolio companies. Because the stack and playbook are reusable, the model expands into adjacent fragmented service industries — making a multi-industry roll-up strategy logical and scalable.",
   boxes: [
     { icon: "1️⃣", title: "Acquire Distribution Cheaply", description: "Buy existing customer bases at 4-6x EBITDA instead of spending years and millions on sales & marketing to build from scratch" },
     { icon: "2️⃣", title: "Speed to Economic Value", description: "Efficiency gains from AI hit the P&L immediately — no need to wait for product-market fit or long sales cycles" },
@@ -383,9 +398,9 @@ const slide08: SlideContent = {
   title: "Building the world's first services factories",
   layout: "flow",
   flows: {
-    before: { label: "Acquire", icon: "🏢", items: ["Buy services firms", "at 4-6x EBITDA"] },
+    before: { label: "Acquire", icon: "🏢", items: ["Buy Services Firms", "At 4–6x EBITDA"] },
     middle: { label: "Automate", icon: "⚡" },
-    after: { label: "Expand", icon: "📈", items: ["End-to-end automation", "Roll up adjacent firms"] },
+    after: { label: "Expand", icon: "📈", items: ["End-to-End Automation", "Roll Up Adjacent Firms"] },
   },
   note: "Following the industrial revolution playbook: acquire manual processes, automate high-friction components, then scale.",
 };
@@ -399,14 +414,14 @@ const slide09: SlideContent = {
   title: "The Playbook",
   layout: "playbook",
   boxes: [
-    { icon: "🔍", title: "Plan", description: "Identify a highly fragmented services sector with sticky, recurring revenue" },
-    { icon: "🤝", title: "Partner", description: "Recruit an industry-specific operating partner (experienced industry executive)" },
-    { icon: "🗺️", title: "Map the Market", description: "Map the entire industry and identify initial acquisition opportunities and automation opportunities" },
-    { icon: "🏢", title: "Acquire Platform", description: "Acquire one well-operated platform company" },
-    { icon: "⚡", title: "Automate", description: "Build the AI automation playbook for the platform: expand workforce capacity (~50%), automate operational workflows, improve margins" },
-    { icon: "🔄", title: "Roll-In Acquisitions", description: "Acquire additional firms (3–5 total) at ~4–6× EBITDA and integrate them into the platform" },
-    { icon: "📊", title: "Demonstrate Expansion", description: "Show EBITDA expansion driven by automation, increased capacity, and operational leverage" },
-    { icon: "📈", title: "Scale", description: "Accelerate acquisition pace to ~2 acquisitions per month alongside organic growth" },
+    { icon: "", title: "Select Sector", description: "Identify a fragmented services vertical with sticky, recurring revenue" },
+    { icon: "", title: "Recruit Operating Partner", description: "Bring on an industry executive who becomes vertical CEO" },
+    { icon: "", title: "Map & Pipeline", description: "Build acquisition pipeline; identify highest-leverage automation targets" },
+    { icon: "", title: "Acquire Platform", description: "Acquire one well-run firm as the operating foundation" },
+    { icon: "", title: "Deploy AI", description: "Automate operational workflows — compliance, reporting, onboarding" },
+    { icon: "", title: "Expand Capacity", description: "Use AI to grow workforce output ~50% without proportional headcount" },
+    { icon: "", title: "Roll Up", description: "Acquire 3–5 adjacent firms at 4–6× EBITDA; integrate onto platform" },
+    { icon: "", title: "Scale the Vertical", description: "Accelerate acquisition cadence and compound organic growth" },
   ],
 };
 
@@ -454,7 +469,7 @@ const slideRollupModel: SlideContent = {
 const slide10: SlideContent = {
   id: "slide-10",
   number: 9,
-  title: "Initial Candidate Industries",
+  title: "Appendix: Initial Candidate Industries",
   subtitle: "We've analyzed 20+ service sectors — Retirement TPA is our first target to disrupt",
   layout: "table",
   bullets: [
@@ -486,7 +501,7 @@ const slide10: SlideContent = {
 const slide11: SlideContent = {
   id: "slide-11",
   number: 10,
-  title: "Our first bet: Retirement TPA",
+  title: "Our first vertical and proving ground: Retirement TPA",
   subtitle: "Federal law requires professional administration for retirement plans — TPAs fill that critical role for 50K+ plans nationwide.",
   layout: "two-column-boxes",
   stats: [
@@ -495,14 +510,14 @@ const slide11: SlideContent = {
     { value: "50K+", label: "Plans Administered" },
     { value: "4–6×", label: "Acquisition Multiples" },
   ],
-  leftColumnTitle: "What is a Retirement TPA?",
+  leftColumnTitle: "What Is a Retirement TPA?",
   leftBoxes: [
     { icon: "📋", title: "Plan Administration", description: "Manages 401(k) and pension plans on behalf of employers — enrollment, distributions, loans" },
     { icon: "⚖️", title: "Compliance & Testing", description: "Runs IRS-mandated nondiscrimination tests (ADP/ACP, top-heavy) to keep plans legal" },
     { icon: "🏛️", title: "Government Filings", description: "Prepares Form 5500, 5558 extensions, and Summary Annual Reports for every plan" },
     { icon: "🔒", title: "Mandatory & Sticky", description: "Federal law requires professional administration — employers can't DIY, and switching is painful" },
   ],
-  rightColumnTitle: "Why we like it",
+  rightColumnTitle: "Why We Like It",
   rightBoxes: [
     { icon: "💰", title: "Recurring Revenue", description: "Clients pay annually, year after year — generating predictable, compounding cash flows" },
     { icon: "🧩", title: "Fragmented Market", description: "2,000+ independent TPAs, most under $5M revenue — cheap to acquire at 4-6x EBITDA" },
@@ -685,7 +700,7 @@ const slideFutureBusiness: SlideContent = {
 const slideHoldco: SlideContent = {
   id: "slide-holdco",
   number: 7,
-  title: "Cognitory Structure",
+  title: "Appendix: Cognitory Structure",
   subtitle: "We acquire sub-scale, traditional, white collar service firms and transform them into AI-native, high-margin businesses",
   layout: "holdco-org",
   orgChart: {
@@ -746,11 +761,33 @@ const slide18: SlideContent = {
 
 
 // ============================================================
-// SLIDE: TLDR
+// SLIDE: TLDR (vision-first)
 // ============================================================
 const slideTldr: SlideContent = {
   id: "slide-tldr",
   number: 2,
+  title: "Executive Summary",
+  subtitle: "AI is reshaping white-collar service industries — we're building the company to lead that transition",
+  layout: "exec-summary",
+  stats: [
+    { value: "6 : 1", label: "Services vs. Tech Spend" },
+    { value: "80%+", label: "Automatable with AI" },
+    { value: "$5M ARR", label: "LOI-Stage First-Vertical" },
+    { value: ">50%", label: "Target EBITDA Margin" },
+  ],
+  boxes: [
+    { icon: "🧠", title: "Purpose-Built Team", description: "M&A, AI, and industry expertise under one roof — PE deal sourcing, production AI systems, and retirement operations at scale" },
+    { icon: "🏗️", title: "Massive Vision, Proven Model", description: "Building an AI-native holding company that acquires and automates service businesses across multiple trillion-dollar industries" },
+    { icon: "🚀", title: "Strong First-Vertical Momentum", description: "Retirement admin: 40+ pipeline targets, 5 active LOIs, and $5M ARR at close in an $8B+ hyper-fragmented market" },
+  ],
+};
+
+// ============================================================
+// SLIDE: TLDR (TPA-focused, original)
+// ============================================================
+const slideTldrTpa: SlideContent = {
+  id: "slide-tldr-tpa",
+  number: 0,
   title: "Executive Summary",
   subtitle: "Building factories for white collar services in highly regulated industries",
   layout: "exec-summary",
@@ -774,7 +811,7 @@ const slideCognitories: SlideContent = {
   id: "slide-cognitories",
   number: 0, // auto-numbered below
   title: "Building cognitories for highly regulated industries",
-  subtitle: "A better way to organize capital, labor, and technology to produce services at much lower cost and higher volume",
+  subtitle: "A better way to organize capital, labor, and technology to produce knowledge services at much lower cost and higher volume",
   layout: "cognitory",
   cognitoryDiagram: {
     clientNote: "Industries that require a high degree of trust and white glove support",
@@ -803,7 +840,7 @@ const slideCognitories: SlideContent = {
       { icon: "⛏️", label: "Process Mining" },
       { icon: "⚙️", label: "Process Automation" },
     ],
-    oversightNote: "Because we operate many businesses, centralized oversight of all agents across all cognitories is a core part of the solution",
+    oversightNote: "Centralized oversight of all agents across all cognitories ensures quality, compliance, and continuous improvement",
   },
 };
 
@@ -820,23 +857,23 @@ const _slides: SlideContent[] = [
 
   // === ACT 2: The Thesis ===
   slideCognitories,       // 6. We're building cognitories
+  slide09,                // 7. The Playbook
 
   // === ACT 3: The Business — TPA as proof ===
-  slide11,                // 7. Our first bet: Retirement TPA
-  slide13,                // 8. Jamie
-  slideRollupModel,       // 9. How Acquisitions Work
-  slide17,                // 10. Automation Opportunities
-  slide15,                // 11. M&A Pipeline
-  slideCompetitive,       // 12. Competitive Landscape
+  slide11,                // 8. Our first bet: Retirement TPA
+  slide13,                // 9. Jamie
+  slideRollupModel,       // 10. How Acquisitions Work
+  slide17,                // 11. Automation Opportunities
+  slide15,                // 12. M&A Pipeline
+  slideCompetitive,       // 13. Competitive Landscape
 
-  // === ACT 4: The Vision — zoom out ===
-  slideHoldco,            // 13. Cognitory Structure
-  slideWhyNow,            // 14. Why HoldCo is the right model
-  slide09,                // 15. The Playbook
-  slide10,                // 16. Candidate Industries
+  // === ACT 4: The Close ===
+  slide18,                // 14. Thank You
 
-  // === ACT 5: The Close ===
-  slide18,                // 17. Thank You
+  // === Appendix ===
+  slideHoldco,            // A1. Cognitory Structure
+  slideWhyNow,            // A2. Why HoldCo is the Right Model
+  slide10,                // A3. Candidate Industries
 
   /* --- commented out slides ---
   slideGrowth,            // How big can this be

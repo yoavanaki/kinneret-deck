@@ -11,7 +11,7 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
   const [verified, setVerified] = useState(false);
   const [linkStatus, setLinkStatus] = useState<"loading" | "ok" | "disabled">("loading");
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [themeId, setThemeId] = useState("aipac");
+  const [themeId, setThemeId] = useState("aipac-light");
   const [slideData, setSlideData] = useState(initialSlides);
   const slideStartTime = useRef<number>(Date.now());
   const currentSlideRef = useRef(currentSlide);
@@ -48,42 +48,9 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
         }
         setLinkStatus("ok");
 
-        // Build slide content from edits
-        let merged = edits.length > 0 ? applyEdits(initialSlides, edits) : [...initialSlides];
-
-        // Use link's snapshot slide_ids if available; otherwise fetch global order
-        if (link?.slide_ids && Array.isArray(link.slide_ids) && link.slide_ids.length > 0) {
-          const slideMap = new Map(merged.map((s) => [s.id, s]));
-          const ordered: typeof merged = [];
-          for (const id of link.slide_ids) {
-            const slide = slideMap.get(id);
-            if (slide) ordered.push(slide);
-          }
-          setSlideData(ordered);
-        } else {
-          // Fallback: use global slide order
-          fetch("/api/slide-order")
-            .then((r) => r.json())
-            .then((order) => {
-              if (order && Array.isArray(order.slide_ids) && order.slide_ids.length > 0) {
-                const slideMap = new Map(merged.map((s) => [s.id, s]));
-                const ordered: typeof merged = [];
-                for (const id of order.slide_ids) {
-                  const slide = slideMap.get(id);
-                  if (slide) { ordered.push(slide); slideMap.delete(id); }
-                }
-                slideMap.forEach((s) => ordered.push(s));
-                merged = ordered;
-
-                const gyIdx = typeof order.graveyard_index === "number" ? order.graveyard_index : -1;
-                if (gyIdx >= 0 && gyIdx < merged.length) {
-                  merged = merged.slice(0, gyIdx);
-                }
-              }
-              setSlideData(merged);
-            })
-            .catch(() => setSlideData(merged));
-        }
+        // Build slide content from edits — order comes from slides.ts
+        const merged = edits.length > 0 ? applyEdits(initialSlides, edits) : [...initialSlides];
+        setSlideData(merged);
       })
       .catch(() => {
         // If the API is unreachable, just show the deck
@@ -221,9 +188,28 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
 
   const slide = slideData[currentSlide];
 
+  const isDark = themeId === "aipac";
+
   // Presentation viewer
   return (
-    <div className="h-screen bg-gray-900 flex flex-col overflow-hidden">
+    <div className={`h-screen flex flex-col overflow-hidden relative ${isDark ? "bg-gray-900" : "bg-[#f0edea]"}`}>
+      {/* Theme toggle */}
+      <button
+        onClick={() => setThemeId(isDark ? "aipac-light" : "aipac")}
+        className={`absolute top-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+          isDark
+            ? "bg-gray-700 hover:bg-gray-600 text-gray-300"
+            : "bg-white/80 hover:bg-white text-gray-600 shadow-sm"
+        }`}
+        title={isDark ? "Switch to light theme" : "Switch to dark theme"}
+      >
+        {isDark ? (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        ) : (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        )}
+      </button>
+
       {/* Slide */}
       <div className="flex-1 flex flex-col items-center justify-center px-2 pt-2 pb-1 min-h-0">
         <div ref={containerRef} className="flex-1 w-full flex items-center justify-center min-h-0">
@@ -237,20 +223,26 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
           <button
             onClick={() => goToSlide(Math.max(0, currentSlide - 1))}
             disabled={currentSlide === 0}
-            className="px-3 py-1.5 bg-gray-700 text-white rounded-lg text-xs disabled:opacity-30 hover:bg-gray-600"
+            className={`px-3 py-1.5 rounded-lg text-xs disabled:opacity-30 ${
+              isDark ? "bg-gray-700 text-white hover:bg-gray-600" : "bg-white/80 text-gray-600 hover:bg-white shadow-sm"
+            }`}
           >
             ←
           </button>
 
           {/* Slide dots */}
           <div className="flex items-center gap-1">
-            <span className="text-[10px] text-gray-500 mr-1">{currentSlide + 1}/{slideData.length}</span>
+            <span className={`text-[10px] mr-1 ${isDark ? "text-gray-500" : "text-gray-400"}`}>{currentSlide + 1}/{slideData.length}</span>
             {slideData.map((_, i) => (
               <button
                 key={i}
                 onClick={() => goToSlide(i)}
                 className={`w-1.5 h-1.5 rounded-full transition-all ${
-                  i === currentSlide ? "bg-blue-500 w-3" : "bg-gray-600 hover:bg-gray-500"
+                  i === currentSlide
+                    ? "bg-blue-500 w-3"
+                    : isDark
+                      ? "bg-gray-600 hover:bg-gray-500"
+                      : "bg-gray-300 hover:bg-gray-400"
                 }`}
               />
             ))}
@@ -259,7 +251,9 @@ export default function ViewPage({ params }: { params: Promise<{ linkId: string 
           <button
             onClick={() => goToSlide(Math.min(slideData.length - 1, currentSlide + 1))}
             disabled={currentSlide === slideData.length - 1}
-            className="px-3 py-1.5 bg-gray-700 text-white rounded-lg text-xs disabled:opacity-30 hover:bg-gray-600"
+            className={`px-3 py-1.5 rounded-lg text-xs disabled:opacity-30 ${
+              isDark ? "bg-gray-700 text-white hover:bg-gray-600" : "bg-white/80 text-gray-600 hover:bg-white shadow-sm"
+            }`}
           >
             →
           </button>

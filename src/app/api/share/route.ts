@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { id, slide_ids } = body;
+  const { id, slide_ids, label } = body;
 
   if (!id) {
     return NextResponse.json({ error: "id required" }, { status: 400 });
@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
     updated_at: new Date().toISOString(),
     disabled: false,
     slide_ids: Array.isArray(slide_ids) ? slide_ids : undefined,
+    label: typeof label === "string" ? label : undefined,
   });
 
   return NextResponse.json(link);
@@ -33,13 +34,13 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   const body = await req.json();
-  const { id, action, slide_ids } = body;
+  const { id, action, slide_ids, label } = body;
 
   if (!id || !action) {
     return NextResponse.json({ error: "id and action required" }, { status: 400 });
   }
 
-  let updates: { disabled?: boolean; slide_ids?: string[] } = {};
+  let updates: { disabled?: boolean; slide_ids?: string[]; label?: string } = {};
 
   if (action === "disable") {
     updates.disabled = true;
@@ -50,6 +51,8 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "slide_ids required for refresh" }, { status: 400 });
     }
     updates.slide_ids = slide_ids;
+  } else if (action === "rename") {
+    updates.label = typeof label === "string" ? label : "";
   } else {
     return NextResponse.json({ error: "unknown action" }, { status: 400 });
   }

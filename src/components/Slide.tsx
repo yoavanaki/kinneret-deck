@@ -303,7 +303,7 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
   if (slide.layout === "team" && slide.team) {
     const isLargeTeam = slide.team.length > 3;
     return (
-      <div style={baseStyle} className={`flex flex-col items-center justify-center ${isLargeTeam ? "px-8 py-8" : "p-12"}`}>
+      <div style={baseStyle} className={`flex flex-col ${isLargeTeam ? "px-8 py-8" : "p-12"}`}>
         <EditableText
           value={slide.title}
           slideId={slide.id}
@@ -311,15 +311,15 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
           editable={editable}
           onUpdate={onUpdate}
           tag="h1"
-          className={`font-bold ${isLargeTeam ? "text-[22px] mb-1" : "text-3xl mb-2"} text-center w-full`}
+          className={`font-bold ${isLargeTeam ? "text-[22px] mb-1" : "text-3xl mb-2"}`}
           style={headingStyle}
         />
-        <AccentBar color={t.accent} className={`mx-auto ${isLargeTeam ? "mb-5" : "mb-6"}`} />
+        <AccentBar color={t.accent} className={isLargeTeam ? "mb-5" : "mb-6"} />
         <div className={`flex ${isLargeTeam ? "gap-3" : "gap-6"} items-stretch w-full`}>
           {slide.team.map((member, i) => (
             <div
               key={i}
-              className={`flex-1 flex flex-col items-center text-center ${isLargeTeam ? "px-3 py-4" : "p-4"} rounded-lg`}
+              className={`flex-1 flex flex-col items-center text-center ${isLargeTeam ? "px-4 py-5" : "px-5 py-6"} rounded-lg`}
               style={{ backgroundColor: t.cardBg }}
             >
               {member.imageUrl ? (
@@ -344,7 +344,7 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
                 editable={editable}
                 onUpdate={onUpdate}
                 tag="h3"
-                className={`${isLargeTeam ? "text-[13px]" : "text-lg"} font-bold mb-0.5`}
+                className={`${isLargeTeam ? "text-[13px]" : "text-lg"} font-bold ${isLargeTeam ? "mb-3" : "mb-3.5"}`}
                 style={{ color: t.heading }}
               />
               {(member.role || editable) && (
@@ -355,7 +355,7 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
                   editable={editable}
                   onUpdate={onUpdate}
                   tag="p"
-                  className={`${isLargeTeam ? "text-[10px]" : "text-xs"} font-semibold uppercase tracking-wider mb-2`}
+                  className={`${isLargeTeam ? "text-[10px]" : "text-xs"} font-semibold uppercase tracking-wider ${isLargeTeam ? "mb-3" : "mb-3.5"}`}
                   style={{ color: t.accent }}
                 />
               )}
@@ -367,11 +367,11 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
                   editable={editable}
                   onUpdate={onUpdate}
                   tag="p"
-                  className={`${isLargeTeam ? "text-[9px] leading-snug" : "text-xs leading-relaxed"}`}
+                  className={`${isLargeTeam ? "text-[9px] leading-snug" : "text-xs leading-relaxed"} ${isLargeTeam ? "mb-3" : "mb-4"}`}
                   style={{ color: t.text, whiteSpace: "pre-line" }}
                 />
               ) : (
-                <div className="flex flex-col gap-0.5 w-full">
+                <div className={`flex flex-col gap-0.5 w-full ${isLargeTeam ? "mb-3" : "mb-4"}`}>
                   {member.bio.split("\n").map((line, li) => (
                     <p key={li} className={`${isLargeTeam ? "text-[9px]" : "text-xs"} leading-tight`}
                       style={{ color: t.text }}>
@@ -381,7 +381,7 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
                 </div>
               )}
               {member.logos && member.logos.length > 0 && (
-                <div className="flex justify-center gap-1 mt-auto pt-2">
+                <div className="flex justify-center gap-1 mt-auto pt-3">
                   {member.logos.map((logo, li) => (
                     <div
                       key={li}
@@ -389,7 +389,7 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
                       style={{
                         width: isLargeTeam ? 44 : 52,
                         height: isLargeTeam ? 30 : 36,
-                        backgroundColor: "#e8e8e8",
+                        backgroundColor: "rgba(255,255,255,0.9)",
                         padding: "3px 4px",
                         flexShrink: 0,
                       }}
@@ -404,9 +404,62 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
                   ))}
                 </div>
               )}
+              {member.linkedIn && (
+                <a
+                  href={member.linkedIn}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`mt-auto flex items-center justify-center gap-1 rounded font-semibold ${isLargeTeam ? "text-[8px]" : "text-[9px]"}`}
+                  style={{
+                    marginTop: isLargeTeam ? 26 : 32,
+                    padding: isLargeTeam ? "3px 6px" : "4px 8px",
+                    color: "#ffffff",
+                    background: "linear-gradient(180deg, #0b7dbe 0%, #0966a0 100%)",
+                    boxShadow: "0 2px 0 #074d7a, 0 3px 6px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.25)",
+                    border: "1px solid #085d8f",
+                    textDecoration: "none",
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  <svg width={isLargeTeam ? 10 : 11} height={isLargeTeam ? 10 : 11} viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                  View
+                </a>
+              )}
             </div>
           ))}
         </div>
+        {slide.teamFooter && (
+          <div className="flex items-center gap-3 mt-4 px-4 py-2.5 rounded-lg w-full" style={{ backgroundColor: t.cardBg }}>
+            <span className="text-[11px] font-medium shrink-0" style={{ color: t.subtitle }}>
+              {slide.teamFooter.text}
+            </span>
+            <div className="flex items-center gap-2 ml-auto">
+              {slide.teamFooter.logos.map((logo, li) => (
+                <div key={li} className="flex flex-col items-center gap-0.5" style={{ flexShrink: 0 }}>
+                  <div
+                    className="flex items-center justify-center rounded"
+                    style={{
+                      width: 52,
+                      height: 34,
+                      backgroundColor: "#ffffff",
+                      padding: "4px 5px",
+                    }}
+                    title={logo.name}
+                  >
+                    <img
+                      src={logo.imageUrl}
+                      alt={logo.name}
+                      style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", display: "block" }}
+                    />
+                  </div>
+                  <span className="text-[7px] leading-tight text-center" style={{ color: t.subtitle, maxWidth: 56 }}>{logo.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
@@ -1306,7 +1359,7 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
                     <span className="text-xl font-bold" style={{ color: t.text }}>{leftVal}</span>
                   </div>
                   <div className="flex flex-col items-center justify-center px-4">
-                    <span className="text-[8px] font-bold uppercase tracking-widest mb-1 whitespace-nowrap"
+                    <span className="text-[8px] font-bold uppercase tracking-widest mb-1 text-center whitespace-pre-line leading-tight"
                       style={{ color: t.accent }}>{cat}</span>
                     <span className="text-xl font-bold" style={{ color: t.accent }}>&#x2192;</span>
                   </div>
@@ -1439,13 +1492,13 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
                   key={i}
                   className="rounded-lg px-3 py-2 flex flex-col items-center justify-center text-center"
                   style={{
-                    backgroundColor: i === 0 ? t.accent + "15" : t.cardBg,
-                    border: `1.5px solid ${i === 0 ? t.accent + "40" : t.tableBorder}`,
+                    backgroundColor: t.cardBg,
+                    border: `1.5px solid ${t.tableBorder}`,
                   }}
                 >
                   <span
                     className="text-lg font-bold leading-none"
-                    style={{ color: i === 0 ? t.accent : t.heading, fontFamily: theme.headingFont }}
+                    style={{ color: t.heading, fontFamily: theme.headingFont }}
                   >
                     {stat.value}
                   </span>
@@ -1969,13 +2022,13 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
                 key={i}
                 className="flex-1 rounded-lg px-3 py-2 flex flex-col items-center justify-center text-center"
                 style={{
-                  backgroundColor: i === 0 ? t.accent + "15" : t.cardBg,
-                  border: `1.5px solid ${i === 0 ? t.accent + "40" : t.tableBorder}`,
+                  backgroundColor: t.cardBg,
+                  border: `1.5px solid ${t.tableBorder}`,
                 }}
               >
                 <span
                   className="text-[18px] font-bold leading-none"
-                  style={{ color: i === 0 ? t.accent : t.heading, fontFamily: theme.headingFont }}
+                  style={{ color: t.heading, fontFamily: theme.headingFont }}
                 >
                   {stat.value}
                 </span>
@@ -1989,28 +2042,28 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
 
         {/* Card grid */}
         <div
-          className={`flex-1 grid gap-3 content-center ${slide.boxes.length === 4 ? 'grid-cols-2' : 'grid-cols-3'}`}
+          className={`flex-1 grid gap-3 ${slide.boxes.length === 4 ? 'grid-cols-2 grid-rows-2' : 'grid-cols-3'}`}
         >
           {slide.boxes.map((box, i) => (
             <div
               key={i}
-              className="rounded-lg px-4 py-3 flex flex-col"
+              className="rounded-lg px-5 py-4 flex flex-col justify-center"
               style={{
                 backgroundColor: t.cardBg,
                 border: `1.5px solid ${t.tableBorder}`,
               }}
             >
-              <div className="flex items-center gap-2 mb-1.5">
-                <span className="text-base leading-none">{box.icon}</span>
+              <div className="flex items-center gap-2.5 mb-2">
+                <span className="text-lg leading-none">{box.icon}</span>
                 <span
-                  className="text-[11px] font-bold leading-tight"
+                  className="text-[13px] font-bold leading-tight"
                   style={{ color: t.heading }}
                 >
                   {box.title}
                 </span>
               </div>
               <span
-                className="text-[10px] leading-snug"
+                className="text-[11px] leading-relaxed"
                 style={{ color: t.text, opacity: 0.85 }}
               >
                 {box.description}
@@ -2116,13 +2169,13 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
                 key={i}
                 className="flex-1 rounded-lg px-3 py-2 flex flex-col items-center justify-center text-center"
                 style={{
-                  backgroundColor: i === 0 ? t.accent + "15" : t.cardBg,
-                  border: `1.5px solid ${i === 0 ? t.accent + "40" : t.tableBorder}`,
+                  backgroundColor: t.cardBg,
+                  border: `1.5px solid ${t.tableBorder}`,
                 }}
               >
                 <span
                   className="text-[18px] font-bold leading-none"
-                  style={{ color: i === 0 ? t.accent : t.heading, fontFamily: theme.headingFont }}
+                  style={{ color: t.heading, fontFamily: theme.headingFont }}
                 >
                   {stat.value}
                 </span>
@@ -2154,13 +2207,70 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
     );
   }
 
-  // ---- PLAYBOOK LAYOUT (flowchart boxes) ----
+  // ---- PLAYBOOK LAYOUT (connected flow with phases) ----
   if (slide.layout === "playbook" && slide.boxes) {
-    const isLargePlaybook = slide.boxes.length > 6;
-    const cols = isLargePlaybook ? 4 : 3;
-    const rows = Math.ceil(slide.boxes.length / cols);
+    const topRow = slide.boxes.slice(0, 4);
+    const bottomRow = slide.boxes.slice(4, 8);
+
+    // Phase color per step: Foundation (1-4), Build (5-6), Scale (7-8)
+    const phaseForStep = (idx: number) => {
+      if (idx < 4) return { label: "Foundation", color: t.accent };
+      if (idx < 6) return { label: "Build", color: "#5fb8c9" };
+      return { label: "Scale", color: "#7bc77f" };
+    };
+
+    // Horizontal arrow connector
+    const HArrow = () => (
+      <div className="flex items-center justify-center px-0 flex-shrink-0" style={{ width: 20 }}>
+        <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
+          <path d="M0 6 L16 6 M12 2 L19 6 L12 10" stroke={t.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.4" />
+        </svg>
+      </div>
+    );
+
+    // Single step card
+    const StepCard = ({ box, idx }: { box: { icon: string; title: string; description: string }; idx: number }) => {
+      const phase = phaseForStep(idx);
+      return (
+        <div
+          className="rounded-xl px-6 py-6 flex flex-col items-center text-center flex-1 min-w-0 relative overflow-hidden"
+          style={{
+            backgroundColor: t.cardBg,
+            border: `1.5px solid ${t.tableBorder}`,
+          }}
+        >
+          {/* Phase color top accent line */}
+          <div
+            className="absolute top-0 left-0 right-0 h-[2.5px]"
+            style={{ backgroundColor: phase.color, opacity: 0.6 }}
+          />
+          {/* Step number */}
+          <div className="mb-4 mt-2">
+            <div
+              className="w-6 h-6 text-[10px] rounded-full flex items-center justify-center font-bold flex-shrink-0"
+              style={{ backgroundColor: phase.color + "20", color: phase.color }}
+            >
+              {idx + 1}
+            </div>
+          </div>
+          <span
+            className="text-[12px] font-bold mb-4 leading-tight"
+            style={{ color: t.heading }}
+          >
+            {box.title}
+          </span>
+          <span
+            className="text-[9px] leading-snug"
+            style={{ color: t.subtitle }}
+          >
+            {box.description}
+          </span>
+        </div>
+      );
+    };
+
     return (
-      <div style={baseStyle} className="flex flex-col p-10">
+      <div style={baseStyle} className="flex flex-col p-10 pb-6">
         <EditableText
           value={slide.title}
           slideId={slide.id}
@@ -2171,45 +2281,79 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
           className="text-[22px] font-bold mb-1"
           style={headingStyle}
         />
-        <AccentBar color={t.accent} className={isLargePlaybook ? "mb-4" : "mb-6"} />
-        <div
-          className="flex-1 grid content-center"
-          style={{
-            gridTemplateColumns: `repeat(${cols}, 1fr)`,
-            gap: isLargePlaybook ? "8px" : "12px",
-          }}
-        >
-          {slide.boxes.map((box, i) => (
-            <div
-              key={i}
-              className={`rounded-xl ${isLargePlaybook ? "px-3 py-2.5" : "px-4 py-4"} flex flex-col items-center text-center`}
-              style={{
-                backgroundColor: t.cardBg,
-                border: `1.5px solid ${t.tableBorder}`,
-              }}
-            >
-              <div
-                className={`${isLargePlaybook ? "w-6 h-6 text-[10px] mb-1" : "w-8 h-8 text-xs mb-2"} rounded-full flex items-center justify-center font-bold`}
-                style={{ backgroundColor: t.accent + "18", color: t.accent }}
-              >
-                {i + 1}
-              </div>
-              <span className={`${isLargePlaybook ? "text-sm" : "text-lg"} mb-1`}>{box.icon}</span>
-              <span
-                className={`${isLargePlaybook ? "text-[11px]" : "text-[13px]"} font-bold mb-1`}
-                style={{ color: t.heading }}
-              >
-                {box.title}
-              </span>
-              <span
-                className={`${isLargePlaybook ? "text-[8.5px]" : "text-[10px]"} leading-snug`}
-                style={{ color: t.subtitle }}
-              >
-                {box.description}
+        <AccentBar color={t.accent} className="mb-3" />
+
+        {/* Phase legend */}
+        <div className="flex items-center gap-5 mb-4">
+          {[
+            { label: "Foundation", color: t.accent, steps: "1–4" },
+            { label: "Build", color: "#5fb8c9", steps: "5–6" },
+            { label: "Scale", color: "#7bc77f", steps: "7–8" },
+          ].map((p) => (
+            <div key={p.label} className="flex items-center gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: p.color, opacity: 0.7 }} />
+              <span className="text-[9px] font-semibold tracking-wide uppercase" style={{ color: t.subtitle }}>
+                {p.label}
               </span>
             </div>
           ))}
         </div>
+
+        {/* Flow rows */}
+        <div className="flex-1 flex flex-col justify-center gap-0">
+          {/* Top row: steps 1–4 */}
+          <div className="flex items-stretch">
+            {topRow.map((box, i) => (
+              <div key={i} className="flex items-stretch flex-1 min-w-0">
+                <StepCard box={box} idx={i} />
+                {i < topRow.length - 1 && <HArrow />}
+              </div>
+            ))}
+          </div>
+
+          {/* Elbow connector: step 4 (top-right) → step 5 (bottom-left) */}
+          <div className="flex items-center justify-center" style={{ height: 24, position: "relative" }}>
+            <div
+              className="absolute"
+              style={{
+                top: 0,
+                right: "12.5%",
+                left: "12.5%",
+                bottom: 0,
+              }}
+            >
+              <svg width="100%" height="100%" viewBox="0 0 600 24" preserveAspectRatio="none" fill="none">
+                <path
+                  d="M525 0 L525 12 L75 12 L75 24"
+                  stroke={t.accent}
+                  strokeWidth="1.5"
+                  strokeDasharray="5 3"
+                  opacity="0.35"
+                  fill="none"
+                  vectorEffect="non-scaling-stroke"
+                />
+              </svg>
+              {/* Arrow tip at bottom-left */}
+              <svg
+                style={{ position: "absolute", bottom: -1, left: "12.5%", transform: "translateX(-50%)" }}
+                width="10" height="7" viewBox="0 0 10 7" fill="none"
+              >
+                <path d="M1 1 L5 6 L9 1" stroke={t.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.35" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Bottom row: steps 5–8 */}
+          <div className="flex items-stretch">
+            {bottomRow.map((box, i) => (
+              <div key={i} className="flex items-stretch flex-1 min-w-0">
+                <StepCard box={box} idx={i + 4} />
+                {i < bottomRow.length - 1 && <HArrow />}
+              </div>
+            ))}
+          </div>
+        </div>
+
         <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );

@@ -220,28 +220,25 @@ export async function updateShareLink(
     return updated;
   }
   await initDB();
-  const slideIdsJson = updates.slide_ids !== undefined ? JSON.stringify(updates.slide_ids) : undefined;
-
-  if (updates.disabled !== undefined && slideIdsJson !== undefined) {
-    const { rows } = await sql`
-      UPDATE share_links SET disabled = ${updates.disabled}, slide_ids = ${slideIdsJson}, updated_at = NOW()
-      WHERE id = ${id} RETURNING *
-    `;
-    return rows[0] ? deserializeShareLink(rows[0]) : null;
-  } else if (updates.disabled !== undefined) {
-    const { rows } = await sql`
-      UPDATE share_links SET disabled = ${updates.disabled}, updated_at = NOW()
-      WHERE id = ${id} RETURNING *
-    `;
-    return rows[0] ? deserializeShareLink(rows[0]) : null;
-  } else if (slideIdsJson !== undefined) {
-    const { rows } = await sql`
-      UPDATE share_links SET slide_ids = ${slideIdsJson}, updated_at = NOW()
-      WHERE id = ${id} RETURNING *
-    `;
-    return rows[0] ? deserializeShareLink(rows[0]) : null;
+  // Build SET clause dynamically to handle any combination of fields
+  const sets: string[] = ["updated_at = NOW()"];
+  const vals: any[] = [];
+  if (updates.disabled !== undefined) {
+    vals.push(updates.disabled);
+    sets.push(`disabled = $${vals.length}`);
   }
-  return getShareLink(id);
+  if (updates.slide_ids !== undefined) {
+    vals.push(JSON.stringify(updates.slide_ids));
+    sets.push(`slide_ids = $${vals.length}`);
+  }
+  if (updates.label !== undefined) {
+    vals.push(updates.label);
+    sets.push(`label = $${vals.length}`);
+  }
+  vals.push(id);
+  const query = `UPDATE share_links SET ${sets.join(", ")} WHERE id = $${vals.length} RETURNING *`;
+  const { rows } = await sql.query(query, vals);
+  return rows[0] ? deserializeShareLink(rows[0]) : null;
 }
 
 // ---- View Events ----

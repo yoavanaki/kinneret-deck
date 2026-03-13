@@ -64,44 +64,11 @@ export default function Home() {
       setShareLink(`${window.location.origin}/view/${savedLinkId}`);
     }
 
-    // Fetch server-stored edits and slide order
-    Promise.all([
-      fetch("/api/slides").then((r) => r.json()),
-      fetch("/api/slide-order").then((r) => r.json()),
-    ])
-      .then(([edits, order]) => {
-        let merged = edits.length > 0 ? applyEdits(initialSlides, edits) : initialSlides;
-
-        // Apply saved order if it exists
-        if (order && Array.isArray(order.slide_ids) && order.slide_ids.length > 0) {
-          const slideMap = new Map(merged.map((s) => [s.id, s]));
-          const ordered: SlideContent[] = [];
-          for (const id of order.slide_ids) {
-            const slide = slideMap.get(id);
-            if (slide) {
-              ordered.push(slide);
-              slideMap.delete(id);
-            }
-          }
-          // Insert any new slides (not in saved order) at their original position
-          if (slideMap.size > 0) {
-            const originalIds = merged.map((s) => s.id);
-            slideMap.forEach((s) => {
-              const origIdx = originalIds.indexOf(s.id);
-              let insertAt = ordered.length;
-              for (let j = origIdx - 1; j >= 0; j--) {
-                const prevIdx = ordered.findIndex((o) => o.id === originalIds[j]);
-                if (prevIdx !== -1) {
-                  insertAt = prevIdx + 1;
-                  break;
-                }
-              }
-              ordered.splice(insertAt, 0, s);
-            });
-          }
-          merged = ordered;
-        }
-
+    // Fetch server-stored edits
+    fetch("/api/slides")
+      .then((r) => r.json())
+      .then((edits) => {
+        const merged = edits.length > 0 ? applyEdits(initialSlides, edits) : initialSlides;
         setSlideData(merged);
       })
       .catch(() => {});

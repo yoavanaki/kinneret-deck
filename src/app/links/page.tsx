@@ -18,7 +18,11 @@ export default function LinksPage() {
   const [copied, setCopied] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
+  const [newLinkName, setNewLinkName] = useState("");
+  const [editingLabel, setEditingLabel] = useState<string | null>(null);
+  const [editingLabelValue, setEditingLabelValue] = useState("");
   const [activeSlideIds, setActiveSlideIds] = useState<string[]>([]);
+  const [dark, setDark] = useState(false);
 
   useEffect(() => {
     fetch("/api/share")
@@ -66,20 +70,23 @@ export default function LinksPage() {
     setCreating(true);
     const id = crypto.randomUUID().slice(0, 8);
     const now = new Date().toISOString();
+    const label = newLinkName.trim() || undefined;
     const newLink: ShareLink = {
       id,
       created_at: now,
       updated_at: now,
       disabled: false,
       slide_ids: activeSlideIds,
+      label,
     };
     try {
       await fetch("/api/share", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, slide_ids: activeSlideIds }),
+        body: JSON.stringify({ id, slide_ids: activeSlideIds, label }),
       });
       setLinks((prev) => [newLink, ...prev]);
+      setNewLinkName("");
     } catch {}
     setCreating(false);
   }
@@ -113,6 +120,19 @@ export default function LinksPage() {
     setBusy(null);
   }
 
+  async function renameLink(link: ShareLink, newLabel: string) {
+    const label = newLabel.trim();
+    setBusy(link.id);
+    setLinks((prev) => prev.map((l) => l.id === link.id ? { ...l, label: label || undefined } : l));
+    await fetch("/api/share", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: link.id, action: "rename", label }),
+    }).catch(() => {});
+    setBusy(null);
+    setEditingLabel(null);
+  }
+
   function formatDate(iso?: string) {
     if (!iso) return "—";
     return new Date(iso).toLocaleString(undefined, {
@@ -130,17 +150,37 @@ export default function LinksPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${dark ? "bg-gray-950" : "bg-gray-50"}`}>
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className={`${dark ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"} border-b px-6 py-4`}>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Share Links</h1>
-            <p className="text-sm text-gray-500">
+            <h1 className={`text-xl font-bold ${dark ? "text-white" : "text-gray-900"}`}>Share Links</h1>
+            <p className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
               {links.length} link{links.length !== 1 ? "s" : ""} &middot; {links.filter((l) => !l.disabled).length} active
             </p>
           </div>
           <div className="flex items-center gap-3">
+            {/* Dark mode toggle */}
+            <button
+              onClick={() => setDark(!dark)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${dark ? "bg-blue-600" : "bg-gray-300"}`}
+              title={dark ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${dark ? "translate-x-6" : "translate-x-1"}`}
+              />
+            </button>
+            <span className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}>{dark ? "Dark" : "Light"}</span>
+
+            <input
+              type="text"
+              placeholder="Link name (optional)"
+              value={newLinkName}
+              onChange={(e) => setNewLinkName(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") createNewLink(); }}
+              className={`px-3 py-2 border rounded-lg text-sm w-48 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${dark ? "bg-gray-800 border-gray-700 text-white placeholder-gray-500" : "border-gray-300 text-gray-900"}`}
+            />
             <button
               onClick={createNewLink}
               disabled={creating || activeSlideIds.length === 0}
@@ -150,13 +190,13 @@ export default function LinksPage() {
             </button>
             <a
               href="/dashboard"
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200"
+              className={`px-4 py-2 rounded-lg text-sm ${dark ? "bg-gray-800 text-gray-300 hover:bg-gray-700" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
             >
               Dashboard
             </a>
             <a
               href="/"
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200"
+              className={`px-4 py-2 rounded-lg text-sm ${dark ? "bg-gray-800 text-gray-300 hover:bg-gray-700" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
             >
               Back to Deck
             </a>
@@ -167,8 +207,8 @@ export default function LinksPage() {
       <div className="max-w-4xl mx-auto p-6">
         {links.length === 0 ? (
           <div className="text-center py-16">
-            <h2 className="text-lg font-medium text-gray-900 mb-2">No links yet</h2>
-            <p className="text-gray-500 mb-4">Create a share link to let others view your deck.</p>
+            <h2 className={`text-lg font-medium mb-2 ${dark ? "text-white" : "text-gray-900"}`}>No links yet</h2>
+            <p className={`mb-4 ${dark ? "text-gray-400" : "text-gray-500"}`}>Create a share link to let others view your deck.</p>
             <button
               onClick={createNewLink}
               disabled={creating || activeSlideIds.length === 0}
@@ -185,8 +225,10 @@ export default function LinksPage() {
               return (
                 <div
                   key={link.id}
-                  className={`bg-white rounded-xl border p-5 transition-opacity ${
-                    link.disabled ? "border-gray-200 opacity-60" : "border-gray-200"
+                  className={`rounded-xl border p-5 transition-opacity ${
+                    dark
+                      ? `bg-gray-900 ${link.disabled ? "border-gray-800 opacity-60" : "border-gray-800"}`
+                      : `bg-white ${link.disabled ? "border-gray-200 opacity-60" : "border-gray-200"}`
                   }`}
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -196,24 +238,43 @@ export default function LinksPage() {
                         <span
                           className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
                             link.disabled
-                              ? "bg-red-100 text-red-700"
-                              : "bg-green-100 text-green-700"
+                              ? dark ? "bg-red-900/40 text-red-400" : "bg-red-100 text-red-700"
+                              : dark ? "bg-green-900/40 text-green-400" : "bg-green-100 text-green-700"
                           }`}
                         >
                           {link.disabled ? "Disabled" : "Active"}
                         </span>
-                        {link.label && (
-                          <span className="text-sm font-medium text-gray-700">{link.label}</span>
+                        {editingLabel === link.id ? (
+                          <input
+                            autoFocus
+                            type="text"
+                            value={editingLabelValue}
+                            onChange={(e) => setEditingLabelValue(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") renameLink(link, editingLabelValue);
+                              if (e.key === "Escape") setEditingLabel(null);
+                            }}
+                            onBlur={() => renameLink(link, editingLabelValue)}
+                            className={`text-sm font-medium border rounded px-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 w-48 ${dark ? "bg-gray-800 border-gray-700 text-white" : "text-gray-700 border-gray-300"}`}
+                          />
+                        ) : (
+                          <button
+                            onClick={() => { setEditingLabel(link.id); setEditingLabelValue(link.label || ""); }}
+                            className={`text-sm font-medium cursor-pointer ${dark ? "text-gray-200 hover:text-blue-400" : "text-gray-700 hover:text-blue-600"}`}
+                            title="Click to rename"
+                          >
+                            {link.label || <span className={`italic font-normal ${dark ? "text-gray-600" : "text-gray-400"}`}>Add name...</span>}
+                          </button>
                         )}
                       </div>
 
                       <div className="flex items-center gap-2 mb-3">
-                        <code className="text-sm text-blue-700 bg-blue-50 px-2 py-1 rounded truncate max-w-sm">
+                        <code className={`text-sm px-2 py-1 rounded truncate max-w-sm ${dark ? "text-blue-400 bg-blue-950/50" : "text-blue-700 bg-blue-50"}`}>
                           {url}
                         </code>
                         <button
                           onClick={() => copyUrl(link.id)}
-                          className="flex-shrink-0 text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded hover:bg-gray-200"
+                          className={`flex-shrink-0 text-xs px-2 py-1 rounded ${dark ? "bg-gray-800 text-gray-400 hover:bg-gray-700" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
                         >
                           {copied === link.id ? "Copied!" : "Copy"}
                         </button>
@@ -221,13 +282,13 @@ export default function LinksPage() {
                           href={url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex-shrink-0 text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded hover:bg-gray-200"
+                          className={`flex-shrink-0 text-xs px-2 py-1 rounded ${dark ? "bg-gray-800 text-gray-400 hover:bg-gray-700" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
                         >
                           Open
                         </a>
                       </div>
 
-                      <div className="flex items-center gap-4 text-xs text-gray-400">
+                      <div className={`flex items-center gap-4 text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}>
                         <span>Created {formatDate(link.created_at)}</span>
                         {link.updated_at && link.updated_at !== link.created_at && (
                           <span>Refreshed {formatDate(link.updated_at)}</span>
@@ -244,7 +305,7 @@ export default function LinksPage() {
                         onClick={() => refreshSnapshot(link)}
                         disabled={isBusy || activeSlideIds.length === 0}
                         title="Update this link to show the current deck"
-                        className="px-3 py-1.5 text-sm bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 disabled:opacity-40"
+                        className={`px-3 py-1.5 text-sm rounded-lg disabled:opacity-40 ${dark ? "bg-blue-900/30 text-blue-400 hover:bg-blue-900/50" : "bg-blue-50 text-blue-700 hover:bg-blue-100"}`}
                       >
                         {isBusy ? "..." : "Refresh"}
                       </button>
@@ -253,8 +314,8 @@ export default function LinksPage() {
                         disabled={isBusy}
                         className={`px-3 py-1.5 text-sm rounded-lg disabled:opacity-40 ${
                           link.disabled
-                            ? "bg-green-50 text-green-700 hover:bg-green-100"
-                            : "bg-red-50 text-red-700 hover:bg-red-100"
+                            ? dark ? "bg-green-900/30 text-green-400 hover:bg-green-900/50" : "bg-green-50 text-green-700 hover:bg-green-100"
+                            : dark ? "bg-red-900/30 text-red-400 hover:bg-red-900/50" : "bg-red-50 text-red-700 hover:bg-red-100"
                         }`}
                       >
                         {isBusy ? "..." : link.disabled ? "Enable" : "Disable"}
