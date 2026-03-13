@@ -656,19 +656,19 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
         )}
         <AccentBar color={t.accent} className="mb-4" />
         {slide.stats && (
-          <div className="flex gap-3 mb-4">
+          <div className="flex gap-3 mb-6">
             {slide.stats.map((stat, i) => (
               <div
                 key={i}
                 className="flex-1 rounded-lg px-3 py-2 flex flex-col items-center justify-center text-center"
                 style={{
-                  backgroundColor: i === 0 ? t.accent + "15" : t.cardBg,
-                  border: `1.5px solid ${i === 0 ? t.accent + "40" : t.tableBorder}`,
+                  backgroundColor: t.cardBg,
+                  border: `1.5px solid ${t.tableBorder}`,
                 }}
               >
                 <span
                   className="text-lg font-bold leading-none"
-                  style={{ color: i === 0 ? t.accent : t.heading, fontFamily: theme.headingFont }}
+                  style={{ color: t.heading, fontFamily: theme.headingFont }}
                 >
                   {stat.value}
                 </span>
@@ -2046,9 +2046,9 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
         <div
           className="text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-md text-center"
           style={{
-            color: isRight ? t.accent : t.heading,
-            backgroundColor: isRight ? t.accent + "12" : t.cardBg,
-            border: `1.5px solid ${isRight ? t.accent + "40" : t.tableBorder}`,
+            color: t.accent,
+            backgroundColor: t.accent + "12",
+            border: `1.5px solid ${t.accent}40`,
           }}
         >
           {title}
