@@ -24,7 +24,7 @@ export interface SlideContent {
   customHtml?: string;
   /** Team members for team layout */
   team?: { name: string; role: string; bio: string; imageUrl?: string; linkedIn?: string; logos?: { name: string; imageUrl: string }[] }[];
-  /** Footer banner for team slide — additional hires with logos */
+  /** Footer banner for team slide - additional hires with logos */
   teamFooter?: { text: string; logos: { name: string; imageUrl: string }[] };
   /** Bar chart data for bar-chart layout */
   bars?: { label: string; value: number; highlight?: boolean }[];
@@ -52,14 +52,14 @@ export interface SlideContent {
   imageUrl?: string;
   /** Logos to display (e.g. company/institution logos) */
   logos?: { name: string; imageUrl: string }[];
-  /** Callout box text — rendered as a highlighted banner */
+  /** Callout box text - rendered as a highlighted banner */
   callout?: string;
-  /** Footnote text — rendered in very small text at slide bottom */
+  /** Footnote text - rendered in very small text at slide bottom */
   footnote?: string;
-  /** Sticker text — rendered as a tilted ribbon/badge on the slide */
+  /** Sticker text - rendered as a tilted ribbon/badge on the slide */
   sticker?: string;
   /** Box cards for boxes layout */
-  boxes?: { icon: string; title: string; description: string }[];
+  boxes?: { icon: string; title: string; description: string; highlights?: { value: string; label: string }[] }[];
   /** Stack diagram layers for stack layout (rendered bottom-to-top) */
   stack?: {
     label: string;
@@ -102,7 +102,7 @@ export interface SlideContent {
 }
 
 // ============================================================
-// SLIDE 1: Title Slide — Dictionary Entry
+// SLIDE 1: Title Slide - Dictionary Entry
 // ============================================================
 const slide01: SlideContent = {
   id: "slide-01",
@@ -112,7 +112,6 @@ const slide01: SlideContent = {
   subtitle: "/ˈkɒɡ.nɪ.tər.i/",
   body: "noun",
   customHtml: "A facility or system that produces knowledge services at scale through standardized, automated processes: as a factory does for physical goods.",
-  note: '"The next $1T company will be a software company masquerading as a services firm." — Sequoia',
 };
 
 // ============================================================
@@ -139,7 +138,7 @@ const slide02: SlideContent = {
     {
       name: "Yoav Segev",
       role: "",
-      bio: "Economics @ Oxford University\nConsultant at BCG\nBusiness Services Investor at Charlesbank\nIncubated Salus, $20M ARR compliance firm\nMBA @ HBS",
+      bio: "Economics @ Oxford University\nConsultant at BCG\nBusiness Services Investor at Charlesbank\nIncubated $20M ARR compliance firm\nMBA @ HBS",
       imageUrl: "/team/segev.jpeg",
       linkedIn: "https://www.linkedin.com/in/ysegev/",
       logos: [
@@ -163,7 +162,7 @@ const slide02: SlideContent = {
     {
       name: "Jamie Kalamarides",
       role: "",
-      bio: "President, Group Insurance at Prudential\nHead of Institutional Retirement Plan Services\nExpert witness, U.S. Senate (SECURE Act)\nFellow, Bipartisan Policy Center\nMBA @ Tuck",
+      bio: "Head of Retirement Services, Prudential\nExpert witness, U.S. Senate (SECURE Act)\nFellow, Bipartisan Policy Center\nMBA @ Tuck",
       imageUrl: "/team/kalamarides.png",
       linkedIn: "https://www.linkedin.com/in/kalamarides/",
       logos: [
@@ -229,7 +228,7 @@ const slide04: SlideContent = {
   id: "slide-04",
   number: 5,
   title: "AI Revolution: Transformation of Knowledge Work",
-  subtitle: "The middle component — the knowledge worker — is replaced by AI and automation, just as factories replaced artisans.",
+  subtitle: "The middle component - the knowledge worker - is replaced by AI and automation, just as factories replaced artisans.",
   layout: "flow",
   flows: {
     before: { label: "Inputs", icon: "📊", items: ["Data & Information", "Documents & Records"] },
@@ -245,12 +244,12 @@ const slide04: SlideContent = {
 const slide05: SlideContent = {
   id: "slide-05",
   number: 6,
-  title: "White collar services dwarf the technology market",
-  subtitle: "White collar services are ~4x larger than the technology sector — and almost none of it runs on automation.",
+  title: "Knowledge services dwarf the technology market",
+  subtitle: "Knowledge services are ~4x larger than the technology sector. Almost none of it runs on automation.",
   layout: "bar-chart",
   footnote: "Source: U.S. Bureau of Economic Analysis, U.S. Gross Output by Industry (Q3 2025, Jan 2026)",
   bars: [
-    { label: "White Collar Services", value: 11.3, highlight: true },
+    { label: "Knowledge Services", value: 11.3, highlight: true },
     { label: "Manufacturing", value: 7.3 },
     { label: "Real Estate", value: 6.1 },
     { label: "Government", value: 5.7 },
@@ -270,7 +269,7 @@ const slide06: SlideContent = {
   id: "slide-06",
   number: 7,
   title: "Service factories are highly generalizable",
-  subtitle: "Common workstreams across white collar services",
+  subtitle: "Common workstreams across knowledge services",
   layout: "table",
   tableHeaders: ["Industry", "Project Mgmt", "Client Comm", "Data Analysis", "Doc Creation", "Invoicing", "Compliance"],
   tableRows: [
@@ -284,7 +283,7 @@ const slide06: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 8: Platform Architecture — Stack Diagram
+// SLIDE 8: Platform Architecture - Stack Diagram
 // ============================================================
 const slideStack: SlideContent = {
   id: "slide-stack",
@@ -387,14 +386,14 @@ const slideWhyNow: SlideContent = {
   layout: "boxes",
   boxes: [
     { icon: "1️⃣", title: "Acquire Distribution Cheaply", description: "Buy existing customer bases at 4-6x EBITDA instead of spending years and millions on sales & marketing to build from scratch" },
-    { icon: "2️⃣", title: "Speed to Economic Value", description: "Efficiency gains from AI hit the P&L immediately — no need to wait for product-market fit or long sales cycles" },
-    { icon: "3️⃣", title: "Real Businesses to Experiment In", description: "Acquired firms are live environments to deploy, test, and iterate on AI — with real clients, real workflows, and real data" },
-    { icon: "4️⃣", title: "Compounding Platform", description: "Each acquisition makes the next one faster and cheaper — shared tech, shared ops, shared playbook. The platform compounds with every deal." },
+    { icon: "2️⃣", title: "Speed to Economic Value", description: "Efficiency gains from AI hit the P&L immediately. No need to wait for product-market fit or long sales cycles" },
+    { icon: "3️⃣", title: "Real Businesses to Experiment In", description: "Acquired firms are live environments to deploy, test, and iterate on AI: real clients, real workflows, and real data" },
+    { icon: "4️⃣", title: "Compounding Platform", description: "Each acquisition makes the next one faster and cheaper: shared tech, shared ops, shared playbook. The platform compounds with every deal." },
   ],
 };
 
 // ============================================================
-// SLIDE 10: Mission — Acquire → Automate → Expand
+// SLIDE 10: Mission - Acquire → Automate → Expand
 // ============================================================
 const slide08: SlideContent = {
   id: "slide-08",
@@ -419,10 +418,10 @@ const slide09: SlideContent = {
   layout: "playbook",
   boxes: [
     { icon: "", title: "Select Sector", description: "Identify a fragmented services vertical with sticky, recurring revenue" },
-    { icon: "", title: "Recruit Operating Partner", description: "Bring on an industry executive who becomes vertical CEO" },
-    { icon: "", title: "Map & Pipeline", description: "Build acquisition pipeline; identify highest-leverage automation targets" },
+    { icon: "", title: "Map Workflows", description: "Deeply study operational workflows; identify highest-leverage automation opportunities" },
+    { icon: "", title: "Build Pipeline", description: "Source and qualify acquisition targets; rank by fit, margin, and integration ease" },
     { icon: "", title: "Acquire Platform", description: "Acquire one well-run firm as the operating foundation" },
-    { icon: "", title: "Deploy AI", description: "Automate operational workflows — compliance, reporting, onboarding" },
+    { icon: "", title: "Deploy Autopilot", description: "Automate operational workflows: compliance, reporting, onboarding" },
     { icon: "", title: "Expand Capacity", description: "Use AI to grow workforce output ~50% without proportional headcount" },
     { icon: "", title: "Roll Up", description: "Acquire 3–5 adjacent firms at 4–6× EBITDA; integrate onto platform" },
     { icon: "", title: "Scale the Vertical", description: "Accelerate acquisition cadence and compound organic growth" },
@@ -430,7 +429,7 @@ const slide09: SlideContent = {
 };
 
 // ============================================================
-// SLIDE: How Acquisitions Work — Rollup Model
+// SLIDE: How Acquisitions Work - Rollup Model
 // ============================================================
 const slideRollupModel: SlideContent = {
   id: "slide-rollup-model",
@@ -440,8 +439,8 @@ const slideRollupModel: SlideContent = {
   layout: "rollup-model",
   rollupModel: {
     targets: [
-      { name: "TPA 1 — Platform", revenue: "$2.0M", ebitda: "$700K", margin: "35%", highlight: true, buyNote: "Buy at 4.5× EBITDA ($3.2M) · 12 employees" },
-      { name: "TPA 2 — Tuck-in", revenue: "$1.8M", ebitda: "$250K", margin: "14%", buyNote: "Buy at 4.4× EBITDA ($1.1M) · 10 employees" },
+      { name: "TPA 1 - Platform", revenue: "$2.0M", ebitda: "$700K", margin: "35%", highlight: true, buyNote: "Buy at 4.5× EBITDA ($3.2M) · 12 employees" },
+      { name: "TPA 2 - Tuck-in", revenue: "$1.8M", ebitda: "$250K", margin: "14%", buyNote: "Buy at 4.4× EBITDA ($1.1M) · 10 employees" },
     ],
     steps: [
       "Deploy AI to expand TPA 1 capacity",
@@ -474,7 +473,7 @@ const slide10: SlideContent = {
   id: "slide-10",
   number: 9,
   title: "Appendix: Initial Candidate Industries",
-  subtitle: "We've analyzed 20+ service sectors — Retirement TPA is our first target to disrupt",
+  subtitle: "We've analyzed 20+ service sectors. Retirement TPA is our first target to disrupt",
   layout: "table",
   bullets: [
     "High fragmentation",
@@ -488,10 +487,10 @@ const slide10: SlideContent = {
   ],
   tableHeaders: ["Sector", "Market Size", "Fragmentation", "Automation Potential", "Trust / Regulatory Moat"],
   tableRows: [
-    ["⭐ Retirement TPA", "$8B+", "Very High — 2,000+ firms", "Very High", "Strong (ERISA/IRS)"],
+    ["⭐ Retirement TPA", "$24B", "Very High - 18,000+ firms", "Very High", "Strong (ERISA/IRS)"],
     ["Financial Services Compliance", "$12B+", "High", "Very High", "Moderate"],
     ["IT Services", "$450B+", "Very High", "High", "Moderate"],
-    ["Home Owner Services", "$100B+", "High — mostly local", "High", "Moderate"],
+    ["Home Owner Services", "$100B+", "High - mostly local", "High", "Moderate"],
     ["Medical Billing", "$15B+", "High", "Very High", "Strong (HIPAA/CMS)"],
     ["Benefits Administration", "$15B+", "High", "High", "Strong (ERISA/ACA)"],
     ["Insurance Brokerage", "$60B+", "Very High", "High", "Strong"],
@@ -506,27 +505,27 @@ const slide11: SlideContent = {
   id: "slide-11",
   number: 10,
   title: "Our first vertical and proving ground: Retirement TPA",
-  subtitle: "Federal law requires professional administration for retirement plans — TPAs fill that critical role for 700K+ plans nationwide.",
+  subtitle: "Federal law requires professional administration for retirement plans. 18,000+ service providers fill that critical role for 700K+ plans nationwide.",
   layout: "two-column-boxes",
   stats: [
-    { value: "$8B+", label: "Market Size" },
-    { value: "2,000+", label: "TPA Firms" },
+    { value: "$24B", label: "Market Size" },
+    { value: "18,000+", label: "Service Providers" },
     { value: "700K+", label: "Plans Administered" },
-    { value: "4–6×", label: "Acquisition Multiples" },
+    { value: "3–6×", label: "Acquisition Multiples" },
   ],
   leftColumnTitle: "What Is a Retirement TPA?",
   leftBoxes: [
-    { icon: "📋", title: "Plan Administration", description: "Manages 401(k) and pension plans on behalf of employers — enrollment, distributions, loans" },
+    { icon: "📋", title: "Plan Administration", description: "Manages 401(k) and pension plans on behalf of employers: enrollment, distributions, loans" },
     { icon: "⚖️", title: "Compliance & Testing", description: "Runs IRS-mandated nondiscrimination tests (ADP/ACP, top-heavy) to keep plans legal" },
     { icon: "🏛️", title: "Government Filings", description: "Prepares Form 5500, 5558 extensions, and Summary Annual Reports for every plan" },
-    { icon: "🔒", title: "Mandatory & Sticky", description: "Federal law requires professional administration — employers can't DIY, and switching is painful" },
+    { icon: "🔒", title: "Mandatory & Sticky", description: "Federal law requires professional administration. Employers can't DIY, and switching is painful" },
   ],
   rightColumnTitle: "Why We Like It",
   rightBoxes: [
-    { icon: "💰", title: "Recurring Revenue", description: "Clients pay annually, year after year — generating predictable, compounding cash flows" },
-    { icon: "🧩", title: "Fragmented Market", description: "2,000+ independent TPAs, most under $5M revenue — cheap to acquire at 4-6x EBITDA. A wave of owners lacking succession plans" },
-    { icon: "🤖", title: "Automation Ready", description: "80%+ of workflows are rule-based and repetitive — AI can cut cost-to-serve by 50%+" },
-    { icon: "📜", title: "Retirement Coverage Expansion", description: "New Federal & State legislation expanding plan coverage to millions — growing demand, same supply" },
+    { icon: "🛡️", title: "Regulatory Moat", description: "TPAs are required by federal law for compliance testing. Employers can't opt out, creating a durable, protected demand base" },
+    { icon: "💰", title: "Sticky Revenue", description: "Clients pay annually and rarely switch. High switching costs generate predictable, compounding cash flows" },
+    { icon: "🤖", title: "Highly Automatable", description: "80%+ of workflows are rule-based and repetitive. AI can cut cost-to-serve by 50%+" },
+    { icon: "🧩", title: "Fragmented Market", description: "18,000+ independent service providers, most under $5M revenue. Cheap to acquire at 3-6x EBITDA, with a wave of owners lacking succession plans" },
   ],
 };
 
@@ -547,7 +546,7 @@ const slide12: SlideContent = {
     { icon: "📬", title: "Participant Communications", description: "Enrollment, disclosures, benefit statements, notices" },
     { icon: "🔧", title: "Plan Corrections", description: "EPCRS / VCP filings for operational errors" },
   ],
-  note: "Most of this work is document-heavy, rule-based, and repetitive — exactly the profile AI excels at automating.",
+  note: "Most of this work is document-heavy, rule-based, and repetitive. Exactly the profile AI excels at automating.",
 };
 
 // ============================================================
@@ -565,7 +564,7 @@ const slide13: SlideContent = {
     { value: "$285B", label: "Retirement Assets" },
     { value: "Top 10", label: "U.S. Financial Institution" },
   ],
-  body: "Jamie brings 20+ years of senior leadership at Prudential Financial, where he served as President of Group Insurance and Head of Institutional Retirement Plan Services, overseeing billions in plan assets.\n\nHe was a key expert to the SECURE Act, testifying before the U.S. Senate Finance, HELP, and Aging Committees on retirement policy. He is a nonresident fellow at the Bipartisan Policy Center.\n\nJamie's deep domain expertise in retirement services — combined with his relationships across the industry — gives Cognitory a unique advantage in building trust with acquisition targets and navigating the regulatory landscape.",
+  body: "Jamie brings 20+ years of senior leadership at Prudential Financial, where he served as President of Group Insurance and Head of Institutional Retirement Plan Services, overseeing billions in plan assets.\n\nHe was a key expert to the SECURE Act, testifying before the U.S. Senate Finance, HELP, and Aging Committees on retirement policy. He is a nonresident fellow at the Bipartisan Policy Center.\n\nJamie's deep domain expertise in retirement services - combined with his relationships across the industry - gives Cognitory a unique advantage in building trust with acquisition targets and navigating the regulatory landscape.",
   logos: [
     { name: "Prudential", imageUrl: "/logos/prudential.png" },
     { name: "US Gov", imageUrl: "/logos/usgov.svg" },
@@ -581,7 +580,7 @@ const slide14: SlideContent = {
   number: 15,
   title: "Why Retirement TPA?",
   layout: "two-column",
-  leftText: "STRUCTURAL ADVANTAGES\n\n• Regulatory mandate creates guaranteed demand\n• Extreme fragmentation — no dominant player\n• Owner-operators aging out, looking to sell\n• Acquisition multiples are low (4-6x EBITDA)\n• Recurring, contract-based revenue",
+  leftText: "STRUCTURAL ADVANTAGES\n\n• Regulatory mandate creates guaranteed demand\n• Extreme fragmentation - no dominant player\n• Owner-operators aging out, looking to sell\n• Acquisition multiples are low (3-6x EBITDA)\n• Recurring, contract-based revenue",
   rightText: "AUTOMATION OPPORTUNITY\n\n• 80%+ of workflows are rule-based\n• Document generation is templated\n• Compliance testing follows fixed algorithms\n• Government filings are standardized\n• AI can reduce cost-to-serve by 50%+",
   note: "The combination of cheap acquisitions and dramatic margin expansion through automation creates a powerful economic engine.",
 };
@@ -596,25 +595,24 @@ const slide15: SlideContent = {
   layout: "table",
   subtitle: "Active acquisition pipeline across the U.S.",
   stats: [
-    { value: "40+", label: "Total Targets" },
-    { value: "5", label: "In LOI Stage" },
-    { value: "~$5M", label: "ARR in LOI" },
-    { value: "15+", label: "States" },
+    { value: "42", label: "Total Targets" },
+    { value: "6", label: "In Diligence / LOI" },
+    { value: "~$12M", label: "Revenue in Adv. / LOI" },
   ],
   pieChart: [
-    { label: "Warm Intros", value: 46 },
-    { label: "Cold Outreach", value: 33 },
-    { label: "Banker-Sourced", value: 21 },
+    { label: "Warm Intros", value: 78 },
+    { label: "Banker-Sourced", value: 12 },
+    { label: "Cold Outreach", value: 10 },
   ],
-  tableHeaders: ["Target", "Revenue", "EBITDA", "Region", "Stage"],
+  tableHeaders: ["Target", "Revenue", "EBITDA", "Stage"],
   tableRows: [
-    ['"Liberty Benefits Admin"', "$1.8M", "$810K", "Mid-Atlantic", "Pre-LOI Diligence"],
-    ['"Atlantic Retirement Group"', "$2.0M", "$800K", "Northeast", "Pre-LOI Diligence"],
-    ['"Pacific Pension Services"', "$2.0M", "$600K", "West Coast", "Pre-LOI Diligence"],
-    ['"Evergreen Plan Services"', "$1.7M", "$425K", "Pacific NW", "Pre-LOI Diligence"],
-    ['"Summit Trust Services"', "$5.0M", "—", "Pacific NW", "First Meeting"],
-    ['"Lone Star Admin"', "$10.0M", "—", "Southwest", "First Meeting"],
-    ["+ 34 additional targets", "$750K–$10M", "", "Nationwide", "Various"],
+    ['"Liberty Benefits Admin"', "$1.8M", "$230K", "LOI Sent"],
+    ['"Redwood Pension Services"', "$1.8M", "$810K", "Pre-LOI Diligence"],
+    ['"Atlantic Retirement Group"', "$2.0M", "$800K", "Pre-LOI Diligence"],
+    ['"Pacific Plan Consultants"', "$2.0M", "$600K", "Pre-LOI Diligence"],
+    ['"Evergreen Plan Services"', "$1.7M", "$425K", "Pre-LOI Diligence"],
+    ['"Summit Benefit Advisors"', "$750K", "$200K", "Pre-LOI Diligence"],
+    ["+ 34 additional targets", "$300K–$25M", "", "Various"],
   ],
 };
 
@@ -626,8 +624,8 @@ const slide16: SlideContent = {
   number: 14,
   title: "Retirement TPA Industry Overview",
   layout: "two-column",
-  leftText: "MARKET STRUCTURE\n\n• $8B+ total addressable market\n• 2,000+ TPA firms in the U.S.\n• Top 10 firms hold <15% market share\n• Average firm: 10-50 employees\n• 700,000+ retirement plans need administration",
-  rightText: "KEY DYNAMICS\n\n• Owner-operators are 55-65 years old on average\n• Succession crisis — limited buyer pool\n• SECURE Act 2.0 expanding plan coverage to millions of new participants\n• Technology adoption is 10+ years behind\n• Margins today: 15-25%. Post-automation target: 40-50%",
+  leftText: "MARKET STRUCTURE\n\n• $24B total addressable market\n• 18,000+ service providers in the U.S.\n• Top 10 firms hold <15% market share\n• Average firm: 10-50 employees\n• 700,000+ retirement plans need administration",
+  rightText: "KEY DYNAMICS\n\n• Owner-operators are 55-65 years old on average\n• Succession crisis - limited buyer pool\n• SECURE Act 2.0 expanding plan coverage to millions of new participants\n• Technology adoption is 10+ years behind\n• Margins today: 15-25%. Post-automation target: 40-50%",
   note: "The retirement TPA industry is at an inflection point: regulatory expansion is driving demand while the supply side is consolidating.",
 };
 
@@ -638,16 +636,16 @@ const slideCompetitive: SlideContent = {
   id: "slide-competitive",
   number: 15,
   title: "Competitive Landscape",
-  subtitle: "No one is combining acquisitions with AI-native automation",
+  subtitle: "Cognitory is the only player providing AI-native bespoke retirement administration services",
   layout: "table",
-  tableHeaders: ["Player", "Model", "AI Automation", "M&A Strategy", "Threat Level"],
+  tableHeaders: ["Player", "Model", "Bespoke Service", "AI Automation", "M&A Strategy", "Threat Level"],
   tableRows: [
-    ["Large Recordkeepers\n(Fidelity, Vanguard, Empower)", "Bundled plan services", "Internal tools only", "Acquire large RKs", "Low — don't serve small plans"],
-    ["National TPAs\n(ASC, Pinnacle)", "Traditional TPA", "Minimal", "Organic growth", "Low — no tech DNA"],
-    ["Regional / Local TPAs", "Owner-operated", "None", "None — aging owners", "None — these are targets"],
-    ["Tech Platforms\n(Vestwell, Human Interest)", "Software for advisors", "Workflow tooling", "Not acquiring TPAs", "Medium — different segment"],
-    ["PE Rollups\n(Definiti, Strongpoint)", "Buy & integrate", "Limited", "Acquire for revenue", "Medium — no automation edge"],
-    ["Cognitory", "Acquire + Automate", "AI-native platform", "Buy at 4-6x, automate", "Unique — both acquire & automate"],
+    ["Large Recordkeepers\n(Fidelity, Vanguard, Empower)", "Bundled plan services", "One-size-fits-all", "Internal tools only", "Acquire large RKs", "Low - don't serve small plans"],
+    ["National TPAs\n(TRA, Pinnacle)", "Traditional TPA", "Moderate - standardized processes", "Minimal", "Organic growth", "Low - no tech DNA"],
+    ["Regional / Local TPAs", "Owner-operated", "High - but doesn't scale", "None", "None - aging owners", "None - these are targets"],
+    ["Tech Platforms\n(Vestwell, Human Interest)", "Software for advisors", "Low - self-serve tooling", "Workflow tooling", "Not acquiring TPAs", "Medium - different segment"],
+    ["PE Rollups\n(Definiti, Strongpoint)", "Buy & integrate", "Erodes post-acquisition", "Limited", "Acquire for revenue", "Medium - no automation edge"],
+    ["Cognitory", "Acquire + Automate", "High - AI scales the personal touch", "AI-native platform", "Buy at 3-6x, automate", "Unique - both acquire & automate"],
   ],
   callout: "Most competitors are either technology companies that don't acquire, or acquirers that don't automate. Cognitory is uniquely positioned to do both.",
 };
@@ -659,13 +657,13 @@ const slide17: SlideContent = {
   id: "slide-17",
   number: 16,
   title: "Automation Opportunities",
-  subtitle: "Process inventory mapped across partner TPAs",
+  subtitle: "Low-hanging fruit from 144-process inventory mapped across partner TPAs",
   layout: "table",
   stats: [
     { value: "144", label: "Processes Mapped" },
     { value: "62", label: "Quick Wins" },
     { value: "11,550", label: "Hours Saved / Year" },
-    { value: "+20pp", label: "Margin Expansion" },
+    { value: "+20%", label: "Margin Expansion" },
   ],
   tableHeaders: [
     "Process",
@@ -694,23 +692,23 @@ const slideFutureBusiness: SlideContent = {
   id: "slide-future-business",
   number: 6,
   title: "What does the business of the future look like?",
-  subtitle: "AI collapses the cost of intelligence — the winners will be the ones who redesign the firm around it",
+  subtitle: "AI collapses the cost of intelligence. The winners will be the ones who redesign the firm around it",
   layout: "vision",
   boxes: [
     { icon: "📧", title: "People, Email & Spreadsheets", description: "Most service firms still run on manual processes and human labor" },
-    { icon: "🔄", title: "End-to-End Replacement", description: "AI doesn't just assist workers — it replaces entire workflows" },
+    { icon: "🔄", title: "End-to-End Replacement", description: "AI doesn't just assist workers. It replaces entire workflows" },
     { icon: "🏗️", title: "Thin Management Layer", description: "The business of the future is a small team on top of autonomous AI agents" },
   ],
 };
 
 // ============================================================
-// SLIDE: What we're building — a Holding Company
+// SLIDE: What we're building - a Holding Company
 // ============================================================
 const slideHoldco: SlideContent = {
   id: "slide-holdco",
   number: 7,
   title: "Appendix: Cognitory Structure",
-  subtitle: "We acquire sub-scale, traditional, white collar service firms and transform them into AI-native, high-margin businesses",
+  subtitle: "We acquire sub-scale, traditional, knowledge service firms and transform them into AI-native, high-margin businesses",
   layout: "holdco-org",
   orgChart: {
     top: {
@@ -732,7 +730,7 @@ const slideHoldco: SlideContent = {
       description: "Companies acquired through M&A in target services industries",
     },
   },
-  note: "Each OpCo is managed as independently separable — creating strategic optionality as the portfolio grows. The platform compounds: every new vertical reuses 80% of existing infrastructure.",
+  note: "Each OpCo is managed as independently separable, creating strategic optionality as the portfolio grows. The platform compounds: every new vertical reuses 80% of existing infrastructure.",
 };
 
 // ============================================================
@@ -745,9 +743,9 @@ const slideGrowth: SlideContent = {
   subtitle: "The playbook scales from one vertical to an entire economy of services",
   layout: "boxes",
   stats: [
-    { value: "$8B", label: "Phase 1: Retirement TPA" },
+    { value: "$24B", label: "Phase 1: Retirement TPA" },
     { value: "$51B", label: "Phase 2: Adjacent Verticals" },
-    { value: "$400B+", label: "Phase 3: All White Collar Services" },
+    { value: "$400B+", label: "Phase 3: All Knowledge Services" },
   ],
   boxes: [
     { icon: "🏁", title: "Year 1–3: Prove the Model", description: "Acquire 5-10 TPAs, deploy automation, expand margins from ~20% to 40-50%" },
@@ -755,7 +753,7 @@ const slideGrowth: SlideContent = {
     { icon: "🌐", title: "Year 5–10: Platform Play", description: "License the Cognitory platform to PE rollups and service firms across insurance, accounting, legal, and beyond" },
     { icon: "📐", title: "The Math", description: "10 verticals × $500M revenue each = $5B revenue platform at 50%+ margins. Every vertical we enter compounds the automation advantage." },
   ],
-  note: "The Cognitory platform is vertical-agnostic by design. Every new vertical reuses 80% of the existing infrastructure — only the domain-specific agents change.",
+  note: "The Cognitory platform is vertical-agnostic by design. Every new vertical reuses 80% of the existing infrastructure. Only the domain-specific agents change.",
 };
 
 // ============================================================
@@ -775,19 +773,16 @@ const slide18: SlideContent = {
 const slideTldr: SlideContent = {
   id: "slide-tldr",
   number: 2,
-  title: "Executive Summary",
-  summary: "At Cognitory, we're building \"factories\" for white-collar services — replacing labor-intensive workflows with AI. We identify attractive verticals and leverage our agentic toolkit to acquire, automate, and scale traditional service firms. We're starting with the massive retirement administration market, where we have a 40+ firm pipeline and are nearing close on ~$5M of ARR.",
+  title: "Overview",
   layout: "exec-summary",
   stats: [
-    { value: "6 : 1", label: "Services vs. Tech Spend" },
-    { value: "80%+", label: "Automatable with AI" },
-    { value: "$5M ARR", label: "LOI-Stage First-Vertical" },
-    { value: ">50%", label: "Target EBITDA Margin" },
+    { value: "42", label: "Firm Pipeline" },
+    { value: "~$12M", label: "ARR in Adv. / LOI Stage" },
   ],
   boxes: [
-    { icon: "🧠", title: "Purpose-Built Team", description: "M&A, AI, and industry expertise under one roof — PE deal sourcing, production AI systems, and retirement operations at scale" },
-    { icon: "🏗️", title: "Massive Vision, Proven Model", description: "Building an AI-native holding company that acquires and automates service businesses across multiple industries" },
-    { icon: "🚀", title: "Strong First-Vertical Momentum", description: "Retirement admin: 40+ pipeline targets, 5 active LOIs, and $5M ARR at close in an $8B+ hyper-fragmented market" },
+    { icon: "🏭", title: "Factories for Knowledge Services", description: "Building AI-native \"cognitories\" that acquire and automate labor-intensive service businesses, replacing manual workflows with intelligent systems at scale" },
+    { icon: "🎯", title: "Starting with Retirement Admin", description: "Our first vertical: a hyper-fragmented, $24B market with sticky recurring revenue, high automation potential, and attractive 3–6x EBITDA acquisition multiples" },
+    { icon: "🧠", title: "Purpose-Built Team", description: "M&A, AI, and deep industry expertise under one roof. From PE deal sourcing and production AI systems to retirement operations and compliance" },
   ],
 };
 
@@ -798,18 +793,18 @@ const slideTldrTpa: SlideContent = {
   id: "slide-tldr-tpa",
   number: 0,
   title: "Executive Summary",
-  subtitle: "Building factories for white collar services in highly regulated industries",
+  subtitle: "Building factories for knowledge services in highly regulated industries",
   layout: "exec-summary",
   stats: [
-    { value: "40+", label: "Pipeline Targets" },
+    { value: "42", label: "Pipeline Targets" },
     { value: "5", label: "Active LOIs" },
     { value: "$5M", label: "ARR at Close" },
     { value: "50%+", label: "Target EBITDA Margin" },
   ],
   boxes: [
-    { icon: "🏢", title: "Roll Up Retirement Admin", description: "Acquiring businesses in a hyper-fragmented, $8B+ market with sticky, recurring revenue at 4–6x EBITDA" },
+    { icon: "🏢", title: "Roll Up Retirement Admin", description: "Acquiring businesses in a hyper-fragmented, $24B market with sticky, recurring revenue at 3–6x EBITDA" },
     { icon: "⚡", title: "Automate with AI", description: "Deploying AI to automate 80%+ of rule-based workflows, expanding margins from ~25% blended to 50%+" },
-    { icon: "📐", title: "Replicate Across Verticals", description: "Proven playbook scales to adjacent service sectors — building a multi-industry AI-native holding company" },
+    { icon: "📐", title: "Replicate Across Verticals", description: "Proven playbook scales to adjacent service sectors, building a multi-industry AI-native holding company" },
   ],
 };
 
@@ -829,7 +824,7 @@ const slideCognitories: SlideContent = {
       { icon: "💼", label: "Sales & Advisory" },
       { icon: "📞", label: "Trust & Support" },
     ],
-    humanNote: "Cognitories maintain the human interfaces — the client-facing layer stays personal",
+    humanNote: "Cognitories maintain the human interfaces. The client-facing layer stays personal",
     agents: [
       { icon: "📅", label: "Scheduling" },
       { icon: "💰", label: "Billing" },
@@ -842,7 +837,7 @@ const slideCognitories: SlideContent = {
       { icon: "🔧", label: "Error Corrections" },
       { icon: "📬", label: "Notices" },
     ],
-    agentNote: "AI agents replace the backend — from scheduling and billing to gathering unstructured data, producing reports, and filing forms",
+    agentNote: "AI agents replace the backend: scheduling, billing, data gathering, report production, and form filing",
     oversightItems: [
       { icon: "📡", label: "Monitoring" },
       { icon: "🎛️", label: "Remote Intervention" },
@@ -862,13 +857,13 @@ const _slides: SlideContent[] = [
   slideTldr,              // 2. Executive Summary
   slide02,                // 3. Team
   slideParallels,         // 4. History doesn't repeat
-  slide05,                // 5. White collar services dwarf tech market
+  slide05,                // 5. Knowledge services dwarf tech market
 
   // === ACT 2: The Thesis ===
   slideCognitories,       // 6. We're building cognitories
   slide09,                // 7. The Playbook
 
-  // === ACT 3: The Business — TPA as proof ===
+  // === ACT 3: The Business - TPA as proof ===
   slide11,                // 8. Our first bet: Retirement TPA
   slide13,                // 9. Jamie
   slideRollupModel,       // 10. How Acquisitions Work
@@ -879,10 +874,11 @@ const _slides: SlideContent[] = [
   // === ACT 4: The Close ===
   slide18,                // 14. Thank You
 
-  // === Appendix ===
+  /* === Appendix ===
   slideHoldco,            // A1. Cognitory Structure
   slideWhyNow,            // A2. Why HoldCo is the Right Model
   slide10,                // A3. Candidate Industries
+  */
 
   /* --- commented out slides ---
   slideGrowth,            // How big can this be
@@ -903,7 +899,7 @@ const _slides: SlideContent[] = [
 export const slides: SlideContent[] = _slides.map((s, i) => ({ ...s, number: i + 1 }));
 
 // ============================================================
-// APPLY EDITS — merges server-stored field overrides onto slides
+// APPLY EDITS - merges server-stored field overrides onto slides
 // ============================================================
 export function applyEdits(
   baseSlides: SlideContent[],

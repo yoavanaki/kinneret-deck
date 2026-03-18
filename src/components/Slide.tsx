@@ -203,7 +203,7 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
               editable={editable}
               onUpdate={onUpdate}
               tag="p"
-              className="text-xl leading-relaxed"
+              className="text-xl leading-relaxed italic"
               style={{ color: t.text }}
             />
           </div>
@@ -371,7 +371,7 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
                   style={{ color: t.text, whiteSpace: "pre-line" }}
                 />
               ) : (
-                <div className={`flex flex-col gap-0.5 w-full ${isLargeTeam ? "mb-3" : "mb-4"}`}>
+                <div className={`flex flex-col ${isLargeTeam ? "gap-1.5" : "gap-1"} w-full ${isLargeTeam ? "mb-3" : "mb-4"}`}>
                   {member.bio.split("\n").map((line, li) => (
                     <p key={li} className={`${isLargeTeam ? "text-[9px]" : "text-xs"} leading-tight`}
                       style={{ color: t.text }}>
@@ -387,8 +387,8 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
                       key={li}
                       className="flex items-center justify-center rounded"
                       style={{
-                        width: isLargeTeam ? 44 : 52,
-                        height: isLargeTeam ? 30 : 36,
+                        width: isLargeTeam ? 53 : 62,
+                        height: isLargeTeam ? 36 : 43,
                         backgroundColor: "rgba(255,255,255,0.9)",
                         padding: "3px 4px",
                         flexShrink: 0,
@@ -890,14 +890,31 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
             {slide.boxes.map((box, i) => (
               <div
                 key={i}
-                className="flex-1 rounded-lg px-5 py-4"
-                style={{ backgroundColor: t.cardBg, border: `1px solid ${t.tableBorder}` }}
+                className="flex-1 rounded-lg px-5 py-4 flex flex-col"
+                style={{ backgroundColor: t.cardBg, borderTop: `3px solid ${t.accent}`, borderLeft: `1px solid ${t.tableBorder}`, borderRight: `1px solid ${t.tableBorder}`, borderBottom: `1px solid ${t.tableBorder}` }}
               >
                 <div className="text-xl mb-2">{box.icon}</div>
                 <div className="text-[13px] font-semibold mb-1.5" style={{ color: t.heading }}>
                   {box.title}
                 </div>
-                <div className="text-[11px] leading-relaxed" style={{ color: t.subtitle }}>
+                {box.highlights && (
+                  <div className="flex gap-3 my-2">
+                    {box.highlights.map((h, j) => (
+                      <div key={j} className="flex-1">
+                        <div
+                          className="text-[22px] font-bold leading-tight"
+                          style={{ color: t.accent, fontFamily: theme.headingFont }}
+                        >
+                          {h.value}
+                        </div>
+                        <div className="text-[9px] mt-0.5 font-medium uppercase tracking-wider" style={{ color: t.subtitle }}>
+                          {h.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="text-[11px] leading-relaxed mt-auto" style={{ color: t.subtitle }}>
                   {box.description}
                 </div>
               </div>
@@ -940,8 +957,8 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
         {slide.bullets && (
           <ul className="space-y-2.5 ml-1">
             {slide.bullets.map((bullet, i) => {
-              // Split on " — " to highlight the label portion
-              const dashIdx = bullet.indexOf(" — ");
+              // Split on " - " to highlight the label portion
+              const dashIdx = bullet.indexOf(" - ");
               const hasLabel = dashIdx > 0;
               return (
                 <li key={i} className="flex items-start gap-3 text-[14px] leading-snug">
@@ -949,7 +966,7 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
                   {hasLabel && !editable ? (
                     <span>
                       <span className="font-semibold" style={{ color: t.heading }}>{bullet.slice(0, dashIdx)}</span>
-                      <span style={{ color: t.subtitle }}> &mdash; {bullet.slice(dashIdx + 3)}</span>
+                      <span style={{ color: t.subtitle }}> - {bullet.slice(dashIdx + 3)}</span>
                     </span>
                   ) : (
                     <EditableText
@@ -1433,6 +1450,10 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
     // Detect if the last row should be highlighted (competitive landscape "Cognitory" row)
     const lastRow = slide.tableRows?.[slide.tableRows.length - 1];
     const highlightLastRow = lastRow && lastRow[0]?.toLowerCase().includes("cognitory");
+    const isCompetitive = slide.id === "slide-competitive";
+    const isAutomation = slide.id === "slide-17";
+    const tablePy = isCompetitive ? "py-[5px]" : isAutomation ? "py-[10px]" : "py-2.5";
+    const tableFontSize = isCompetitive ? "text-[11px]" : "text-[11px]";
 
     return (
       <div style={baseStyle} className="flex flex-col px-10 pt-8 pb-6">
@@ -1553,13 +1574,13 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
         )}
         {slide.tableHeaders && slide.tableRows && (
           <div className="overflow-auto flex-1">
-            <table className="w-full text-xs border-collapse">
+            <table className={`w-full border-collapse ${isCompetitive ? "text-[11px]" : "text-xs"}`}>
               <thead>
                 <tr>
                   {slide.tableHeaders.map((h, i) => (
                     <th
                       key={i}
-                      className="px-2 py-1.5 text-left font-semibold border text-[11px]"
+                      className={`px-2 ${tablePy} text-left font-semibold border ${tableFontSize}`}
                       style={{
                         backgroundColor: t.tableHeaderBg,
                         borderColor: t.tableBorder,
@@ -1591,13 +1612,13 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
                         backgroundColor: isHighlighted
                           ? t.accent + "15"
                           : isEven ? undefined : t.cardBg + "80",
-                        height: highlightLastRow ? 36 : undefined,
+                        height: highlightLastRow ? (isCompetitive ? 35 : 36) : undefined,
                       }}
                     >
                       {row.map((cell, ci) => (
                         <td
                           key={ci}
-                          className="px-2 py-1 border"
+                          className={`px-2 ${tablePy} border`}
                           style={{
                             borderColor: t.tableBorder,
                             fontWeight: isHighlighted ? 600 : undefined,
@@ -1658,7 +1679,7 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
         )}
         {slide.callout && (
           <div
-            className="mt-2 px-4 py-2 rounded-lg text-center"
+            className="mt-1.5 px-4 py-1.5 rounded-lg text-center"
             style={{
               backgroundColor: t.accent + "12",
               border: `1.5px solid ${t.accent}40`,
@@ -1671,7 +1692,7 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
               editable={editable}
               onUpdate={onUpdate}
               tag="p"
-              className="text-[13px] font-semibold"
+              className="text-[12px] font-semibold"
               style={{ color: t.accent }}
             />
           </div>
