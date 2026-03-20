@@ -19,7 +19,7 @@ export interface SlideContent {
   /** Bullet points as an array of strings */
   bullets?: string[];
   /** Layout type determines how the slide renders */
-  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels" | "boxes" | "playbook" | "two-column-boxes" | "vision" | "holdco-org" | "rollup-model" | "exec-summary" | "cognitory";
+  layout: "title" | "text" | "two-column" | "bullets" | "section" | "table" | "big-text" | "dictionary" | "team" | "bar-chart" | "flow" | "stack" | "parallels" | "boxes" | "playbook" | "two-column-boxes" | "vision" | "holdco-org" | "rollup-model" | "exec-summary" | "cognitory" | "autoservice";
   /** Custom HTML content for special layouts */
   customHtml?: string;
   /** Team members for team layout */
@@ -89,6 +89,13 @@ export interface SlideContent {
     middle: { labels: string[]; description: string };
     bottom: { groups: number[]; description: string };
   };
+  /** Auto-service / auto-improving firm diagram */
+  autoService?: {
+    rewardFunctions: { icon: string; label: string; detail?: string }[];
+    levers: { icon: string; label: string; detail?: string }[];
+    flywheel: string[];
+    insight: string;
+  };
   /** Cognitory anatomy diagram for cognitory layout */
   cognitoryDiagram?: {
     clientNote: string;
@@ -115,7 +122,7 @@ const slide01: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 2: Team
+// SLIDE 3: Team
 // ============================================================
 const slide02: SlideContent = {
   id: "slide-02",
@@ -185,7 +192,7 @@ const slide02: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 3: Industrial → AI Revolution Parallels
+// SLIDE 4: Industrial → AI Revolution Parallels
 // ============================================================
 const slideParallels: SlideContent = {
   id: "slide-parallels",
@@ -239,7 +246,7 @@ const slide04: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 6: Services Economy
+// SLIDE 5: Services Economy
 // ============================================================
 const slide05: SlideContent = {
   id: "slide-05",
@@ -429,12 +436,12 @@ const slide09: SlideContent = {
 };
 
 // ============================================================
-// SLIDE: How Acquisitions Work - Rollup Model
+// SLIDE 9: How Acquisitions Work - Rollup Model
 // ============================================================
 const slideRollupModel: SlideContent = {
   id: "slide-rollup-model",
   number: 9,
-  title: "How Acquisitions Work",
+  title: "How Our Founding Acquisitions Work",
   subtitle: "Buy adjacent firms, roll up operations, expand margins with AI",
   layout: "rollup-model",
   rollupModel: {
@@ -511,7 +518,6 @@ const slide11: SlideContent = {
     { value: "$24B", label: "Market Size" },
     { value: "18,000+", label: "Service Providers" },
     { value: "700K+", label: "Plans Administered" },
-    { value: "3–6×", label: "Acquisition Multiples" },
   ],
   leftColumnTitle: "What Is a Retirement TPA?",
   leftBoxes: [
@@ -550,7 +556,7 @@ const slide12: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 14: Chairman
+// SLIDE 8: Chairman
 // ============================================================
 const slide13: SlideContent = {
   id: "slide-13",
@@ -586,14 +592,14 @@ const slide14: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 16: M&A Pipeline
+// SLIDE 11: M&A Pipeline
 // ============================================================
 const slide15: SlideContent = {
   id: "slide-15",
   number: 13,
   title: "Current M&A Pipeline",
   layout: "table",
-  subtitle: "Active acquisition pipeline across the U.S.",
+  subtitle: "Developed a deep bench of M&A targets to optimize selection of our base platform",
   stats: [
     { value: "42", label: "Total Targets" },
     { value: "6", label: "In Diligence / LOI" },
@@ -630,7 +636,7 @@ const slide16: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 18: Competitive Landscape
+// SLIDE 12: Competitive Landscape
 // ============================================================
 const slideCompetitive: SlideContent = {
   id: "slide-competitive",
@@ -651,7 +657,7 @@ const slideCompetitive: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 19: Automation Opportunities
+// SLIDE 10: Automation Opportunities
 // ============================================================
 const slide17: SlideContent = {
   id: "slide-17",
@@ -757,7 +763,7 @@ const slideGrowth: SlideContent = {
 };
 
 // ============================================================
-// SLIDE 21: Fundraise
+// SLIDE 13: Thank You
 // ============================================================
 const slide18: SlideContent = {
   id: "slide-18",
@@ -768,7 +774,7 @@ const slide18: SlideContent = {
 
 
 // ============================================================
-// SLIDE: TLDR (vision-first)
+// SLIDE 2: TLDR (vision-first)
 // ============================================================
 const slideTldr: SlideContent = {
   id: "slide-tldr",
@@ -780,9 +786,9 @@ const slideTldr: SlideContent = {
     { value: "~$12M", label: "ARR in Adv. / LOI Stage" },
   ],
   boxes: [
-    { icon: "🏭", title: "Factories for Knowledge Services", description: "Building AI-native \"cognitories\" that acquire and automate labor-intensive service businesses, replacing manual workflows with intelligent systems at scale" },
+    { icon: "🏭", title: "Factories for Knowledge Services", description: "Building AI-native \"cognitories\" that automate labor-intensive service businesses, replacing manual workflows with intelligent systems at scale" },
     { icon: "🎯", title: "Starting with Retirement Admin", description: "Our first vertical: a hyper-fragmented, $24B market with sticky recurring revenue, high automation potential, and attractive 3–6x EBITDA acquisition multiples" },
-    { icon: "🧠", title: "Purpose-Built Team", description: "M&A, AI, and deep industry expertise under one roof. From PE deal sourcing and production AI systems to retirement operations and compliance" },
+    { icon: "🧠", title: "Purpose-Built Team", description: "AI, deep industry expertise and M&A capabilities under one roof. From PE deal sourcing and production AI systems to retirement operations and compliance" },
   ],
 };
 
@@ -809,7 +815,7 @@ const slideTldrTpa: SlideContent = {
 };
 
 // ============================================================
-// SLIDE: We're Building Cognitories
+// SLIDE 6: We're Building Cognitories
 // ============================================================
 const slideCognitories: SlideContent = {
   id: "slide-cognitories",
@@ -851,28 +857,74 @@ const slideCognitories: SlideContent = {
 // ============================================================
 // ALL SLIDES - exported as a single array
 // ============================================================
+// ============================================================
+// SLIDE 7: Scale Bar (combined Playbook + First Bet)
+// ============================================================
+const slideScaleBar: SlideContent = {
+  id: "slide-scale-bar",
+  number: 7,
+  title: "The Playbook",
+  layout: "playbook",
+  boxes: [
+    { icon: "", title: "Select Sector", description: "Identify a fragmented services vertical with sticky, recurring revenue" },
+    { icon: "", title: "Map Workflows", description: "Deeply study operational workflows; identify highest-leverage automation opportunities" },
+    { icon: "", title: "Build Pipeline", description: "Source and qualify acquisition targets; rank by fit, margin, and integration ease" },
+    { icon: "", title: "Acquire Platform", description: "Acquire one well-run firm as the operating foundation" },
+    { icon: "", title: "Deploy Autopilot", description: "Automate operational workflows: compliance, reporting, onboarding" },
+    { icon: "", title: "Expand Capacity", description: "Use AI to grow workforce output ~50% without proportional headcount" },
+    { icon: "", title: "Scale the Vertical", description: "Compound organic growth with opportunistic M&A" },
+    { icon: "", title: "Auto-Improvement", description: "AI agents autonomously run experiments to optimize service delivery" },
+  ],
+};
+
+// ============================================================
+// SLIDE: The Auto-Improving Firm
+// ============================================================
+const slideAutoImprove: SlideContent = {
+  id: "slide-auto-improve",
+  number: 0,
+  title: "Autoservices",
+  subtitle: "Cognitories will be self-improving units of production.",
+  layout: "autoservice",
+  autoService: {
+    rewardFunctions: [
+      { icon: "🛡️", label: "Fewer IRS Interventions", detail: "Reduce compliance errors and audit triggers" },
+      { icon: "💰", label: "More Tax Dollars Saved", detail: "Optimize plan structures for maximum tax efficiency" },
+      { icon: "😊", label: "Higher Client Retention", detail: "Improve service quality and responsiveness" },
+    ],
+    levers: [
+      { icon: "🏛️", label: "IRS Reporting Methods", detail: "How to structure and file compliance documents" },
+      { icon: "📋", label: "Onboarding Structure", detail: "How to set up plans and enroll participants" },
+      { icon: "🔎", label: "Fund Recommendations", detail: "Which investment options to recommend" },
+    ],
+    flywheel: [],
+    insight: "",
+  },
+};
+
 const _slides: SlideContent[] = [
   // === ACT 1: Context ===
   slide01,                // 1. Cognitory (title)
-  slideTldr,              // 2. Executive Summary
-  slide02,                // 3. Team
-  slideParallels,         // 4. History doesn't repeat
-  slide05,                // 5. Knowledge services dwarf tech market
+  // slideTldr,           // Overview (commented out)
+  slide02,                // 2. Team
+  slideParallels,         // 3. History doesn't repeat
+  slide05,                // 4. Knowledge services dwarf tech market
 
   // === ACT 2: The Thesis ===
-  slideCognitories,       // 6. We're building cognitories
-  slide09,                // 7. The Playbook
+  slideCognitories,       // 5. We're building cognitories
+  slideAutoImprove,       // 6. Autoservices
+  slideScaleBar,          // 7. The Playbook
 
   // === ACT 3: The Business - TPA as proof ===
-  slide11,                // 8. Our first bet: Retirement TPA
-  slide13,                // 9. Jamie
-  slideRollupModel,       // 10. How Acquisitions Work
-  slide17,                // 11. Automation Opportunities
-  slide15,                // 12. M&A Pipeline
-  slideCompetitive,       // 13. Competitive Landscape
+  slide11,                // 7. Our first vertical: Retirement TPA
+  slide13,                // 8. Jamie
+  slideRollupModel,       // 9. How our founding acquisitions work
+  slide17,                // 10. Automation Opportunities
+  slide15,                // 11. M&A Pipeline
+  slideCompetitive,       // 12. Competitive Landscape
 
   // === ACT 4: The Close ===
-  slide18,                // 14. Thank You
+  slide18,                // 13. Thank You
 
   /* === Appendix ===
   slideHoldco,            // A1. Cognitory Structure

@@ -676,6 +676,18 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
           className="text-5xl font-bold text-center"
           style={headingStyle}
         />
+        {slide.subtitle && (
+          <EditableText
+            value={slide.subtitle}
+            slideId={slide.id}
+            field="subtitle"
+            editable={editable}
+            onUpdate={onUpdate}
+            tag="h2"
+            className="text-2xl mt-6 text-center"
+            style={{ color: t.subtitle }}
+          />
+        )}
         <SlideNumber num={slide.number} color={t.subtitle} />
       </div>
     );
@@ -2257,6 +2269,184 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
     );
   }
 
+  // ---- AUTO-SERVICE LAYOUT (auto-improving firm) ----
+  if (slide.layout === "autoservice" && slide.autoService) {
+    const { rewardFunctions, levers } = slide.autoService;
+
+    const ItemRow = ({ icon, label, detail }: { icon: string; label: string; detail?: string }) => (
+      <div className="flex items-start gap-2 mb-2">
+        <div
+          className="w-6 h-6 rounded-md flex items-center justify-center text-[12px] flex-shrink-0 mt-0.5"
+          style={{ backgroundColor: t.accent + "18" }}
+        >
+          {icon}
+        </div>
+        <div className="min-w-0">
+          <div className="text-[10px] font-semibold leading-tight" style={{ color: t.heading }}>{label}</div>
+          {detail && <div className="text-[8px] leading-snug mt-0.5" style={{ color: t.subtitle }}>{detail}</div>}
+        </div>
+      </div>
+    );
+
+    const engineSteps = [
+      { icon: "👁", label: "Observe", desc: "Monitor performance against reward functions" },
+      { icon: "💡", label: "Hypothesize", desc: "Propose experiments to improve outcomes" },
+      { icon: "🧪", label: "Experiment", desc: "Run tests on live and historical data" },
+    ];
+
+    return (
+      <div style={baseStyle} className="flex flex-col p-10 pb-6">
+        {/* Title */}
+        <EditableText
+          value={slide.title}
+          slideId={slide.id}
+          field="title"
+          editable={editable}
+          onUpdate={onUpdate}
+          tag="h1"
+          className="text-[22px] font-bold mb-1"
+          style={headingStyle}
+        />
+        {slide.subtitle && (
+          <EditableText
+            value={slide.subtitle}
+            slideId={slide.id}
+            field="subtitle"
+            editable={editable}
+            onUpdate={onUpdate}
+            tag="h2"
+            className="text-xs mb-1"
+            style={{ color: t.subtitle }}
+          />
+        )}
+        <AccentBar color={t.accent} className="mb-5" />
+
+        {/* Two-column layout: Left stacked boxes → Right engine */}
+        <div className="flex-1 flex items-stretch gap-0">
+          {/* LEFT: stacked Reward Functions + Levers boxes */}
+          <div className="flex flex-col gap-3 justify-center" style={{ width: 230, flexShrink: 0 }}>
+            {/* Reward Functions box */}
+            <div
+              className="rounded-xl px-4 py-3"
+              style={{ backgroundColor: t.cardBg, border: `1.5px solid ${t.tableBorder}` }}
+            >
+              <div className="text-[9px] font-bold uppercase tracking-widest mb-0.5" style={{ color: t.accent }}>Reward Functions</div>
+              <div className="text-[8px] mb-2.5" style={{ color: t.subtitle }}>What to optimize for</div>
+              {rewardFunctions.map((rf, i) => (
+                <ItemRow key={i} icon={rf.icon} label={rf.label} detail={rf.detail} />
+              ))}
+            </div>
+            {/* Levers box */}
+            <div
+              className="rounded-xl px-4 py-3"
+              style={{ backgroundColor: t.cardBg, border: `1.5px solid ${t.tableBorder}` }}
+            >
+              <div className="text-[9px] font-bold uppercase tracking-widest mb-0.5" style={{ color: t.accent }}>Levers</div>
+              <div className="text-[8px] mb-2.5" style={{ color: t.subtitle }}>What the system can change</div>
+              {levers.map((lv, i) => (
+                <ItemRow key={i} icon={lv.icon} label={lv.label} detail={lv.detail} />
+              ))}
+            </div>
+          </div>
+
+          {/* Arrow connecting left → right */}
+          <div className="flex flex-col items-center justify-center flex-shrink-0" style={{ width: 44 }}>
+            <svg width="44" height="40" viewBox="0 0 44 40">
+              <defs>
+                <marker id="arrowAutoR" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                  <path d="M0 0 L7 3.5 L0 7 Z" fill={t.accent} opacity="0.6" />
+                </marker>
+              </defs>
+              <line x1="4" y1="20" x2="34" y2="20" stroke={t.accent} strokeWidth="2" opacity="0.4" markerEnd="url(#arrowAutoR)" />
+            </svg>
+          </div>
+
+          {/* RIGHT: Autoservice Engine box */}
+          <div className="flex-1 flex flex-col" style={{ minWidth: 0 }}>
+            <div
+              className="flex-1 rounded-xl px-4 py-2.5 flex flex-col"
+              style={{ backgroundColor: t.cardBg, border: `2px solid ${t.accent}40` }}
+            >
+              {/* Engine header */}
+              <div
+                className="text-[10px] font-bold uppercase tracking-widest text-center mb-2 px-4 py-1 rounded-full self-center"
+                style={{ color: t.accent, backgroundColor: t.accent + "14" }}
+              >
+                Autoservice Engine
+              </div>
+
+              {/* Engine loop: Observe → Hypothesize → Experiment, with loop-back */}
+              <div className="flex-1 flex flex-col items-center justify-center relative">
+                {/* The three steps with loop-back arrow on the right side */}
+                <div className="flex items-stretch w-full" style={{ maxWidth: 380 }}>
+                  {/* Steps column */}
+                  <div className="flex flex-col items-center flex-1">
+                    {engineSteps.map((step, i) => (
+                      <div key={i} className="flex flex-col items-center w-full">
+                        <div className="flex items-center gap-3 w-full px-4 py-2.5 rounded-lg" style={{ backgroundColor: t.bg }}>
+                          <div
+                            className="w-7 h-7 rounded-lg flex items-center justify-center text-[13px] flex-shrink-0"
+                            style={{ backgroundColor: t.accent + "18" }}
+                          >
+                            {step.icon}
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-[11px] font-bold leading-tight" style={{ color: t.heading }}>{step.label}</div>
+                            <div className="text-[8px] leading-snug" style={{ color: t.subtitle }}>{step.desc}</div>
+                          </div>
+                        </div>
+                        {/* Down arrow between steps */}
+                        {i < engineSteps.length - 1 && (
+                          <svg width="12" height="18" viewBox="0 0 12 18" className="my-1 flex-shrink-0">
+                            <path d="M6 0 L6 13 M3 10 L6 16 L9 10" stroke={t.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.5" />
+                          </svg>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Loop-back arrow on the right: curves from Experiment back up to Observe */}
+                  <div className="flex items-center justify-center flex-shrink-0 relative" style={{ width: 36 }}>
+                    <svg width="36" height="100%" viewBox="0 0 36 200" preserveAspectRatio="none" fill="none"
+                      style={{ position: "absolute", top: 0, left: 0, height: "100%" }}
+                    >
+                      <defs>
+                        <marker id="loopUp" markerWidth="7" markerHeight="7" refX="3.5" refY="6" orient="auto">
+                          <path d="M0 7 L3.5 0 L7 7 Z" fill={t.accent} opacity="0.5" />
+                        </marker>
+                      </defs>
+                      <path
+                        d="M4 185 Q4 198, 18 198 Q32 198, 32 185 L32 15 Q32 2, 18 2 Q4 2, 4 15"
+                        stroke={t.accent} strokeWidth="2" fill="none" opacity="0.35"
+                        strokeDasharray="5 3"
+                        markerEnd="url(#loopUp)"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Karpathy reference */}
+              <div className="mt-3 text-center">
+                <a
+                  href="https://github.com/karpathy/autoresearch?tab=readme-ov-file"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[8px] hover:underline"
+                  style={{ color: t.subtitle, opacity: 0.7 }}
+                >
+                  Modeled on Andrej Karpathy&apos;s Autoresearch
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <SlideNumber num={slide.number} color={t.subtitle} />
+      </div>
+    );
+  }
+
   // ---- PLAYBOOK LAYOUT (connected flow with phases) ----
   if (slide.layout === "playbook" && slide.boxes) {
     const topRow = slide.boxes.slice(0, 4);
@@ -2447,7 +2637,7 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
               className="text-[9px] font-bold uppercase tracking-[0.15em] mb-2 text-center py-1 rounded"
               style={{ color: t.accent, backgroundColor: t.accent + "10" }}
             >
-              Step 1 — Acquire
+              Step 1: Acquire
             </div>
             <div className="flex flex-col gap-2 flex-1 justify-center">
               {targets.map((target, i) => (
@@ -2496,13 +2686,13 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
             </svg>
           </div>
 
-          {/* Center: Integrate */}
+          {/* Center: Automate */}
           <div className="flex flex-col w-[230px] flex-shrink-0">
             <div
               className="text-[9px] font-bold uppercase tracking-[0.15em] mb-2 text-center py-1 rounded"
               style={{ color: t.accent, backgroundColor: t.accent + "10" }}
             >
-              Step 2 — Integrate
+              Step 2: Automate
             </div>
             <div className="flex-1 flex flex-col justify-center">
               <div
@@ -2537,7 +2727,7 @@ export default function Slide({ slide, theme, scale = 1 }: SlideProps) {
               className="text-[9px] font-bold uppercase tracking-[0.15em] mb-2 text-center py-1 rounded"
               style={{ color: t.accent, backgroundColor: t.accent + "10" }}
             >
-              Step 3 — Result
+              Step 3: Result
             </div>
             <div className="flex-1 flex flex-col justify-center">
               <div
